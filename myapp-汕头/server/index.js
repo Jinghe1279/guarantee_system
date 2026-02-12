@@ -6,18 +6,21 @@ const crypto = require('crypto');
 
 const app = express();
 
-const conn = mysql.createConnection({
+const pool = mysql.createPool({
     host: 'localhost',
     port: '3306',
     user: 'root',
     password: 'root',
     database: 'airport',
     charset: 'utf8mb4',
-    collation: 'utf8mb4_unicode_ci'
+    collation: 'utf8mb4_unicode_ci',
+    connectionLimit: 10,
+    waitForConnections: true,
+    queueLimit: 0
 });
 
 // promisify query for async/await
-const queryAsync = util.promisify(conn.query).bind(conn);
+const queryAsync = util.promisify(pool.query).bind(pool);
 
 // 建表：loan_application
 const createLoanApplicationTableSQL = `
@@ -323,7 +326,7 @@ const tableStatements = [
 ];
 
 tableStatements.forEach((statement) => {
-    conn.query(statement, (err) => {
+    pool.query(statement, (err) => {
         if (err) {
             console.error('创建表失败:', err);
         } else {
@@ -332,7 +335,7 @@ tableStatements.forEach((statement) => {
     });
 });
 
-conn.query(createHuizongTableSQL, (err) => {
+pool.query(createHuizongTableSQL, (err) => {
     if (err) {
         console.error('创建 datahuizong 表失败:', err);
     } else {
@@ -790,7 +793,7 @@ app.post('/insert-huizong', async (req, res) => {
             data.expert_amount || null,
             data.created_by || null
         ];
-        conn.query(sql, values, (err, results) => {
+        pool.query(sql, values, (err, results) => {
             if (err) {
                 console.error("插入错误", err);
                 res.status(500).send("插入错误");
@@ -844,7 +847,7 @@ app.post('/insert-prediction1', async (req, res) => {
                 prediction.report_number,
                 prediction.predicted,
             ];
-            conn.query(sql, values, (err) => {
+            pool.query(sql, values, (err) => {
                 if (err) {
                     console.error("插入错误", err);
                 }
@@ -912,7 +915,7 @@ app.post('/insert-prediction', async (req, res) => {
 app.get('/sthz', (req, res) => {
     const name = req.query.name || '';
     const sql = `SELECT * FROM sthz WHERE report_number = ?`;
-    conn.query(sql, name, (err, results) => {
+    pool.query(sql, name, (err, results) => {
         if (err) return res.status(500).send({ error: err.message });
         res.send(results);
     });
@@ -922,7 +925,7 @@ app.get('/sthz', (req, res) => {
 app.get('/datahuizong', (req, res) => {
     const reportNumber = req.query.name || '';
     const sql = `SELECT * FROM datahuizong WHERE report_number = ?`;
-    conn.query(sql, reportNumber, (err, results) => {
+    pool.query(sql, reportNumber, (err, results) => {
         if (err) return res.status(500).send({ error: err.message });
         res.send(results);
     });
@@ -942,7 +945,7 @@ app.get('/xmlb', (req, res) => {
     else if (endDate) { conds.push(`date <= ?`); params.push(endDate); }
     if (searchTime) { conds.push(`application_period = ?`); params.push(searchTime); }
     if (conds.length) sql += ' WHERE ' + conds.join(' AND ');
-    conn.query(sql, params, (err, results) => {
+    pool.query(sql, params, (err, results) => {
         if (err) return res.status(500).send({ error: err.message });
         res.send(results);
     });
@@ -963,7 +966,7 @@ app.get('/loan-application', (req, res) => {
     } else {
         return res.status(400).send({ error: 'projectNumber or createdBy is required' });
     }
-    conn.query(sql, params, (err, results) => {
+    pool.query(sql, params, (err, results) => {
         if (err) return res.status(500).send({ error: err.message });
         res.send(results);
     });
@@ -1139,7 +1142,7 @@ app.post('/datahuizong', async (req, res) => {
             data.created_by || null
         ];
 
-        conn.query(sql, values, (err) => {
+        pool.query(sql, values, (err) => {
             if (err) {
                 console.error('插入错误', err);
                 res.status(500).json({ error: err.message });

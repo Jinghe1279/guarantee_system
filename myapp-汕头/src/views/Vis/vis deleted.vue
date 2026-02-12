@@ -756,6 +756,7 @@ import axios from "axios";
 import { Form, InputNumber, Button } from "ant-design-vue";
 import { ExclamationCircleFilled } from "@ant-design/icons-vue";
 import { ElMessage } from "element-plus";
+import { API_NODE, API_FLASK } from "@/api/config";
 
 //创建列表
 const predictions = ref([]);
@@ -1223,7 +1224,7 @@ const predictContent = async () => {
     console.log('正在发送后端请求...');
     
     // 将数据提交到后端
-    const response = await axios.post("http://127.0.0.1:5001/demo", {
+    const response = await axios.post(`${API_FLASK}/demo`, {
       project_number: project_number.value,
       company_name: company_name.value,
       project_manager: project_manager.value,
@@ -1450,11 +1451,11 @@ const predictContent = async () => {
         // 保存到两个数据库
         try {
           // 保存基础信息
-          const basicResponse = await axios.post("http://localhost:8989/insert-huizong", basicData);
+          const basicResponse = await axios.post(`${API_NODE}/insert-huizong`, basicData);
           console.log('基础信息保存成功:', basicResponse.data);
 
           // 保存详细信息
-          const detailResponse = await axios.post("http://localhost:8989/insert-prediction", detailData);
+          const detailResponse = await axios.post(`${API_NODE}/insert-prediction`, detailData);
           console.log('详细信息保存成功:', detailResponse.data);
         } catch (saveError) {
           console.error('保存数据失败:', saveError);
@@ -1477,12 +1478,12 @@ const insertPredictionToDatabase = async () => {
     // 确保predictions有值
     if (predictions.value.length > 0) {
       const response = await axios.post(
-        "http://localhost:8989/insert-prediction",
+        `${API_NODE}/insert-prediction`,
         predictions.value
       );
       console.log(response.data); // 打印响应数据
       const response2 = await axios.post(
-        "http://localhost:8989/loan-application",
+        `${API_NODE}/loan-application`,
         predictions.value
       );
       console.log(response2.data);
@@ -1588,8 +1589,8 @@ const saveWithoutPredict = async () => {
       created_by: localStorage.getItem("username") || "",
     };
 
-    await axios.post("http://localhost:8989/insert-huizong", basicData);
-    await axios.post("http://localhost:8989/insert-prediction", detailData);
+    await axios.post(`${API_NODE}/insert-huizong`, basicData);
+    await axios.post(`${API_NODE}/insert-prediction`, detailData);
     ElMessage.success("已保存，无需模型预测");
     window.location.reload();
   } catch (error) {

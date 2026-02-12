@@ -227,6 +227,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { message } from "ant-design-vue";
+import { API_NODE } from '@/api/config';
 
 const tableData = ref([]);
 const departments = ref([]);
@@ -264,7 +265,7 @@ const columns = [
 async function fetchTableDataWithSearch() {
   try {
     const response = await axios.get(
-      `http://localhost:8989/xmlb?searchName=${encodeURIComponent(
+      `${API_NODE}/xmlb?searchName=${encodeURIComponent(
         searchName.value
       )}&searchReportNumber=${encodeURIComponent(
         searchReportNumber.value
@@ -328,7 +329,7 @@ const userMap = computed(() => {
 
 const fetchUsers = async () => {
   try {
-    const resp = await axios.get("http://localhost:8989/users");
+    const resp = await axios.get(`${API_NODE}/users`);
     userOptions.value = (resp.data || []).map((u) => ({
       label: u.username,
       value: u.id,
@@ -342,7 +343,7 @@ const fetchUsers = async () => {
 const fetchEmployees = async () => {
   employeesLoading.value = true;
   try {
-    const resp = await axios.get("http://localhost:8989/users", {
+    const resp = await axios.get(`${API_NODE}/users`, {
       params: selectedDeptForUsers.value ? { department_id: selectedDeptForUsers.value } : {},
     });
     employees.value = resp.data || [];
@@ -372,7 +373,7 @@ const submitEmployee = async () => {
   }
   employeeSaving.value = true;
   try {
-    await axios.put(`http://localhost:8989/users/${employeeForm.value.id}`, {
+    await axios.put(`${API_NODE}/users/${employeeForm.value.id}`, {
       department_id: employeeForm.value.department_id,
       password: employeeForm.value.password ? employeeForm.value.password : undefined,
     });
@@ -391,7 +392,7 @@ const submitEmployee = async () => {
 const deleteEmployee = async (record) => {
   if (!record?.id) return;
   try {
-    await axios.delete(`http://localhost:8989/users/${record.id}`);
+    await axios.delete(`${API_NODE}/users/${record.id}`);
     message.success("已删除员工");
     await fetchEmployees();
   } catch (e) {
@@ -402,7 +403,7 @@ const deleteEmployee = async (record) => {
 
 const fetchDepartments = async () => {
   try {
-    const resp = await axios.get("http://localhost:8989/departments");
+    const resp = await axios.get(`${API_NODE}/departments`);
     departments.value = resp.data || [];
   } catch (e) {
     console.error("获取部门失败", e);
@@ -428,13 +429,13 @@ const submitDept = async () => {
   deptSaving.value = true;
   try {
     if (deptMode.value === "edit" && deptForm.value.id) {
-      await axios.put(`http://localhost:8989/departments/${deptForm.value.id}`, {
+      await axios.put(`${API_NODE}/departments/${deptForm.value.id}`, {
         name: deptForm.value.name,
         manager_id: deptForm.value.manager_id,
       });
       message.success("部门已更新");
     } else {
-      await axios.post("http://localhost:8989/departments", {
+      await axios.post(`${API_NODE}/departments`, {
         name: deptForm.value.name,
         manager_id: deptForm.value.manager_id,
       });
@@ -452,7 +453,7 @@ const submitDept = async () => {
 
 const deleteDept = async (record) => {
   try {
-    await axios.delete(`http://localhost:8989/departments/${record.id}`);
+    await axios.delete(`${API_NODE}/departments/${record.id}`);
     message.success("部门已删除");
     await fetchDepartments();
   } catch (e) {

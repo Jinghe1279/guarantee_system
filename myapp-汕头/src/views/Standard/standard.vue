@@ -41,6 +41,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import PieChart from '../../components/pieChart.vue';
 import BarChart from '../../components/barChart.vue';
+import { API_NODE } from "@/api/config";
 
 const router = useRouter();
 const input = ref('');
@@ -56,7 +57,7 @@ const toggleChartView = () => {
 
 const fetchData = async () => {
     try {
-        const response = await axios.get('http://localhost:8989/standard', {
+        const response = await axios.get(`${API_NODE}/standard`, {
             params: {
                 page: currentPage.value,
                 pageSize: pageSize.value

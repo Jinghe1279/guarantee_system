@@ -51,6 +51,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { API_NODE, API_FLASK } from "@/api/config";
 
 const activeTab = ref("login");
 const loginForm = ref({ username: "", password: "" });
@@ -79,7 +80,7 @@ const handleLoginSuccess = (role = "user") => {
     localStorage.setItem("department_name", loginResponse.value.department_name || "");
   }
   const target = role === "admin" ? "/admin" : "/vis";
-  window.location.href = `http://localhost:8080${target}`;
+  window.location.href = target;
 };
 
 const login = () => {
@@ -88,7 +89,7 @@ const login = () => {
   loginFormRef.value.validate(async (valid) => {
     if (!valid) return;
     try {
-      const response = await axios.post("http://127.0.0.1:5001/login", {
+      const response = await axios.post(`${API_FLASK}/login`, {
         username: loginForm.value.username,
         password: loginForm.value.password,
       });
@@ -108,7 +109,7 @@ const register = () => {
   registerFormRef.value.validate(async (valid) => {
     if (!valid) return;
     try {
-      await axios.post("http://127.0.0.1:5001/register", {
+      await axios.post(`${API_FLASK}/register`, {
         username: registerForm.value.username,
         password: registerForm.value.password,
         department_id: registerForm.value.department_id,
@@ -127,7 +128,7 @@ const register = () => {
 const fetchDepartments = async () => {
   deptLoading.value = true;
   try {
-    const resp = await axios.get("http://localhost:8989/departments");
+    const resp = await axios.get(`${API_NODE}/departments`);
     deptOptions.value = resp.data || [];
   } catch (err) {
     console.error("获取部门列表失败", err);

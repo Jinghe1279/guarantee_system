@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory} from 'vue-router'
 import axios from 'axios'
+import { API_FLASK } from '@/api/config'
 import Layout from '../views/Layout/layout.vue'
 import Login from '../views/login/login.vue'
 import Information from '../views/Information/information.vue'
@@ -163,7 +164,7 @@ router.beforeEach(async (to, from, next) => {
   // 强化校验：需要携带令牌，并向后端校验有效性
   if (to.path.startsWith('/admin')) {
     try {
-      const resp = await axios.get('http://127.0.0.1:5001/auth-check', {
+      const resp = await axios.get(`${API_FLASK}/auth-check`, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
       if (authRole !== 'admin' || resp.data?.role !== 'admin') {

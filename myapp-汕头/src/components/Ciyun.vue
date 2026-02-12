@@ -7,6 +7,7 @@ import * as echarts from 'echarts';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import 'echarts-wordcloud';
+import { API_NODE } from '@/api/config';
 const wordCloud = ref(null);
 
 onMounted(async () => {
@@ -14,7 +15,7 @@ onMounted(async () => {
 
     try {
         // 从API获取数据
-        const response = await axios.get('http://localhost:8989/fjjyk');
+        const response = await axios.get(`${API_NODE}/fjjyk`);
         const data = await response.data;
         data.pop(); // 移除最后一个空对象
         // 准备词云图数据

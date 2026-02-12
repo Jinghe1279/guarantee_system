@@ -529,6 +529,7 @@
 import { ref, onMounted, computed, onActivated } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
+import { API_NODE } from '@/api/config';
 
 const route = useRoute();
 const tableData = ref([]);
@@ -709,10 +710,10 @@ const parseJSON = (jsonStr) => {
 async function fetchTableDataWithSearch() {
   try {
     const response = await axios.get(
-      `http://localhost:8989/loan-application?projectNumber=${encodeURIComponent(searchName.value)}`
+      `${API_NODE}/loan-application?projectNumber=${encodeURIComponent(searchName.value)}`
     );
     const response2 = await axios.get(
-      `http://localhost:8989/datahuizong?name=${encodeURIComponent(searchName.value)}`
+      `${API_NODE}/datahuizong?name=${encodeURIComponent(searchName.value)}`
     );
     tableData.value = response.data || [];
     tableData2.value = response2.data || [];

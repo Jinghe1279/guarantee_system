@@ -1321,6 +1321,7 @@
 import { computed, reactive } from "vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
+import { API_NODE } from '@/api/config';
 
 const months = Array.from({ length: 12 }, (_, index) => ({
   key: `m${index + 1}`,
@@ -1844,8 +1845,8 @@ const saveWithoutPredict = async () => {
       created_by: createdBy,
     };
 
-    await axios.post("http://localhost:8989/insert-huizong", basicData);
-    await axios.post("http://localhost:8989/insert-prediction", detailData);
+    await axios.post(`${API_NODE}/insert-huizong`, basicData);
+    await axios.post(`${API_NODE}/insert-prediction`, detailData);
     ElMessage.success("已保存");
     window.location.reload();
   } catch (error) {

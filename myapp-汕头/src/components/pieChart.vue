@@ -5,6 +5,7 @@
 <script setup>
 import * as echarts from 'echarts';
 import { ref, onMounted } from 'vue';
+import { API_NODE } from '@/api/config';
 
 const pieChart = ref(null);
 let resizeTimer;
@@ -20,7 +21,7 @@ onMounted(async () => {
     var myChart = echarts.init(pieChart.value);
 
     // 调用API获取数据
-    const response = await fetch('http://localhost:8989/fjjyk');
+    const response = await fetch(`${API_NODE}/fjjyk`);
     const data = await response.json();
     data.sort((a, b) => b.total - a.total);
     // 构建饼图数据

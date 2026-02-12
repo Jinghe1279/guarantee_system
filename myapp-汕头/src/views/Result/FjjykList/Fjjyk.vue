@@ -46,6 +46,7 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import pinyin from 'pinyin';
 import { useRouter } from 'vue-router';
+import { API_NODE } from '@/api/config';
 
 const router = useRouter();
 const isChartView = ref(false);
@@ -56,7 +57,7 @@ const nameChineseOptions = ref([]);
 // 获取 name_chinese 的列表
 async function fetchNameChineseOptions() {
     try {
-        const response = await axios.get('http://localhost:8989/getNameChinese');
+        const response = await axios.get(`${API_NODE}/getNameChinese`);
         // 使用 pinyin 库将每个中文字符串转换为拼音
         const pinyinOptions = response.data.map(item => ({
             nameChinese: item.name_chinese,
@@ -105,7 +106,7 @@ const dynamicColumns = computed(() => {
 
 async function fetchTableDataWithSearch(nameChinese = null) {
     try {
-        let url = 'http://localhost:8989/fjjyk';
+        let url = `${API_NODE}/fjjyk`;
         if (nameChinese) {
             url += `?searchKey=${encodeURIComponent(nameChinese)}`;
         }

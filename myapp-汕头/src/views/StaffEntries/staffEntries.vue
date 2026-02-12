@@ -83,6 +83,7 @@
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
+import { API_NODE } from '@/api/config';
 
 interface RecordItem {
   [key: string]: any;
@@ -351,7 +352,7 @@ const submitEdit = async () => {
   }
   saving.value = true;
   try {
-    await axios.put(`http://localhost:8989/loan-application/${currentRecordId.value}`, editForm.value);
+    await axios.put(`${API_NODE}/loan-application/${currentRecordId.value}`, editForm.value);
     message.success('保存成功');
     editVisible.value = false;
     await fetchEntries();
@@ -370,7 +371,7 @@ const deleteRecord = async (record: RecordItem) => {
     return;
   }
   try {
-    await axios.delete(`http://localhost:8989/loan-application-with-summary/${id}`);
+    await axios.delete(`${API_NODE}/loan-application-with-summary/${id}`);
     message.success('删除成功');
     await fetchEntries();
   } catch (error: any) {
@@ -387,7 +388,7 @@ const fetchEntries = async () => {
 
   loading.value = true;
   try {
-    const response = await axios.get('http://localhost:8989/department-entries', {
+    const response = await axios.get(`${API_NODE}/department-entries`, {
       params: { manager: username.value },
     });
     records.value = response.data || [];

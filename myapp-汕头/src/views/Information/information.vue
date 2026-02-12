@@ -11,6 +11,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { API_NODE } from "@/api/config";
 
 const columns = [
     {
@@ -68,7 +69,7 @@ const tableData = ref([]);
 // 获取表格数据
 async function fetchTableData(page = 1) {
     try {
-        const response = await axios.get('http://localhost:8989/pollutant');
+        const response = await axios.get(`${API_NODE}/pollutant`);
         //console.log(response);
         tableData.value = response.data;
     } catch (error) {

@@ -7,6 +7,7 @@
 import * as echarts from 'echarts';
 import { ref, onMounted } from 'vue';
 import axios from 'axios'; // 假设您使用axios来发送HTTP请求
+import { API_NODE } from '@/api/config';
 
 const barChart = ref(null);
 
@@ -34,7 +35,7 @@ onMounted(async () => {
 
     try {
         // 从API获取数据
-        const response = await axios.get('http://localhost:8989/fjjyk');
+        const response = await axios.get(`${API_NODE}/fjjyk`);
         const data = response.data;
 
         // 按total升序排序

@@ -1,4 +1,32 @@
-# MySQL client
+# Web framework
+flask
+flask-cors
+werkzeug
+
+# Database
 pymysql
+
+# Data science & ML
+pandas
+numpy
+scikit-learn
+joblib
+xgboost
+
+# Document processing
 docxtpl
 python-docx
+openpyxl
+
+# LLM integration
+langchain-openai
+langchain-core
+
+# Environment config
+python-dotenv
+
+# Optional dependencies (uncomment if needed)
+# transformers
+# torch
+# shap
+# matplotlib

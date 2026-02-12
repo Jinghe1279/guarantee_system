@@ -12,6 +12,7 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 // import PieChart from '../../../components/pieChart.vue';
 import { useRouter } from 'vue-router';
+import { API_NODE } from '@/api/config';
 
 const router = useRouter();
 const isChartView = ref(false);
@@ -34,7 +35,7 @@ const dynamicColumns = computed(() => {
 
 async function fetchTableDataWithSearch(page = 1) {
   try {
-    const response = await axios.get('http://localhost:8989/hospital');
+    const response = await axios.get(`${API_NODE}/hospital`);
     console.log(searchQuery.value);
     tableData.value = response.data;
   } catch (error) {

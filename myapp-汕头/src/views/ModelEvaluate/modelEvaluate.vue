@@ -612,6 +612,7 @@
 import { computed, onMounted, ref, h } from 'vue';
 import axios from 'axios';
 import { message, Modal } from 'ant-design-vue';
+import { API_NODE, API_FLASK } from "@/api/config";
 
 interface RecordItem {
   [key: string]: any;
@@ -1009,7 +1010,7 @@ const deleteRecord = async (record: RecordItem) => {
     return;
   }
   try {
-    await axios.delete(`http://localhost:8989/loan-application-with-summary/${id}`);
+    await axios.delete(`${API_NODE}/loan-application-with-summary/${id}`);
     message.success('删除成功');
     await fetchEntries();
   } catch (error: any) {
@@ -1026,7 +1027,7 @@ const fetchEntries = async () => {
 
   loading.value = true;
   try {
-    const response = await axios.get('http://localhost:8989/loan-application', {
+    const response = await axios.get(`${API_NODE}/loan-application`, {
       params: { createdBy: username.value },
     });
     records.value = response.data || [];
@@ -1056,7 +1057,7 @@ const downloadRecord = async (record: RecordItem) => {
   }
 
   try {
-    const response = await axios.get('http://127.0.0.1:5001/download-report', {
+    const response = await axios.get(`${API_FLASK}/download-report`, {
       params: { id },
       responseType: 'blob',
     });
@@ -1085,6 +1086,53 @@ const downloadRecord = async (record: RecordItem) => {
   } catch (error: any) {
     console.error('下载失败', error);
     message.error(error?.response?.data?.message || '下载失败');
+  }
+};
+
+const handlePredict = async (record: RecordItem) => {
+  const id = record.id || record.project_number;
+  if (!id) {
+    message.error('缺少记录ID，无法预测');
+    return;
+  }
+  predictingId.value = id;
+  try {
+    // 调用后端预测接口
+    const res = await axios.post(`${API_FLASK}/demo`, record);
+    const predictedAmount = res.data['模型预测金额'];
+    const llmJudgment = res.data['大模型判断'];
+
+    // 将预测结果保存到数据库
+    await axios.put(`${API_NODE}/loan-application/${id}`, {
+      predicted: predictedAmount,
+      prediction_text: llmJudgment,
+    });
+
+    // 弹窗展示预测结果
+    Modal.success({
+      title: '预测完成',
+      width: 720,
+      content: h('div', [
+        h('p', { style: 'font-size:16px;font-weight:600;color:#2b7a78;margin-bottom:8px;' },
+          `模型预测额度: ${predictedAmount ?? '—'} 万元`),
+        h('div', {
+          style: 'max-height:400px;overflow-y:auto;white-space:pre-wrap;background:#f7f9fa;padding:12px;border-radius:8px;font-size:13px;line-height:1.8;',
+          innerHTML: (llmJudgment || '—').replace(/\n/g, '<br/>'),
+        }),
+      ]),
+      okText: '确认并刷新',
+      onOk() {
+        window.location.reload();
+      },
+    });
+
+    // 刷新列表
+    await fetchEntries();
+  } catch (error: any) {
+    console.error('预测失败', error);
+    message.error(error?.response?.data?.message || error?.response?.data?.error || '预测失败，请检查后端服务是否启动');
+  } finally {
+    predictingId.value = null;
   }
 };
 

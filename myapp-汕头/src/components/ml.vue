@@ -30,6 +30,7 @@ import { ref } from "vue";
 import axios from "axios";
 import { Form, InputNumber, Button } from "ant-design-vue";
 import { ExclamationCircleFilled } from "@ant-design/icons-vue";
+import { API_FLASK } from '@/api/config';
 
 const temperature = ref(0);
 const start_time = ref(null);
@@ -38,7 +39,7 @@ const start_time = ref(null);
 const predictContent = async () => {
   try {
     // 将时间转换为后端期望的格式
-    const response = await axios.post("http://localhost:5001/demo", {
+    const response = await axios.post(`${API_FLASK}/demo`, {
       temperature: temperature.value,
       start_time: start_time.value,
     });
