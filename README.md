@@ -52,3 +52,21 @@ https://blog.csdn.net/brrdg_sefg/article/details/146048667?ops_request_misc=%257
   │ 客户服务器 │ npm run serve:prod │ .env.production  │ 192.168.1.100 │
   └────────────┴────────────────────┴──────────────────┴───────────────┘
   客户服务器上只需要把 npm run serve 换成 npm run serve:prod，其他不变。
+
+
+
+
+
+xgboost list：
+application_amount
+net_assets
+total_assets
+core_assets
+inventory_at_meeting
+industry_experience
+local_residence_years
+receivables_at_meeting
+annual_sales
+electricity_consumption
+total_liabilities
+repayment_method

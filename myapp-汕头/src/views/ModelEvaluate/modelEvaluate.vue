@@ -1099,14 +1099,27 @@ const handlePredict = async (record: RecordItem) => {
   try {
     // 调用后端预测接口
     const res = await axios.post(`${API_FLASK}/demo`, record);
-    const predictedAmount = res.data['模型预测金额'];
-    const llmJudgment = res.data['大模型判断'];
+    const predictedAmount =
+      res.data?.['模型预测金额'] ??
+      res.data?.model_result ??
+      res.data?.predicted ??
+      null;
+    const llmJudgment =
+      res.data?.['大模型判断'] ??
+      res.data?.final_judgment ??
+      res.data?.prediction_text ??
+      '';
 
     // 将预测结果保存到数据库
     await axios.put(`${API_NODE}/loan-application/${id}`, {
       predicted: predictedAmount,
       prediction_text: llmJudgment,
+      project_number: record.project_number,
     });
+
+    // 先本地回填，避免刷新前界面看不到更新
+    record.predicted = predictedAmount as any;
+    record.prediction_text = llmJudgment as any;
 
     // 弹窗展示预测结果
     Modal.success({

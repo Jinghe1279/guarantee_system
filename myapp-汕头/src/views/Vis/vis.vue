@@ -30,14 +30,23 @@
               </div>
               <div class="form-item">
                 <label>项目来源</label>
-                <select v-model="form.project.source">
+                <select v-model="form.project.source" @change="handleProjectSourceChange">
                   <option value="金融中介">金融中介</option>
                   <option value="非金融中介">非金融中介</option>
                   <option value="银行">银行</option>
                   <option value="老客户续作">老客户续作</option>
                   <option value="老客户推荐">老客户推荐</option>
+                  <option value="员工开发">员工开发</option>
                   <option value="其他">其他</option>
                 </select>
+              </div>
+              <div class="form-item" v-if="isOtherProjectSource">
+                <label>项目来源具体情况</label>
+                <input
+                  type="text"
+                  v-model="form.project.source_detail"
+                  placeholder="请输入具体来源"
+                />
               </div>
               <div class="form-item">
                 <label>合作银行</label>
@@ -112,7 +121,7 @@
               </div>
               <div class="form-item">
                 <label>员工人数</label>
-                <input type="number" v-model="form.company.employee_count" />
+                <input type="text" v-model="form.company.employee_count" />
               </div>
               <div class="form-item">
                 <label>是否为外贸型</label>
@@ -399,7 +408,7 @@
                 </div>
                 <div class="form-item">
                   <label>月均余额</label>
-                  <input type="number" v-model="row.avg" readonly />
+                  <input type="number" v-model="row.avg" />
                 </div>
               </div>
             </div>
@@ -442,7 +451,7 @@
                 </div>
                 <div class="form-item">
                   <label>全年日均</label>
-                  <input type="number" v-model="row.annual_avg" readonly />
+                  <input type="number" v-model="row.annual_avg" />
                 </div>
               </div>
             </div>
@@ -601,15 +610,15 @@
             <div class="form-grid">
               <div class="form-item">
                 <label>贷款金额合计</label>
-                <input type="number" v-model="form.existing_loans_totals.amount_total" readonly />
+                <input type="number" v-model="form.existing_loans_totals.amount_total" />
               </div>
               <div class="form-item">
                 <label>贷款余额合计</label>
-                <input type="number" v-model="form.existing_loans_totals.balance_total" readonly />
+                <input type="number" v-model="form.existing_loans_totals.balance_total" />
               </div>
               <div class="form-item">
                 <label>每月还款本息合计</label>
-                <input type="number" v-model="form.existing_loans_totals.monthly_payment_total" readonly />
+                <input type="number" v-model="form.existing_loans_totals.monthly_payment_total" />
               </div>
             </div>
 
@@ -688,7 +697,7 @@
                 </div>
                 <div class="form-item">
                   <label>合计</label>
-                  <input type="number" v-model="item.total" readonly />
+                  <input type="number" v-model="item.total" />
                 </div>
               </div>
             </div>
@@ -1250,7 +1259,7 @@
                 </div>
                 <div class="form-item">
                   <label>合计</label>
-                  <input type="number" v-model="item.total" readonly />
+                  <input type="number" v-model="item.total" />
                 </div>
               </div>
             </div>
@@ -1293,7 +1302,7 @@
                 </div>
                 <div class="form-item">
                   <label>合计</label>
-                  <input type="number" v-model="item.total" readonly />
+                  <input type="number" v-model="item.total" />
                 </div>
               </div>
             </div>
@@ -1428,6 +1437,7 @@ const createForm = () => ({
     b_owner: "",
     market_manager: "",
     source: "",
+    source_detail: "",
     coop_bank: "",
     apply_date: "",
     enterpriseid: "",
@@ -1609,6 +1619,13 @@ const createForm = () => ({
 });
 
 const form = reactive(createForm());
+const isOtherProjectSource = computed(() => form.project.source === "其他");
+
+const handleProjectSourceChange = () => {
+  if (!isOtherProjectSource.value) {
+    form.project.source_detail = "";
+  }
+};
 
 const electricityCollectType = computed({
   get() {

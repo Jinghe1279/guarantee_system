@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS loan_application (
     company_established_date DATE,
     company_registered_address VARCHAR(300),
     company_main_business TEXT,
-    company_employee_count INT,
+    company_employee_count VARCHAR(100),
     company_is_salary VARCHAR(10),
     company_shareholder_info TEXT,
     controller_name VARCHAR(100),
@@ -324,6 +324,10 @@ CREATE TABLE IF NOT EXISTS datahuizong (
 const tableStatements = [
     createLoanApplicationTableSQL
 ];
+const migrateEmployeeCountToVarcharSQL = `
+ALTER TABLE loan_application
+MODIFY company_employee_count VARCHAR(100)
+`;
 
 tableStatements.forEach((statement) => {
     pool.query(statement, (err) => {
@@ -333,6 +337,14 @@ tableStatements.forEach((statement) => {
             console.log('表创建成功或已存在');
         }
     });
+});
+
+pool.query(migrateEmployeeCountToVarcharSQL, (alterErr) => {
+    if (alterErr) {
+        console.error('Ensure company_employee_count VARCHAR failed:', alterErr);
+    } else {
+        console.log('company_employee_count is VARCHAR(100).');
+    }
 });
 
 pool.query(createHuizongTableSQL, (err) => {
@@ -498,12 +510,16 @@ const mapMainValues = (payload) => {
         balance_total: existingLoans.reduce((sum, loan) => sum + parseNumber(loan.balance), 0),
         monthly_payment_total: existingLoans.reduce((sum, loan) => sum + parseNumber(loan.monthly_payment), 0),
     };
+    const sourceDetail = typeof project.source_detail === 'string' ? project.source_detail.trim() : '';
+    const projectSourceValue = project.source === '其他'
+        ? (sourceDetail || null)
+        : (project.source || null);
 
     return [
         project.a_owner || null,
         project.b_owner || null,
         project.market_manager || null,
-        project.source || null,
+        projectSourceValue,
         project.coop_bank || null,
         formatDateToSQL(project.apply_date) || null,
         project.enterpriseid || null,
@@ -1007,6 +1023,9 @@ app.put('/loan-application/:id', async (req, res) => {
     const id = req.params.id;
     const payload = req.body || {};
     if (!id) return res.status(400).send({ error: 'id is required' });
+    const idStr = String(id);
+    const isNumericId = /^\d+$/.test(idStr);
+    const hasProjectNumber = Boolean(payload.project_number);
 
     const isStructuredPayload = Boolean(
         payload.project || payload.loan || payload.company || payload.controller || payload.family ||
@@ -1025,14 +1044,52 @@ app.put('/loan-application/:id', async (req, res) => {
 
         const setClause = fieldsToUpdate.map((col) => `${col} = ?`).join(', ');
         const values = fieldsToUpdate.map((col) => payload[col]);
-        values.push(id);
 
         try {
-            await queryAsync(`UPDATE loan_application SET ${setClause} WHERE id = ?`, values);
-            const rows = await queryAsync(
-                'SELECT project_enterpriseid, company_name, loan_apply_term, project_market_manager, predicted, expert_opinion, expert_amount, created_by FROM loan_application WHERE id = ?',
-                [id]
-            );
+            let updateResult = null;
+            if (isNumericId) {
+                updateResult = await queryAsync(
+                    `UPDATE loan_application SET ${setClause} WHERE id = ?`,
+                    [...values, id]
+                );
+            } else {
+                updateResult = await queryAsync(
+                    `UPDATE loan_application SET ${setClause} WHERE project_enterpriseid = ?`,
+                    [...values, id]
+                );
+            }
+
+            // Fallback: if id update hit no rows, try project number from payload.
+            if ((updateResult?.affectedRows || 0) === 0 && hasProjectNumber) {
+                updateResult = await queryAsync(
+                    `UPDATE loan_application SET ${setClause} WHERE project_enterpriseid = ?`,
+                    [...values, payload.project_number]
+                );
+            }
+
+            if ((updateResult?.affectedRows || 0) === 0) {
+                return res.status(404).send({ error: 'Record not found for update' });
+            }
+
+            let rows = [];
+            if (isNumericId) {
+                rows = await queryAsync(
+                    'SELECT project_enterpriseid, company_name, loan_apply_term, project_market_manager, predicted, expert_opinion, expert_amount, created_by FROM loan_application WHERE id = ?',
+                    [id]
+                );
+            } else {
+                rows = await queryAsync(
+                    'SELECT project_enterpriseid, company_name, loan_apply_term, project_market_manager, predicted, expert_opinion, expert_amount, created_by FROM loan_application WHERE project_enterpriseid = ? ORDER BY id DESC LIMIT 1',
+                    [id]
+                );
+            }
+
+            if ((!rows || rows.length === 0) && hasProjectNumber) {
+                rows = await queryAsync(
+                    'SELECT project_enterpriseid, company_name, loan_apply_term, project_market_manager, predicted, expert_opinion, expert_amount, created_by FROM loan_application WHERE project_enterpriseid = ? ORDER BY id DESC LIMIT 1',
+                    [payload.project_number]
+                );
+            }
             if (rows && rows.length > 0 && rows[0].project_enterpriseid) {
                 await queryAsync(
                     `UPDATE datahuizong
