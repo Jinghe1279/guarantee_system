@@ -28,7 +28,10 @@
       bordered
     >
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'actions'">
+        <template v-if="column.key === 'model_opinion'">
+          <a-button type="link" @click="showModelOpinion(record)">查看意见</a-button>
+        </template>
+        <template v-else-if="column.key === 'actions'">
           <a-space>
             <a-button type="link" :loading="predictingId === (record.id || record.project_number)" @click="handlePredict(record)">预测</a-button>
             <a-button type="link" @click="downloadRecord(record)">下载</a-button>
@@ -605,6 +608,18 @@
         </div>
       </template>
     </a-table>
+
+    <a-modal
+      v-model:visible="modelOpinionVisible"
+      title="模型意见"
+      :width="760"
+      :mask-closable="false"
+      :ok-button-props="{ style: { display: 'none' } }"
+      cancel-text="确定"
+      @cancel="modelOpinionVisible = false"
+    >
+      <div class="model-opinion-content">{{ modelOpinionText || '暂无模型意见' }}</div>
+    </a-modal>
   </div>
 </template>
 
@@ -622,6 +637,8 @@ const username = ref<string>(localStorage.getItem('username') || '');
 const records = ref<RecordItem[]>([]);
 const loading = ref<boolean>(false);
 const predictingId = ref<string | number | null>(null);
+const modelOpinionVisible = ref<boolean>(false);
+const modelOpinionText = ref<string>('');
 const predictionModalVisible = ref<boolean>(false);
 const predictionResult = ref<{ amount?: number; report?: string }>({});
 const businessSites = ref<RecordItem[]>([]);
@@ -775,6 +792,7 @@ const columns = [
   { title: '申请金额(万元)', dataIndex: 'application_amount', key: 'application_amount' },
   { title: '申请期限(月)', dataIndex: 'application_period', key: 'application_period' },
   { title: '预测额度(万元)', dataIndex: 'predicted', key: 'predicted' },
+  { title: '模型意见', key: 'model_opinion' },
   { title: '专家额度', dataIndex: 'expert_amount', key: 'expert_amount' },
   { title: '创建时间', dataIndex: 'created_at', key: 'created_at', customRender: ({ text }: any) => formatDateTime(text) },
   { title: '操作', key: 'actions' },
@@ -1000,6 +1018,11 @@ const formatDisplayValue = (key: string, value: any) => {
     return mapping[key][value];
   }
   return formatValue(value);
+};
+
+const showModelOpinion = (record: RecordItem) => {
+  modelOpinionText.value = (record?.prediction_text || '').toString().trim();
+  modelOpinionVisible.value = true;
 };
 
 
@@ -1360,5 +1383,16 @@ const parseJSON = (jsonStr: string) => {
   color: #ad6800;
   font-size: 13px;
   border-radius: 4px;
+}
+
+.model-opinion-content {
+  max-height: 420px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  background: #f7f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.8;
 }
 </style>
