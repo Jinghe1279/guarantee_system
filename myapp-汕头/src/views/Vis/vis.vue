@@ -302,10 +302,16 @@
                 </div>
                 <div class="form-item">
                   <label>自有 / 租赁</label>
-                  <select v-model="site.ownership">
-                    <option value="自有">自有</option>
-                    <option value="租赁">租赁</option>
-                  </select>
+                  <input
+                    type="text"
+                    v-model="site.ownership"
+                    :list="`ownership-options-${index}`"
+                    placeholder=""
+                  />
+                  <datalist :id="`ownership-options-${index}`">
+                    <option value="自有"></option>
+                    <option value="租赁"></option>
+                  </datalist>
                 </div>
                 <div class="form-item">
                   <label>场地月租金</label>
@@ -331,9 +337,9 @@
 
             <h4 class="subsection-title">经营模式</h4>
             <div class="form-grid">
-              <div class="form-item">
+              <div class="form-item full-row large-textarea">
                 <label>商业模式简述</label>
-                <textarea v-model="form.business.model_description" rows="3"></textarea>
+                <textarea v-model="form.business.model_description" rows="4"></textarea>
               </div>
             </div>
           </div>
@@ -378,7 +384,7 @@
               添加账户
             </el-button>
 
-            <h4 class="subsection-title">银行月末余额（近一年）</h4>
+            <h4 class="subsection-title">银行月末余额</h4>
             <div
               class="table-row"
               v-for="(row, index) in form.account_rows"
