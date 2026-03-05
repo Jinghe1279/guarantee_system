@@ -299,14 +299,17 @@
                 <span><strong>账户{{ idx + 1 }}:</strong> {{ acc.account_name }} - {{ acc.account_no }}</span>
               </div>
             </div>
-            <div v-if="record.account_rows_json" class="sub-table">
+            <div v-if="getAccountBalanceGroups(record).length" class="sub-table">
               <div class="sub-table-title">银行月末余额</div>
-              <div v-for="(row, idx) in parseJSON(record.account_rows_json)" :key="idx" class="sub-item">
-                <div><strong>{{ row.year }}年:</strong></div>
-                <div style="margin-left: 20px; margin-top: 4px;">
-                  1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
-                  7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
-                  <strong>月均: {{ row.avg }}万</strong>
+              <div v-for="(group, gIdx) in getAccountBalanceGroups(record)" :key="`acc-group-${gIdx}`" class="sub-item">
+                <div><strong>{{ group.label }}</strong></div>
+                <div v-for="(row, idx) in group.rows" :key="`acc-row-${gIdx}-${idx}`" style="margin-left: 20px; margin-top: 4px;">
+                  <div><strong>{{ row.year }}年:</strong></div>
+                  <div style="margin-left: 12px; margin-top: 4px;">
+                    1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
+                    7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
+                    <strong>月均: {{ row.avg }}万</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1172,12 +1175,50 @@ const handlePredict = async (record: RecordItem) => {
   }
 };
 
-const parseJSON = (jsonStr: string) => {
+const parseJSON = (jsonStr: any) => {
   try {
-    return JSON.parse(jsonStr);
+    if (!jsonStr) return [];
+    if (Array.isArray(jsonStr)) return jsonStr;
+    if (typeof jsonStr === 'string') return JSON.parse(jsonStr);
+    return [];
   } catch {
     return [];
   }
+};
+
+const getAccountBalanceGroups = (record: RecordItem) => {
+  const accounts = parseJSON(record.business_accounts_json).map((acc: any, idx: number) => ({
+    ...acc,
+    account_id: acc?.account_id || `legacy_account_${idx}`,
+    _index: idx,
+  }));
+  const rows = parseJSON(record.account_rows_json);
+  const accountMap = new Map(accounts.map((acc: any) => [acc.account_id, acc]));
+  const groups: Array<{ label: string; rows: any[] }> = [];
+  const groupMap = new Map<string, { label: string; rows: any[] }>();
+
+  rows.forEach((row: any) => {
+    const hasMatch = row?.account_id && accountMap.has(row.account_id);
+    const groupKey = hasMatch ? row.account_id : '__unlinked__';
+    if (!groupMap.has(groupKey)) {
+      if (hasMatch) {
+        const acc = accountMap.get(row.account_id);
+        groupMap.set(groupKey, {
+          label: `账户${(acc?._index ?? 0) + 1}: ${acc?.account_name || '未填写开户银行'}${acc?.account_no ? ` - ${acc.account_no}` : ''}`,
+          rows: [],
+        });
+      } else {
+        groupMap.set(groupKey, {
+          label: '未关联账户（历史数据）',
+          rows: [],
+        });
+      }
+      groups.push(groupMap.get(groupKey)!);
+    }
+    groupMap.get(groupKey)!.rows.push(row);
+  });
+
+  return groups;
 };
 </script>
 

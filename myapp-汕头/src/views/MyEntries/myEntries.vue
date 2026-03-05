@@ -296,14 +296,17 @@
                 <span><strong>账户{{ idx + 1 }}:</strong> {{ acc.account_name }} - {{ acc.account_no }}</span>
               </div>
             </div>
-            <div v-if="record.account_rows_json" class="sub-table">
+            <div v-if="getAccountBalanceGroups(record).length" class="sub-table">
               <div class="sub-table-title">银行月末余额</div>
-              <div v-for="(row, idx) in parseJSON(record.account_rows_json)" :key="idx" class="sub-item">
-                <div><strong>{{ row.year }}年:</strong></div>
-                <div style="margin-left: 20px; margin-top: 4px;">
-                  1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
-                  7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
-                  <strong>月均: {{ row.avg }}万</strong>
+              <div v-for="(group, gIdx) in getAccountBalanceGroups(record)" :key="`acc-group-${gIdx}`" class="sub-item">
+                <div><strong>{{ group.label }}</strong></div>
+                <div v-for="(row, idx) in group.rows" :key="`acc-row-${gIdx}-${idx}`" style="margin-left: 20px; margin-top: 4px;">
+                  <div><strong>{{ row.year }}年:</strong></div>
+                  <div style="margin-left: 12px; margin-top: 4px;">
+                    1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
+                    7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
+                    <strong>月均: {{ row.avg }}万</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -872,7 +875,7 @@
           <h3>四、资信状况</h3>
 
           <h4 class="subsection-title">银行账户</h4>
-          <div v-for="(account, index) in businessAccounts" :key="'account-' + index" class="table-row">
+          <div v-for="(account, index) in businessAccounts" :key="'account-' + (account.account_id || index)" class="table-row">
             <div class="table-row-header">
               <span>账户 {{ index + 1 }}</span>
               <a-button size="small" danger @click="removeBusinessAccount(index)">删除</a-button>
@@ -889,24 +892,37 @@
           <a-button type="primary" @click="addBusinessAccount" style="margin-top: 12px;">添加银行账户</a-button>
 
           <h4 class="subsection-title" style="margin-top: 24px;">银行月末余额</h4>
-          <div v-for="(row, index) in accountRows" :key="'account-row-' + index" class="table-row">
+          <div
+            v-for="(account, accountIndex) in businessAccounts"
+            :key="'account-balance-' + (account.account_id || accountIndex)"
+            class="table-row"
+          >
             <div class="table-row-header">
-              <span>行 {{ index + 1 }}</span>
-              <a-button size="small" danger @click="removeAccountRow(index)">删除</a-button>
+              <span>账户 {{ accountIndex + 1 }}：{{ account.account_name || '未填写开户银行' }}{{ account.account_no ? `（${account.account_no}）` : '' }}</span>
+              <a-button size="small" type="primary" @click="addAccountRowForAccount(account.account_id)">添加年份行</a-button>
             </div>
-            <div class="edit-grid">
-              <a-form-item label="年份">
-                <a-input v-model:value="row.year" />
-              </a-form-item>
-              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label">
-                <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
-              </a-form-item>
-              <a-form-item label="月均余额">
-                <a-input-number v-model:value="row.avg" :min="0" style="width: 100%" />
-              </a-form-item>
+            <div
+              v-for="(row, rowIndex) in getAccountRowsByAccountId(account.account_id)"
+              :key="'account-row-' + (row.row_id || `${account.account_id}-${rowIndex}`)"
+              class="table-row"
+            >
+              <div class="table-row-header">
+                <span>年份行 {{ rowIndex + 1 }}</span>
+                <a-button size="small" danger @click="removeAccountRowById(row.row_id, row.account_id)">删除</a-button>
+              </div>
+              <div class="edit-grid">
+                <a-form-item label="年份">
+                  <a-input v-model:value="row.year" />
+                </a-form-item>
+                <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label">
+                  <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
+                </a-form-item>
+                <a-form-item label="月均余额">
+                  <a-input-number v-model:value="row.avg" :min="0" style="width: 100%" />
+                </a-form-item>
+              </div>
             </div>
           </div>
-          <a-button type="primary" @click="addAccountRow" style="margin-top: 12px;">添加月末余额</a-button>
 
           <h4 class="subsection-title" style="margin-top: 24px;">日均余额</h4>
           <div v-for="(row, index) in dailyAvgBalance" :key="'daily-avg-' + index" class="table-row">
@@ -1539,6 +1555,8 @@ const quarterFields = ['m3', 'm6', 'm9', 'm12'].map((key) => ({
   key,
   label: `${key.slice(1)}月`,
 }));
+const makeLocalId = (prefix: string) =>
+  `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
 const parseArrayField = (value: any) => {
   if (!value) return [];
@@ -1567,14 +1585,15 @@ const createBusinessSite = () => ({
 });
 
 const createBusinessAccount = () => ({
+  account_id: makeLocalId('acct'),
   account_name: '',
   account_no: '',
 });
 
-const createAccountRow = () =>
+const createAccountRow = (accountId = '') =>
   monthFields.reduce(
     (acc, month) => ({ ...acc, [month.key]: '' }),
-    { year: '', avg: '' }
+    { row_id: makeLocalId('bal'), account_id: accountId, year: '', avg: '' }
   );
 
 const createDailyAvgRow = () =>
@@ -1640,10 +1659,81 @@ const createSalesItem = () => ({
 
 const addBusinessSite = () => businessSites.value.push(createBusinessSite());
 const removeBusinessSite = (index: number) => businessSites.value.splice(index, 1);
-const addBusinessAccount = () => businessAccounts.value.push(createBusinessAccount());
-const removeBusinessAccount = (index: number) => businessAccounts.value.splice(index, 1);
-const addAccountRow = () => accountRows.value.push(createAccountRow());
-const removeAccountRow = (index: number) => accountRows.value.splice(index, 1);
+
+const normalizeAccountMappings = () => {
+  if (!Array.isArray(businessAccounts.value) || businessAccounts.value.length === 0) {
+    businessAccounts.value = [createBusinessAccount()];
+  }
+
+  const accountIds = new Set<string>();
+  businessAccounts.value = businessAccounts.value.map((account) => {
+    const normalized = { ...createBusinessAccount(), ...account };
+    if (!normalized.account_id) {
+      normalized.account_id = makeLocalId('acct');
+    }
+    accountIds.add(normalized.account_id);
+    return normalized;
+  });
+
+  if (!Array.isArray(accountRows.value)) {
+    accountRows.value = [];
+  }
+
+  accountRows.value = accountRows.value.map((row) => {
+    const normalized = { ...createAccountRow(), ...row };
+    if (!normalized.row_id) {
+      normalized.row_id = makeLocalId('bal');
+    }
+    if (!normalized.account_id || !accountIds.has(normalized.account_id)) {
+      normalized.account_id = businessAccounts.value[0].account_id;
+    }
+    return normalized;
+  });
+
+  businessAccounts.value.forEach((account) => {
+    if (!accountRows.value.some((row) => row.account_id === account.account_id)) {
+      accountRows.value.push(createAccountRow(account.account_id));
+    }
+  });
+};
+
+const getAccountRowsByAccountId = (accountId: string) =>
+  accountRows.value.filter((row) => row.account_id === accountId);
+
+const addBusinessAccount = () => {
+  const account = createBusinessAccount();
+  businessAccounts.value.push(account);
+  accountRows.value.push(createAccountRow(account.account_id));
+};
+
+const removeBusinessAccount = (index: number) => {
+  if (businessAccounts.value.length <= 1) {
+    message.warning('至少保留一个银行账户');
+    return;
+  }
+  const [removed] = businessAccounts.value.splice(index, 1);
+  if (removed?.account_id) {
+    accountRows.value = accountRows.value.filter((row) => row.account_id !== removed.account_id);
+  }
+  normalizeAccountMappings();
+};
+
+const addAccountRowForAccount = (accountId: string) => {
+  accountRows.value.push(createAccountRow(accountId));
+};
+
+const removeAccountRowById = (rowId: string, accountId: string) => {
+  const rowsForAccount = accountRows.value.filter((row) => row.account_id === accountId);
+  if (rowsForAccount.length <= 1) {
+    message.warning('每个银行账户至少保留一条月末余额记录');
+    return;
+  }
+  const rowIndex = accountRows.value.findIndex((row) => row.row_id === rowId);
+  if (rowIndex >= 0) {
+    accountRows.value.splice(rowIndex, 1);
+  }
+};
+
 const addDailyAvgRow = () => dailyAvgBalance.value.push(createDailyAvgRow());
 const removeDailyAvgRow = (index: number) => dailyAvgBalance.value.splice(index, 1);
 const addGuarantee = () => guarantees.value.push(createGuarantee());
@@ -1954,7 +2044,7 @@ const openEdit = (record: RecordItem) => {
     createBusinessAccount
   );
   accountRows.value = ensureArray(
-    parseArrayField(record.account_rows_json).map((row) => ({ ...createAccountRow(), ...row })),
+    parseArrayField(record.account_rows_json).map((row) => ({ ...createAccountRow(row?.account_id || ''), ...row })),
     createAccountRow
   );
   dailyAvgBalance.value = ensureArray(
@@ -2013,6 +2103,7 @@ const openEdit = (record: RecordItem) => {
     sales = legacy.map((row) => ({ ...createSalesItem(), ...row }));
   }
   salesList.value = ensureArray(sales, createSalesItem);
+  normalizeAccountMappings();
   editVisible.value = true;
   console.log('Opening edit modal with record:', record);
   console.log('Edit form:', editForm.value);
@@ -2020,6 +2111,7 @@ const openEdit = (record: RecordItem) => {
 };
 
 const buildPayload = () => {
+  normalizeAccountMappings();
   const data = editForm.value || {};
   const sales = salesList.value || [];
   const first = sales[0] || {};
@@ -2332,12 +2424,50 @@ const downloadRecord = async (record: RecordItem) => {
   }
 };
 
-const parseJSON = (jsonStr: string) => {
+const parseJSON = (jsonStr: any) => {
   try {
-    return JSON.parse(jsonStr);
+    if (!jsonStr) return [];
+    if (Array.isArray(jsonStr)) return jsonStr;
+    if (typeof jsonStr === 'string') return JSON.parse(jsonStr);
+    return [];
   } catch {
     return [];
   }
+};
+
+const getAccountBalanceGroups = (record: RecordItem) => {
+  const accounts = parseJSON(record.business_accounts_json).map((acc: any, idx: number) => ({
+    ...acc,
+    account_id: acc?.account_id || `legacy_account_${idx}`,
+    _index: idx,
+  }));
+  const rows = parseJSON(record.account_rows_json);
+  const accountMap = new Map(accounts.map((acc: any) => [acc.account_id, acc]));
+  const groups: Array<{ label: string; rows: any[] }> = [];
+  const groupMap = new Map<string, { label: string; rows: any[] }>();
+
+  rows.forEach((row: any) => {
+    const hasMatch = row?.account_id && accountMap.has(row.account_id);
+    const groupKey = hasMatch ? row.account_id : '__unlinked__';
+    if (!groupMap.has(groupKey)) {
+      if (hasMatch) {
+        const acc = accountMap.get(row.account_id);
+        groupMap.set(groupKey, {
+          label: `账户${(acc?._index ?? 0) + 1}: ${acc?.account_name || '未填写开户银行'}${acc?.account_no ? ` - ${acc.account_no}` : ''}`,
+          rows: [],
+        });
+      } else {
+        groupMap.set(groupKey, {
+          label: '未关联账户（历史数据）',
+          rows: [],
+        });
+      }
+      groups.push(groupMap.get(groupKey)!);
+    }
+    groupMap.get(groupKey)!.rows.push(row);
+  });
+
+  return groups;
 };
 </script>
 

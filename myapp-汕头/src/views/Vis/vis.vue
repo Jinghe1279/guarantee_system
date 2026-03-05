@@ -349,7 +349,7 @@
             <div
               class="table-row"
               v-for="(bank, index) in form.business_accounts"
-              :key="'bank-' + index"
+              :key="'bank-' + (bank.account_id || index)"
             >
               <div class="table-row-header">
                 <span>账户 {{ index + 1 }}</span>
@@ -358,7 +358,7 @@
                     size="small"
                     type="danger"
                     plain
-                    @click="removeRow(form.business_accounts, index)"
+                    @click="removeBusinessAccount(index)"
                   >
                     删除
                   </el-button>
@@ -379,7 +379,7 @@
               type="primary"
               plain
               size="small"
-              @click="addRow(form.business_accounts, createBusinessAccount)"
+              @click="addBusinessAccount"
             >
               添加账户
             </el-button>
@@ -387,45 +387,56 @@
             <h4 class="subsection-title">银行月末余额</h4>
             <div
               class="table-row"
-              v-for="(row, index) in form.account_rows"
-              :key="'account-row-' + index"
+              v-for="(bank, bankIndex) in form.business_accounts"
+              :key="'bank-balance-' + (bank.account_id || bankIndex)"
             >
               <div class="table-row-header">
-                <span>余额 {{ index + 1 }}</span>
+                <span>账户 {{ bankIndex + 1 }}：{{ bank.account_name || "未填写开户银行" }}{{ bank.account_no ? `（${bank.account_no}）` : "" }}</span>
                 <div class="row-actions">
                   <el-button
                     size="small"
-                    type="danger"
+                    type="primary"
                     plain
-                    @click="removeRow(form.account_rows, index)"
+                    @click="addAccountRowForAccount(bank.account_id)"
                   >
-                    删除
+                    添加年份行
                   </el-button>
                 </div>
               </div>
-              <div class="form-grid">
-                <div class="form-item">
-                  <label>年份</label>
-                  <input type="text" v-model="row.year" />
+              <div
+                class="table-row"
+                v-for="(row, rowIndex) in getAccountRowsByAccountId(bank.account_id)"
+                :key="'account-row-' + (row.row_id || `${bank.account_id}-${rowIndex}`)"
+              >
+                <div class="table-row-header">
+                  <span>年份行 {{ rowIndex + 1 }}</span>
+                  <div class="row-actions">
+                    <el-button
+                      size="small"
+                      type="danger"
+                      plain
+                      @click="removeAccountRowById(row.row_id, row.account_id)"
+                    >
+                      删除
+                    </el-button>
+                  </div>
                 </div>
-                <div class="form-item" v-for="month in months" :key="month.key">
-                  <label>{{ month.label }}余额</label>
-                  <input type="number" v-model="row[month.key]" @input="updateAccountRowAvg(row)" />
-                </div>
-                <div class="form-item">
-                  <label>月均余额</label>
-                  <input type="number" v-model="row.avg" />
+                <div class="form-grid">
+                  <div class="form-item">
+                    <label>年份</label>
+                    <input type="text" v-model="row.year" />
+                  </div>
+                  <div class="form-item" v-for="month in months" :key="month.key">
+                    <label>{{ month.label }}余额</label>
+                    <input type="number" v-model="row[month.key]" @input="updateAccountRowAvg(row)" />
+                  </div>
+                  <div class="form-item">
+                    <label>月均余额</label>
+                    <input type="number" v-model="row.avg" />
+                  </div>
                 </div>
               </div>
             </div>
-            <el-button
-              type="primary"
-              plain
-              size="small"
-              @click="addRow(form.account_rows, createAccountRow)"
-            >
-              添加余额行
-            </el-button>
 
             <h4 class="subsection-title">日均余额</h4>
             <div
@@ -1348,6 +1359,9 @@ const quarterMonths = [3, 6, 9, 12].map((month) => ({
   label: `${month}月`,
 }));
 
+const makeLocalId = (prefix) =>
+  `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
 const createMonthlyRow = () =>
   months.reduce((acc, month) => {
     acc[month.key] = "";
@@ -1364,11 +1378,14 @@ const createBusinessSite = () => ({
 });
 
 const createBusinessAccount = () => ({
+  account_id: makeLocalId("acct"),
   account_name: "",
   account_no: "",
 });
 
-const createAccountRow = () => ({
+const createAccountRow = (accountId = "") => ({
+  row_id: makeLocalId("bal"),
+  account_id: accountId,
   year: "",
   ...createMonthlyRow(),
   avg: "",
@@ -1496,7 +1513,7 @@ const createForm = () => ({
     is_jinshen: "",
   },
   business_accounts: [createBusinessAccount()],
-  account_rows: [createAccountRow()],
+  account_rows: [],
   daily_avg_balance: [createDailyAvgRow()],
   guarantees: [createGuarantee()],
   guarantees_totals: {
@@ -1625,6 +1642,79 @@ const createForm = () => ({
 });
 
 const form = reactive(createForm());
+
+const normalizeAccountMappings = () => {
+  if (!Array.isArray(form.business_accounts) || form.business_accounts.length === 0) {
+    form.business_accounts = [createBusinessAccount()];
+  }
+
+  const accountIds = new Set();
+  form.business_accounts.forEach((account) => {
+    if (!account.account_id) {
+      account.account_id = makeLocalId("acct");
+    }
+    accountIds.add(account.account_id);
+  });
+
+  if (!Array.isArray(form.account_rows)) {
+    form.account_rows = [];
+  }
+
+  form.account_rows.forEach((row) => {
+    if (!row.row_id) {
+      row.row_id = makeLocalId("bal");
+    }
+    if (!row.account_id || !accountIds.has(row.account_id)) {
+      row.account_id = form.business_accounts[0].account_id;
+    }
+  });
+
+  form.business_accounts.forEach((account) => {
+    if (!form.account_rows.some((row) => row.account_id === account.account_id)) {
+      form.account_rows.push(createAccountRow(account.account_id));
+    }
+  });
+};
+
+const getAccountRowsByAccountId = (accountId) =>
+  form.account_rows.filter((row) => row.account_id === accountId);
+
+const addBusinessAccount = () => {
+  const account = createBusinessAccount();
+  form.business_accounts.push(account);
+  form.account_rows.push(createAccountRow(account.account_id));
+};
+
+const removeBusinessAccount = (index) => {
+  if (form.business_accounts.length <= 1) {
+    ElMessage.warning("至少保留一个银行账户");
+    return;
+  }
+  const [removed] = form.business_accounts.splice(index, 1);
+  if (removed?.account_id) {
+    form.account_rows = form.account_rows.filter((row) => row.account_id !== removed.account_id);
+  }
+  normalizeAccountMappings();
+};
+
+const addAccountRowForAccount = (accountId) => {
+  form.account_rows.push(createAccountRow(accountId));
+};
+
+const removeAccountRowById = (rowId, accountId) => {
+  const rowsForAccount = form.account_rows.filter((row) => row.account_id === accountId);
+  if (rowsForAccount.length <= 1) {
+    ElMessage.warning("每个银行账户至少保留一条月末余额记录");
+    return;
+  }
+  const rowIndex = form.account_rows.findIndex((row) => row.row_id === rowId);
+  if (rowIndex >= 0) {
+    form.account_rows.splice(rowIndex, 1);
+  }
+};
+
+normalizeAccountMappings();
+
 const isOtherProjectSource = computed(() => form.project.source === "其他");
 
 const handleProjectSourceChange = () => {
@@ -1794,6 +1884,7 @@ const updateCashflowTotal = (item) => {
 const DRAFT_KEY = "vis_form_draft_v2";
 
 const saveDraft = () => {
+  normalizeAccountMappings();
   const draft = JSON.parse(JSON.stringify(form));
   localStorage.setItem(
     DRAFT_KEY,
@@ -1834,6 +1925,7 @@ const restoreDraft = () => {
     const parsed = JSON.parse(raw);
     const data = parsed?.data || parsed;
     applyDraft(form, data);
+    normalizeAccountMappings();
     updateExistingLoansTotals();
     ElMessage.success("已恢复上次暂存内容");
   } catch (error) {
@@ -1844,6 +1936,7 @@ const restoreDraft = () => {
 
 const saveWithoutPredict = async () => {
   try {
+    normalizeAccountMappings();
     updateExistingLoansTotals();
     const createdBy = localStorage.getItem("username") || "";
     const payload = JSON.parse(JSON.stringify(form));
@@ -1874,7 +1967,11 @@ const saveWithoutPredict = async () => {
     window.location.reload();
   } catch (error) {
     console.error("保存失败:", error);
-    ElMessage.error("保存失败，请重试");
+    const detail =
+      error?.response?.data?.details ||
+      error?.response?.data?.error ||
+      error?.message;
+    ElMessage.error(detail ? `保存失败：${detail}` : "保存失败，请重试");
   }
 };
 </script>

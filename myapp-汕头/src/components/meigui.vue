@@ -55,7 +55,7 @@ onMounted(async () => {
         myChart.setOption(option);
     } catch (error) {
         console.error('Error fetching data: ', error);
-    };
+    }
 });
 
 </script>

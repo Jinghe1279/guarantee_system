@@ -382,6 +382,13 @@ const parseNumber = (value) => {
 
 const normalizeCell = (value) => (value === '' || value === undefined ? null : value);
 const normalizeScalar = (value) => (value === '' ? null : value);
+const toNullableNumber = (value) => {
+    if (value === '' || value === null || value === undefined) {
+        return null;
+    }
+    const num = Number(value);
+    return Number.isFinite(num) ? num : null;
+};
 const buildMonthlyValues = (row) => monthKeys.map((key) => normalizeCell(row ? row[key] : null));
 const buildQuarterValues = (row) => quarterKeys.map((key) => normalizeCell(row ? row[key] : null));
 
@@ -475,6 +482,28 @@ const mainColumns = [
     'expert_opinion', 'expert_amount', 'created_by'
 ];
 
+const numericMainColumns = new Set([
+    'loan_apply_amount', 'loan_apply_term', 'company_registered_capital', 'controller_service_years',
+    'family_annual_expense', 'residence_years', 'business_month_pay', 'credit_inquiry_count',
+    'credit_overdue_count', 'credit_max_overdue_amount', 'analysis_plan_amount', 'analysis_plan_term',
+    'analysis_plan_fee_rate', 'analysis_plan_diyapingguzhi', 'analysis_plan_eryayuzhi',
+    'analysis_plan_diyajingzhi', 'analysis_fin_total_assets', 'analysis_fin_total_liabilities',
+    'analysis_fin_net_assets', 'analysis_fin_revenue', 'analysis_fin_net_income', 'analysis_ind_asset_debt_ratio',
+    'analysis_ind_sales_debt_ratio', 'analysis_ind_receivable_days', 'analysis_ind_avg_balance',
+    'analysis_ind_repayment_ratio', 'analysis_limit_apply_amount', 'bs_cash', 'bs_ar', 'bs_prepayments',
+    'bs_other_ar', 'bs_inventory', 'bs_fixed_assets', 'bs_total_assets', 'bs_loans', 'bs_ap',
+    'bs_advances', 'bs_other_ap', 'bs_capital', 'bs_retained_earnings', 'bs_total_liabilities_equity',
+    'asset_totals_buy_price', 'asset_totals_current_value', 'asset_totals_depreciation', 'is_table_s1',
+    'is_table_s2', 'is_table_s3', 'is_table_s_total', 'is_table_material_cost', 'is_table_gross_profit',
+    'is_table_f_wages', 'is_table_f_rent', 'is_table_f_utility', 'is_table_f_comm', 'is_table_f_trans',
+    'is_table_f_loss', 'is_table_f_adv', 'is_table_f_entertain', 'is_table_f_tax', 'is_table_f_other',
+    'is_table_f_total', 'is_table_net_profit', 'is_table_o_family_exp', 'is_table_o_biz_loan',
+    'is_table_o_pvt_loan', 'is_table_o_other_exp', 'is_table_o_family_inc', 'is_table_annual_net_income',
+    'rev_check_total_value', 'rev_check_est_total', 'rev_check_is_revenue', 'rev_check_diff_rate',
+    'guarantees_amount_total', 'guarantees_balance_total', 'existing_loans_amount_total',
+    'existing_loans_balance_total', 'existing_loans_monthly_payment_total', 'predicted', 'expert_amount'
+]);
+
 const mapMainValues = (payload) => {
     const project = payload.project || {};
     const loan = payload.loan || {};
@@ -515,7 +544,7 @@ const mapMainValues = (payload) => {
         ? (sourceDetail || null)
         : (project.source || null);
 
-    return [
+    const rawValues = [
         project.a_owner || null,
         project.b_owner || null,
         project.market_manager || null,
@@ -675,6 +704,14 @@ const mapMainValues = (payload) => {
         payload.expert_amount || null,
         payload.created_by || null
     ];
+
+    return rawValues.map((value, index) => {
+        const column = mainColumns[index];
+        if (numericMainColumns.has(column)) {
+            return toNullableNumber(value);
+        }
+        return normalizeScalar(value);
+    });
 };
 
 const insertChildRows = async (applicationId, payload) => {
@@ -801,12 +838,12 @@ app.post('/insert-huizong', async (req, res) => {
         const values = [
             data.company_name,
             data.date,
-            normalizeScalar(data.application_period),
+            toNullableNumber(data.application_period),
             data.project_manager,
             data.report_number,
-            normalizeScalar(data.predicted),
+            toNullableNumber(data.predicted),
             data.expert_opinion || null,
-            data.expert_amount || null,
+            toNullableNumber(data.expert_amount),
             data.created_by || null
         ];
         pool.query(sql, values, (err, results) => {
@@ -1190,12 +1227,12 @@ app.post('/datahuizong', async (req, res) => {
         const values = [
             data.company_name,
             data.date,
-            normalizeScalar(data.application_period),
+            toNullableNumber(data.application_period),
             data.project_manager,
             data.report_number,
-            normalizeScalar(data.predicted),
+            toNullableNumber(data.predicted),
             data.expert_opinion || null,
-            data.expert_amount || null,
+            toNullableNumber(data.expert_amount),
             data.created_by || null
         ];
 
