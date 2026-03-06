@@ -1,0 +1,2 @@
+249: {% for item in account_rows if item.account_id == bank.account_id %}
+294: {% for row in daily_avg_balance %}

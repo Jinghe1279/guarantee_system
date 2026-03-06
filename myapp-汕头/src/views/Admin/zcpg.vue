@@ -306,6 +306,17 @@
           </div>
         </div>
       </div>
+      <div v-if="getAccountYearlyTotals().length" class="sub-table">
+        <div class="sub-table-title">月末余额合计（按年份）</div>
+        <div v-for="(row, idx) in getAccountYearlyTotals()" :key="`acc-total-${idx}`" class="sub-item">
+          <div><strong>{{ row.year }}年:</strong></div>
+          <div style="margin-left: 20px; margin-top: 4px;">
+            1月余额合计（万元）: {{ row.m1 }} | 2月余额合计（万元）: {{ row.m2 }} | 3月余额合计（万元）: {{ row.m3 }} | 4月余额合计（万元）: {{ row.m4 }} | 5月余额合计（万元）: {{ row.m5 }} | 6月余额合计（万元）: {{ row.m6 }} |
+            7月余额合计（万元）: {{ row.m7 }} | 8月余额合计（万元）: {{ row.m8 }} | 9月余额合计（万元）: {{ row.m9 }} | 10月余额合计（万元）: {{ row.m10 }} | 11月余额合计（万元）: {{ row.m11 }} | 12月余额合计（万元）: {{ row.m12 }} |
+            <strong>月均余额合计（万元）: {{ row.avg }}</strong>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 财务指标 -->
@@ -721,6 +732,87 @@ const parseJSON = (jsonStr) => {
   }
 };
 
+const balanceMonthKeys = Array.from({ length: 12 }, (_, index) => `m${index + 1}`);
+
+const toFiniteNumber = (value) => {
+  if (value === "" || value === null || value === undefined) {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const formatSummaryNumber = (value) =>
+  value
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/(\.\d)0$/, "$1");
+
+const compareYearLabel = (a, b) => {
+  const aNum = Number(a);
+  const bNum = Number(b);
+  if (Number.isFinite(aNum) && Number.isFinite(bNum)) {
+    return aNum - bNum;
+  }
+  return String(a).localeCompare(String(b), "zh-Hans-CN", { numeric: true });
+};
+
+const calculateAccountYearlyTotals = (rows) => {
+  const totalsByYear = new Map();
+  rows.forEach((row) => {
+    const year = String(row?.year ?? "").trim();
+    if (!year) return;
+    if (!totalsByYear.has(year)) {
+      totalsByYear.set(year, {
+        year,
+        monthlyTotals: balanceMonthKeys.reduce((acc, key) => {
+          acc[key] = 0;
+          return acc;
+        }, {}),
+        monthHasValue: balanceMonthKeys.reduce((acc, key) => {
+          acc[key] = false;
+          return acc;
+        }, {}),
+      });
+    }
+    const yearTotal = totalsByYear.get(year);
+    balanceMonthKeys.forEach((key) => {
+      const num = toFiniteNumber(row[key]);
+      if (num === null) return;
+      yearTotal.monthHasValue[key] = true;
+      yearTotal.monthlyTotals[key] += num;
+    });
+  });
+
+  return Array.from(totalsByYear.values())
+    .sort((a, b) => compareYearLabel(a.year, b.year))
+    .map((entry) => {
+      const totalRow = { year: entry.year, avg: "" };
+      let hasAllMonths = true;
+      let yearlySum = 0;
+      let hasAnyMonth = false;
+      balanceMonthKeys.forEach((key) => {
+        if (!entry.monthHasValue[key]) {
+          totalRow[key] = "";
+          hasAllMonths = false;
+          return;
+        }
+        hasAnyMonth = true;
+        const monthTotal = entry.monthlyTotals[key];
+        totalRow[key] = formatSummaryNumber(monthTotal);
+        yearlySum += monthTotal;
+      });
+      if (!hasAnyMonth) {
+        return null;
+      }
+      if (hasAllMonths) {
+        totalRow.avg = formatSummaryNumber(yearlySum / balanceMonthKeys.length);
+      }
+      return totalRow;
+    })
+    .filter((row) => row !== null);
+};
+
 const getAccountBalanceGroups = () => {
   const record = tableData.value[0] || {};
   const accounts = parseJSON(record.business_accounts_json).map((acc, idx) => ({
@@ -755,6 +847,11 @@ const getAccountBalanceGroups = () => {
   });
 
   return groups;
+};
+
+const getAccountYearlyTotals = () => {
+  const record = tableData.value[0] || {};
+  return calculateAccountYearlyTotals(parseJSON(record.account_rows_json));
 };
 
 async function fetchTableDataWithSearch() {

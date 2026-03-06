@@ -437,6 +437,34 @@
                 </div>
               </div>
             </div>
+            <div v-if="accountYearlyTotals.length" class="table-row">
+              <div class="table-row-header">
+                <span>月末余额合计（按年份）</span>
+              </div>
+              <div
+                class="table-row"
+                v-for="(row, totalIndex) in accountYearlyTotals"
+                :key="'balance-total-' + row.year + '-' + totalIndex"
+              >
+                <div class="table-row-header">
+                  <span>{{ row.year }}年</span>
+                </div>
+                <div class="form-grid">
+                  <div
+                    class="form-item"
+                    v-for="month in months"
+                    :key="'balance-total-' + row.year + '-' + month.key"
+                  >
+                    <label>{{ month.label }}余额合计（万元）</label>
+                    <input type="text" :value="row[month.key]" disabled />
+                  </div>
+                  <div class="form-item">
+                    <label>月均余额合计（万元）</label>
+                    <input type="text" :value="row.avg" disabled />
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <h4 class="subsection-title">日均余额（万元）</h4>
             <div
@@ -1682,6 +1710,93 @@ const normalizeAccountMappings = () => {
 
 const getAccountRowsByAccountId = (accountId) =>
   form.account_rows.filter((row) => row.account_id === accountId);
+
+const toFiniteNumber = (value) => {
+  if (value === "" || value === null || value === undefined) {
+    return null;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const formatSummaryNumber = (value) => {
+  if (!Number.isFinite(value)) {
+    return "";
+  }
+  return value
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/(\.\d)0$/, "$1");
+};
+
+const compareYearLabel = (a, b) => {
+  const aNum = Number(a);
+  const bNum = Number(b);
+  if (Number.isFinite(aNum) && Number.isFinite(bNum)) {
+    return aNum - bNum;
+  }
+  return String(a).localeCompare(String(b), "zh-Hans-CN", { numeric: true });
+};
+
+const accountYearlyTotals = computed(() => {
+  const totalsByYear = new Map();
+  form.account_rows.forEach((row) => {
+    const year = String(row?.year ?? "").trim();
+    if (!year) {
+      return;
+    }
+    if (!totalsByYear.has(year)) {
+      totalsByYear.set(year, {
+        year,
+        monthlyTotals: months.reduce((acc, month) => {
+          acc[month.key] = 0;
+          return acc;
+        }, {}),
+        monthHasValue: months.reduce((acc, month) => {
+          acc[month.key] = false;
+          return acc;
+        }, {}),
+      });
+    }
+    const yearTotal = totalsByYear.get(year);
+    months.forEach((month) => {
+      const num = toFiniteNumber(row[month.key]);
+      if (num === null) {
+        return;
+      }
+      yearTotal.monthHasValue[month.key] = true;
+      yearTotal.monthlyTotals[month.key] += num;
+    });
+  });
+
+  return Array.from(totalsByYear.values())
+    .sort((a, b) => compareYearLabel(a.year, b.year))
+    .map((item) => {
+      const totalRow = { year: item.year, avg: "" };
+      let fullYearSum = 0;
+      let hasAllMonths = true;
+      let hasAnyMonth = false;
+      months.forEach((month) => {
+        if (!item.monthHasValue[month.key]) {
+          totalRow[month.key] = "";
+          hasAllMonths = false;
+          return;
+        }
+        hasAnyMonth = true;
+        const monthTotal = item.monthlyTotals[month.key];
+        totalRow[month.key] = formatSummaryNumber(monthTotal);
+        fullYearSum += monthTotal;
+      });
+      if (!hasAnyMonth) {
+        return null;
+      }
+      if (hasAllMonths) {
+        totalRow.avg = formatSummaryNumber(fullYearSum / months.length);
+      }
+      return totalRow;
+    })
+    .filter((row) => row !== null);
+});
 
 const addBusinessAccount = () => {
   const account = createBusinessAccount();

@@ -337,6 +337,83 @@ def build_doc_context(row):
     cashflow_in = normalize_list(row.get("cashflow_in_json"))
     cashflow_out = normalize_list(row.get("cashflow_out_json"))
 
+    month_keys = [f"m{i}" for i in range(1, 13)]
+
+    def parse_optional_number(value):
+        if value is None:
+            return None
+        if isinstance(value, (int, float, Decimal)):
+            return float(value)
+        if isinstance(value, str):
+            text = value.strip().replace(",", "")
+            if not text:
+                return None
+            match = re.search(r"-?\d+(?:\.\d+)?", text)
+            if not match:
+                return None
+            try:
+                return float(match.group())
+            except ValueError:
+                return None
+        return None
+
+    def format_total_number(value):
+        if value is None:
+            return ""
+        if abs(value - round(value)) < 1e-9:
+            return str(int(round(value)))
+        return f"{value:.2f}".rstrip("0").rstrip(".")
+
+    def compare_year_key(text):
+        year_text = str(text or "").strip()
+        if not year_text:
+            return (2, "")
+        try:
+            return (0, int(year_text))
+        except ValueError:
+            return (1, year_text)
+
+    totals_by_year = {}
+    for item in account_rows:
+        year = str((item or {}).get("year") or "").strip()
+        if not year:
+            continue
+        if year not in totals_by_year:
+            totals_by_year[year] = {
+                "year": year,
+                "monthly_totals": {key: 0.0 for key in month_keys},
+                "month_has_value": {key: False for key in month_keys},
+            }
+        year_total = totals_by_year[year]
+        for key in month_keys:
+            value = parse_optional_number((item or {}).get(key))
+            if value is None:
+                continue
+            year_total["month_has_value"][key] = True
+            year_total["monthly_totals"][key] += value
+
+    account_yearly_totals = []
+    for year in sorted(totals_by_year.keys(), key=compare_year_key):
+        total_item = totals_by_year[year]
+        row_total = {"year": year, "avg": ""}
+        has_any_month = False
+        has_all_months = True
+        sum_all = 0.0
+        for key in month_keys:
+            if not total_item["month_has_value"][key]:
+                row_total[key] = ""
+                has_all_months = False
+                continue
+            has_any_month = True
+            month_sum = total_item["monthly_totals"][key]
+            row_total[key] = format_total_number(month_sum)
+            sum_all += month_sum
+        if not has_any_month:
+            continue
+        if has_all_months:
+            row_total["avg"] = format_total_number(sum_all / len(month_keys))
+        account_yearly_totals.append(row_total)
+
     existing_amount_total = sum(parse_number(item.get("amount")) for item in existing_loans)
     existing_balance_total = sum(parse_number(item.get("balance")) for item in existing_loans)
     existing_payment_total = sum(parse_number(item.get("monthly_payment")) for item in existing_loans)
@@ -425,6 +502,7 @@ def build_doc_context(row):
         },
         "business_accounts": business_accounts,
         "account_rows": account_rows,
+        "account_yearly_totals": account_yearly_totals,
         "daily_avg_balance": daily_avg_balance,
         "guarantees": guarantees,
         "g": {
