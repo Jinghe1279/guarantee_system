@@ -98,11 +98,11 @@
                 <div class="value">{{ formatValue(record.loan_borrower_name) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">申请金额(万元)</div>
+                <div class="label">申请金额（万元）</div>
                 <div class="value">{{ formatValue(record.loan_apply_amount) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">申请期限(月)</div>
+                <div class="label">申请期限（月）</div>
                 <div class="value">{{ formatValue(record.loan_apply_term) }}</div>
               </div>
               <div class="detail-item">
@@ -121,7 +121,7 @@
             <h4 class="section-title">企业基本情况</h4>
             <div class="detail-grid">
               <div class="detail-item">
-                <div class="label">注册资本</div>
+                <div class="label">注册资本（万元）</div>
                 <div class="value">{{ formatValue(record.company_registered_capital) }}</div>
               </div>
               <div class="detail-item">
@@ -238,7 +238,7 @@
                 <div class="value">{{ formatValue(record.residence_type) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">本地居住年限</div>
+                <div class="label">本地居住年限（年）</div>
                 <div class="value">{{ formatValue(record.residence_years) }}</div>
               </div>
               <div class="detail-item">
@@ -260,7 +260,7 @@
             <div v-if="record.business_sites_json" class="sub-table">
               <div class="sub-table-title">经营场所明细</div>
               <div v-for="(site, idx) in parseJSON(record.business_sites_json)" :key="idx" class="sub-item">
-                <span><strong>场所{{ idx + 1 }}:</strong> {{ site.address }} | 建筑面积: {{ site.building_area }}㎡ | 土地面积: {{ site.land_area }}㎡ | {{ site.ownership }} | 月租金: {{ site.month_pay }}元 | 最近一期是否支付: {{ site.is_pay || '—' }}</span>
+                <span><strong>场所{{ idx + 1 }}:</strong> {{ site.address }} | 建筑面积（㎡）: {{ site.building_area }} | 土地面积（㎡）: {{ site.land_area }} | {{ site.ownership }} | 场地月租金（万元）: {{ site.month_pay }} | 最近一期是否支付: {{ site.is_pay || '—' }}</span>
               </div>
             </div>
           </div>
@@ -274,11 +274,11 @@
                 <div class="value">{{ formatValue(record.credit_inquiry_count) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">逾期次数</div>
+                <div class="label">逾期次数（次）</div>
                 <div class="value">{{ formatValue(record.credit_overdue_count) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">最大逾期金额</div>
+                <div class="label">最大逾期金额（万元）</div>
                 <div class="value">{{ formatValue(record.credit_max_overdue_amount) }}</div>
               </div>
               <div class="detail-item full-width">
@@ -303,20 +303,20 @@
                 <div v-for="(row, idx) in group.rows" :key="`acc-row-${gIdx}-${idx}`" style="margin-left: 20px; margin-top: 4px;">
                   <div><strong>{{ row.year }}年:</strong></div>
                   <div style="margin-left: 12px; margin-top: 4px;">
-                    1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
-                    7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
-                    <strong>月均: {{ row.avg }}万</strong>
+                    1月余额（万元）: {{ row.m1 }} | 2月余额（万元）: {{ row.m2 }} | 3月余额（万元）: {{ row.m3 }} | 4月余额（万元）: {{ row.m4 }} | 5月余额（万元）: {{ row.m5 }} | 6月余额（万元）: {{ row.m6 }} |
+                    7月余额（万元）: {{ row.m7 }} | 8月余额（万元）: {{ row.m8 }} | 9月余额（万元）: {{ row.m9 }} | 10月余额（万元）: {{ row.m10 }} | 11月余额（万元）: {{ row.m11 }} | 12月余额（万元）: {{ row.m12 }} |
+                    <strong>月均余额（万元）: {{ row.avg }}</strong>
                   </div>
                 </div>
               </div>
             </div>
             <div v-if="record.daily_avg_balance_json" class="sub-table">
-              <div class="sub-table-title">日均余额</div>
+              <div class="sub-table-title">日均余额（万元）</div>
               <div v-for="(row, idx) in parseJSON(record.daily_avg_balance_json)" :key="idx" class="sub-item">
                 <div><strong>{{ row.year }}年:</strong></div>
                 <div style="margin-left: 20px; margin-top: 4px;">
-                  3月: {{ row.m3 }}万 | 6月: {{ row.m6 }}万 | 9月: {{ row.m9 }}万 | 12月: {{ row.m12 }}万 |
-                  <strong>全年日均: {{ row.annual_avg }}万</strong>
+                  3月日均（万元）: {{ row.m3 }} | 6月日均（万元）: {{ row.m6 }} | 9月日均（万元）: {{ row.m9 }} | 12月日均（万元）: {{ row.m12 }} |
+                  <strong>全年日均（万元）: {{ row.annual_avg }}</strong>
                 </div>
               </div>
             </div>
@@ -331,43 +331,43 @@
                 <div class="value">{{ formatDateTime(record.bs_date) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">货币资金</div>
+                <div class="label">货币资金（万元）</div>
                 <div class="value">{{ formatValue(record.bs_cash) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">应收账款</div>
+                <div class="label">应收账款（万元）</div>
                 <div class="value">{{ formatValue(record.bs_ar) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">存货</div>
+                <div class="label">存货（万元）</div>
                 <div class="value">{{ formatValue(record.bs_inventory) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">应付账款</div>
+                <div class="label">应付账款（万元）</div>
                 <div class="value">{{ formatValue(record.bs_ap) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">总资产</div>
+                <div class="label">总资产（万元）</div>
                 <div class="value">{{ formatValue(record.bs_total_assets || record.analysis_fin_total_assets) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">总负债</div>
+                <div class="label">总负债（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_fin_total_liabilities) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">净资产</div>
+                <div class="label">净资产（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_fin_net_assets) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">营业收入</div>
+                <div class="label">营业收入（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_fin_revenue || record.is_table_s_total) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">净利润</div>
+                <div class="label">净利润（万元）</div>
                 <div class="value">{{ formatValue(record.is_table_net_profit || record.analysis_fin_net_income) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">年净收益</div>
+                <div class="label">年净收益（万元）</div>
                 <div class="value">{{ formatValue(record.is_table_annual_net_income) }}</div>
               </div>
               <div class="detail-item full-width">
@@ -388,11 +388,11 @@
             <h4 class="section-title">指标评价</h4>
             <div class="detail-grid">
               <div class="detail-item">
-                <div class="label">资产负债率</div>
+                <div class="label">资产负债率（%）</div>
                 <div class="value">{{ formatValue(record.analysis_ind_asset_debt_ratio) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">销售负债率</div>
+                <div class="label">销售负债率（%）</div>
                 <div class="value">{{ formatValue(record.analysis_ind_sales_debt_ratio) }}</div>
               </div>
               <div class="detail-item">
@@ -400,15 +400,15 @@
                 <div class="value">{{ formatValue(record.analysis_ind_meets_3x_income) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">应收账款平均账期</div>
+                <div class="label">应收账款平均账期（天）</div>
                 <div class="value">{{ formatValue(record.analysis_ind_receivable_days) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">月均/日均余额</div>
+                <div class="label">月均/日均余额（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_ind_avg_balance) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">月还款/月净收益</div>
+                <div class="label">月还款/月净收益（%）</div>
                 <div class="value">{{ formatValue(record.analysis_ind_repayment_ratio) }}</div>
               </div>
             </div>
@@ -419,15 +419,15 @@
             <h4 class="section-title">担保措施</h4>
             <div class="detail-grid">
               <div class="detail-item">
-                <div class="label">贷款金额</div>
+                <div class="label">贷款金额（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_amount) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">贷款期限</div>
+                <div class="label">贷款期限（月）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_term) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">担保费率</div>
+                <div class="label">担保费率（%）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_fee_rate) }}</div>
               </div>
               <div class="detail-item">
@@ -447,31 +447,31 @@
                 <div class="value">{{ formatValue(record.analysis_plan_collateral) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">房产抵押评估值</div>
+                <div class="label">房产抵押评估值（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_diyapingguzhi) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">房产二押余值</div>
+                <div class="label">房产二押余值（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_eryayuzhi) }}</div>
               </div>
               <div class="detail-item">
-                <div class="label">设备抵押净值</div>
+                <div class="label">设备抵押净值（万元）</div>
                 <div class="value">{{ formatValue(record.analysis_plan_diyajingzhi) }}</div>
               </div>
             </div>
             <div v-if="record.guarantees_json" class="sub-table">
               <div class="sub-table-title">我司在保情况</div>
               <div v-for="(g, idx) in parseJSON(record.guarantees_json)" :key="idx" class="sub-item">
-                <span><strong>在保{{ idx + 1 }}:</strong> {{ g.type }} | 承保金额: {{ g.amount }}万 | 承保余额: {{ g.balance }}万 | 月还款: {{ g.monthly_payment }}元</span>
+                <span><strong>在保{{ idx + 1 }}:</strong> {{ g.type }} | 承保金额（万元）: {{ g.amount }} | 承保余额（万元）: {{ g.balance }} | 月还款本息（万元）: {{ g.monthly_payment }}</span>
               </div>
               <div v-if="record.guarantees_amount_total || record.guarantees_balance_total" class="sub-item" style="font-weight: 600; border-top: 2px solid #2b7a78; padding-top: 8px; margin-top: 8px;">
-                <span>合计 - 承保金额: {{ formatValue(record.guarantees_amount_total) }}万 | 承保余额: {{ formatValue(record.guarantees_balance_total) }}万</span>
+                <span>合计 - 承保金额（万元）: {{ formatValue(record.guarantees_amount_total) }} | 承保余额（万元）: {{ formatValue(record.guarantees_balance_total) }}</span>
               </div>
             </div>
             <div v-if="record.existing_loans_json" class="sub-table">
               <div class="sub-table-title">现有贷款情况</div>
               <div v-for="(loan, idx) in parseJSON(record.existing_loans_json)" :key="idx" class="sub-item">
-                <span><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额: {{ loan.amount }}万 | 贷款余额: {{ loan.balance }}万 | 月还款: {{ loan.monthly_payment }}元</span>
+                <span><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</span>
               </div>
               <div
                 v-if="record.existing_loans_amount_total || record.existing_loans_balance_total || record.existing_loans_monthly_payment_total"
@@ -479,9 +479,9 @@
                 style="font-weight: 600; border-top: 2px solid #2b7a78; padding-top: 8px; margin-top: 8px;"
               >
                 <span>
-                  合计 - 贷款金额: {{ formatValue(record.existing_loans_amount_total) }}万 |
-                  贷款余额: {{ formatValue(record.existing_loans_balance_total) }}万 |
-                  月还款本息: {{ formatValue(record.existing_loans_monthly_payment_total) }}元
+                  合计 - 贷款金额（万元）: {{ formatValue(record.existing_loans_amount_total) }} |
+                  贷款余额（万元）: {{ formatValue(record.existing_loans_balance_total) }} |
+                  月还款本息（万元）: {{ formatValue(record.existing_loans_monthly_payment_total) }}
                 </span>
               </div>
             </div>
@@ -531,38 +531,38 @@
                 <div style="margin-left: 20px; margin-top: 4px;">
                   1月: {{ item.m1 }} | 2月: {{ item.m2 }} | 3月: {{ item.m3 }} | 4月: {{ item.m4 }} | 5月: {{ item.m5 }} | 6月: {{ item.m6 }} |
                   7月: {{ item.m7 }} | 8月: {{ item.m8 }} | 9月: {{ item.m9 }} | 10月: {{ item.m10 }} | 11月: {{ item.m11 }} | 12月: {{ item.m12 }} |
-                  <strong>合计: {{ item.total }}{{ record.electricity_is_quantity === '是' ? '度' : '元' }}</strong>
+                  <strong>合计: {{ item.total }}{{ record.electricity_is_quantity === '是' ? 'kWh' : '万元' }}</strong>
                 </div>
               </div>
             </div>
             <div v-if="record.asset_stats_json" class="sub-table">
               <div class="sub-table-title">资产统计</div>
               <div v-for="(asset, idx) in parseJSON(record.asset_stats_json)" :key="idx" class="sub-item">
-                <span><strong>{{ asset.name }}:</strong> 购入价格 {{ asset.buy_price }}万 | 当前价值 {{ asset.current_value }}万 | 折旧 {{ asset.depreciation }}万</span>
+                <span><strong>{{ asset.name }}:</strong> 购入价格（万元） {{ asset.buy_price }} | 当前价值（万元） {{ asset.current_value }} | 折旧（万元） {{ asset.depreciation }}</span>
               </div>
               <div v-if="record.asset_totals_buy_price || record.asset_totals_current_value" class="sub-item" style="font-weight: 600; border-top: 2px solid #2b7a78; padding-top: 8px; margin-top: 8px;">
-                <span>合计 - 购入价格: {{ formatValue(record.asset_totals_buy_price) }}万 | 当前价值: {{ formatValue(record.asset_totals_current_value) }}万 | 折旧: {{ formatValue(record.asset_totals_depreciation) }}万</span>
+                <span>合计 - 购入价格（万元）: {{ formatValue(record.asset_totals_buy_price) }} | 当前价值（万元）: {{ formatValue(record.asset_totals_current_value) }} | 折旧（万元）: {{ formatValue(record.asset_totals_depreciation) }}</span>
               </div>
             </div>
             <div v-if="record.cashflow_in_json" class="sub-table">
-              <div class="sub-table-title">银行流水流入</div>
+              <div class="sub-table-title">银行流水流入（万元）</div>
               <div v-for="(item, idx) in parseJSON(record.cashflow_in_json)" :key="idx" class="sub-item">
                 <div><strong>{{ item.year }}年:</strong></div>
                 <div style="margin-left: 20px; margin-top: 4px;">
-                  1月: {{ item.m1 }}万 | 2月: {{ item.m2 }}万 | 3月: {{ item.m3 }}万 | 4月: {{ item.m4 }}万 | 5月: {{ item.m5 }}万 | 6月: {{ item.m6 }}万 |
-                  7月: {{ item.m7 }}万 | 8月: {{ item.m8 }}万 | 9月: {{ item.m9 }}万 | 10月: {{ item.m10 }}万 | 11月: {{ item.m11 }}万 | 12月: {{ item.m12 }}万 |
-                  <strong>合计: {{ item.total }}万</strong>
+                  1月金额（万元）: {{ item.m1 }} | 2月金额（万元）: {{ item.m2 }} | 3月金额（万元）: {{ item.m3 }} | 4月金额（万元）: {{ item.m4 }} | 5月金额（万元）: {{ item.m5 }} | 6月金额（万元）: {{ item.m6 }} |
+                  7月金额（万元）: {{ item.m7 }} | 8月金额（万元）: {{ item.m8 }} | 9月金额（万元）: {{ item.m9 }} | 10月金额（万元）: {{ item.m10 }} | 11月金额（万元）: {{ item.m11 }} | 12月金额（万元）: {{ item.m12 }} |
+                  <strong>合计（万元）: {{ item.total }}</strong>
                 </div>
               </div>
             </div>
             <div v-if="record.cashflow_out_json" class="sub-table">
-              <div class="sub-table-title">银行流水流出</div>
+              <div class="sub-table-title">银行流水流出（万元）</div>
               <div v-for="(item, idx) in parseJSON(record.cashflow_out_json)" :key="idx" class="sub-item">
                 <div><strong>{{ item.year }}年:</strong></div>
                 <div style="margin-left: 20px; margin-top: 4px;">
-                  1月: {{ item.m1 }}万 | 2月: {{ item.m2 }}万 | 3月: {{ item.m3 }}万 | 4月: {{ item.m4 }}万 | 5月: {{ item.m5 }}万 | 6月: {{ item.m6 }}万 |
-                  7月: {{ item.m7 }}万 | 8月: {{ item.m8 }}万 | 9月: {{ item.m9 }}万 | 10月: {{ item.m10 }}万 | 11月: {{ item.m11 }}万 | 12月: {{ item.m12 }}万 |
-                  <strong>合计: {{ item.total }}万</strong>
+                  1月金额（万元）: {{ item.m1 }} | 2月金额（万元）: {{ item.m2 }} | 3月金额（万元）: {{ item.m3 }} | 4月金额（万元）: {{ item.m4 }} | 5月金额（万元）: {{ item.m5 }} | 6月金额（万元）: {{ item.m6 }} |
+                  7月金额（万元）: {{ item.m7 }} | 8月金额（万元）: {{ item.m8 }} | 9月金额（万元）: {{ item.m9 }} | 10月金额（万元）: {{ item.m10 }} | 11月金额（万元）: {{ item.m11 }} | 12月金额（万元）: {{ item.m12 }} |
+                  <strong>合计（万元）: {{ item.total }}</strong>
                 </div>
               </div>
             </div>
@@ -662,10 +662,10 @@
             <a-form-item label="借款人名称">
               <a-input v-model:value="editForm.loan_borrower_name" />
             </a-form-item>
-            <a-form-item label="申请金额(万元)">
+            <a-form-item label="申请金额（万元）">
               <a-input-number v-model:value="editForm.loan_apply_amount" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="申请期限(月)">
+            <a-form-item label="申请期限（月）">
               <a-input-number v-model:value="editForm.loan_apply_term" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="贷款用途" style="grid-column: 1 / -1">
@@ -681,7 +681,7 @@
             <a-form-item label="企业名称">
               <a-input v-model:value="editForm.company_name" />
             </a-form-item>
-            <a-form-item label="注册资本">
+            <a-form-item label="注册资本（万元）">
               <a-input-number v-model:value="editForm.company_registered_capital" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="成立时间">
@@ -761,7 +761,7 @@
             <a-form-item label="出生日期">
               <a-input v-model:value="editForm.controller_birth_date" type="date" />
             </a-form-item>
-            <a-form-item label="服务年限">
+            <a-form-item label="服务年限（年）">
               <a-input-number v-model:value="editForm.controller_service_years" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="文化程度">
@@ -816,7 +816,7 @@
             <a-form-item label="居住场所类型">
               <a-input v-model:value="editForm.residence_type" />
             </a-form-item>
-            <a-form-item label="本地居住年限">
+            <a-form-item label="本地居住年限（年）">
               <a-input-number v-model:value="editForm.residence_years" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="居住地址">
@@ -844,10 +844,10 @@
               <a-form-item label="地址">
                 <a-input v-model:value="site.address" />
               </a-form-item>
-              <a-form-item label="建筑面积">
+              <a-form-item label="建筑面积（㎡）">
                 <a-input-number v-model:value="site.building_area" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="土地面积">
+              <a-form-item label="土地面积（㎡）">
                 <a-input-number v-model:value="site.land_area" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="自有/租赁">
@@ -856,7 +856,7 @@
                   <a-select-option value="租赁">租赁</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="场地月租金">
+              <a-form-item label="场地月租金（万元）">
                 <a-input-number v-model:value="site.month_pay" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="最近一期是否支付">
@@ -914,17 +914,17 @@
                 <a-form-item label="年份">
                   <a-input v-model:value="row.year" />
                 </a-form-item>
-                <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label">
+                <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '余额（万元）'">
                   <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
                 </a-form-item>
-                <a-form-item label="月均余额">
+                <a-form-item label="月均余额（万元）">
                   <a-input-number v-model:value="row.avg" :min="0" style="width: 100%" />
                 </a-form-item>
               </div>
             </div>
           </div>
 
-          <h4 class="subsection-title" style="margin-top: 24px;">日均余额</h4>
+          <h4 class="subsection-title" style="margin-top: 24px;">日均余额（万元）</h4>
           <div v-for="(row, index) in dailyAvgBalance" :key="'daily-avg-' + index" class="table-row">
             <div class="table-row-header">
               <span>行 {{ index + 1 }}</span>
@@ -934,10 +934,10 @@
               <a-form-item label="年份">
                 <a-input v-model:value="row.year" />
               </a-form-item>
-              <a-form-item v-for="month in quarterFields" :key="month.key" :label="month.label">
+              <a-form-item v-for="month in quarterFields" :key="month.key" :label="month.label + '日均（万元）'">
                 <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="全年日均">
+              <a-form-item label="全年日均（万元）">
                 <a-input-number v-model:value="row.annual_avg" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -953,10 +953,10 @@
                 placeholder="可填写次数、时间段、查询机构等详细情况"
               />
             </a-form-item>
-            <a-form-item label="逾期次数">
+            <a-form-item label="逾期次数（次）">
               <a-input-number v-model:value="editForm.credit_overdue_count" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="最大逾期金额">
+            <a-form-item label="最大逾期金额（万元）">
               <a-input-number v-model:value="editForm.credit_max_overdue_amount" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="征信不良信息" style="grid-column: 1 / -1">
@@ -998,10 +998,10 @@
               <a-form-item label="年份">
                 <a-input v-model:value="item.year" />
               </a-form-item>
-              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '用电'">
+              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '用电量/电费'">
                 <a-input-number v-model:value="item[month.key]" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="合计">
+              <a-form-item label="合计（kWh/万元）">
                 <a-input-number v-model:value="item.total" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -1013,16 +1013,16 @@
         <div class="edit-section">
           <h3>方案及还款分析</h3>
           <div class="edit-grid">
-            <a-form-item label="方案金额">
+            <a-form-item label="方案金额（万元）">
               <a-input-number v-model:value="editForm.analysis_plan_amount" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="方案期限">
+            <a-form-item label="方案期限（月）">
               <a-input-number v-model:value="editForm.analysis_plan_term" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="还款方式">
               <a-input v-model:value="editForm.analysis_plan_repayment_method" />
             </a-form-item>
-            <a-form-item label="担保费率">
+            <a-form-item label="担保费率（%）">
               <a-input-number v-model:value="editForm.analysis_plan_fee_rate" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="企业保证">
@@ -1040,13 +1040,13 @@
             <a-form-item label="抵押物">
               <a-input v-model:value="editForm.analysis_plan_collateral" />
             </a-form-item>
-            <a-form-item label="房产抵押评估值">
+            <a-form-item label="房产抵押评估值（万元）">
               <a-input-number v-model:value="editForm.analysis_plan_diyapingguzhi" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="房产二押余值">
+            <a-form-item label="房产二押余值（万元）">
               <a-input-number v-model:value="editForm.analysis_plan_eryayuzhi" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="设备抵押净值">
+            <a-form-item label="设备抵押净值（万元）">
               <a-input-number v-model:value="editForm.analysis_plan_diyajingzhi" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1061,10 +1061,10 @@
               <a-form-item label="品种">
                 <a-input v-model:value="guarantee.type" />
               </a-form-item>
-              <a-form-item label="承保金额(万元)">
+              <a-form-item label="承保金额（万元）">
                 <a-input-number v-model:value="guarantee.amount" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="承保余额(万元)">
+              <a-form-item label="承保余额（万元）">
                 <a-input-number v-model:value="guarantee.balance" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="用途">
@@ -1079,7 +1079,7 @@
               <a-form-item label="合作银行及利率">
                 <a-input v-model:value="guarantee.bank_rate" />
               </a-form-item>
-              <a-form-item label="月还款额(元)">
+              <a-form-item label="月还款本息（万元）">
                 <a-input-number v-model:value="guarantee.monthly_payment" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="反担保措施" style="grid-column: 1 / -1">
@@ -1090,10 +1090,10 @@
           <a-button type="primary" @click="addGuarantee" style="margin-top: 12px;">添加在保情况</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
-            <a-form-item label="承保金额合计">
+            <a-form-item label="承保金额合计（万元）">
               <a-input-number v-model:value="editForm.guarantees_amount_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="承保余额合计">
+            <a-form-item label="承保余额合计（万元）">
               <a-input-number v-model:value="editForm.guarantees_balance_total" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1108,10 +1108,10 @@
               <a-form-item label="品种">
                 <a-input v-model:value="loan.type" />
               </a-form-item>
-              <a-form-item label="贷款金额(万元)">
+              <a-form-item label="贷款金额（万元）">
                 <a-input-number v-model:value="loan.amount" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="贷款余额(万元)">
+              <a-form-item label="贷款余额（万元）">
                 <a-input-number v-model:value="loan.balance" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="用途">
@@ -1126,7 +1126,7 @@
               <a-form-item label="合作银行及利率">
                 <a-input v-model:value="loan.bank_rate" />
               </a-form-item>
-              <a-form-item label="月还款额(元)">
+              <a-form-item label="月还款本息（万元）">
                 <a-input-number v-model:value="loan.monthly_payment" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="还款方式">
@@ -1137,13 +1137,13 @@
           <a-button type="primary" @click="addExistingLoan" style="margin-top: 12px;">添加现有贷款</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
-            <a-form-item label="贷款金额合计">
+            <a-form-item label="贷款金额合计（万元）">
               <a-input-number v-model:value="editForm.existing_loans_amount_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="贷款余额合计">
+            <a-form-item label="贷款余额合计（万元）">
               <a-input-number v-model:value="editForm.existing_loans_balance_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="每月还款本息合计">
+            <a-form-item label="每月还款本息合计（万元）">
               <a-input-number v-model:value="editForm.existing_loans_monthly_payment_total" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1153,25 +1153,25 @@
         <div class="edit-section">
           <h3>财务指标</h3>
           <div class="edit-grid">
-            <a-form-item label="总资产">
+            <a-form-item label="总资产（万元）">
               <a-input-number v-model:value="editForm.analysis_fin_total_assets" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="总负债">
+            <a-form-item label="总负债（万元）">
               <a-input-number v-model:value="editForm.analysis_fin_total_liabilities" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="净资产">
+            <a-form-item label="净资产（万元）">
               <a-input-number v-model:value="editForm.analysis_fin_net_assets" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="营业收入">
+            <a-form-item label="营业收入（万元）">
               <a-input-number v-model:value="editForm.analysis_fin_revenue" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="净利润">
+            <a-form-item label="净利润（万元）">
               <a-input-number v-model:value="editForm.analysis_fin_net_income" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="资产负债率">
+            <a-form-item label="资产负债率（%）">
               <a-input-number v-model:value="editForm.analysis_ind_asset_debt_ratio" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="销售负债率">
+            <a-form-item label="销售负债率（%）">
               <a-input-number v-model:value="editForm.analysis_ind_sales_debt_ratio" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="是否符合净收益3倍">
@@ -1180,13 +1180,13 @@
                 <a-select-option value="否">否</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="应收账款平均账期">
+            <a-form-item label="应收账款平均账期（天）">
               <a-input-number v-model:value="editForm.analysis_ind_receivable_days" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="月均/日均余额">
+            <a-form-item label="月均/日均余额（万元）">
               <a-input-number v-model:value="editForm.analysis_ind_avg_balance" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="月还款/月净收益">
+            <a-form-item label="月还款/月净收益（%）">
               <a-input-number v-model:value="editForm.analysis_ind_repayment_ratio" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="利润用途" style="grid-column: 1 / -1">
@@ -1198,46 +1198,46 @@
             <a-form-item label="报表日期">
               <a-input v-model:value="editForm.bs_date" type="month" />
             </a-form-item>
-            <a-form-item label="货币资金">
+            <a-form-item label="货币资金（万元）">
               <a-input-number v-model:value="editForm.bs_cash" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="应收账款">
+            <a-form-item label="应收账款（万元）">
               <a-input-number v-model:value="editForm.bs_ar" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="预付账款">
+            <a-form-item label="预付账款（万元）">
               <a-input-number v-model:value="editForm.bs_prepayments" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="其它应收">
+            <a-form-item label="其它应收（万元）">
               <a-input-number v-model:value="editForm.bs_other_ar" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="存货">
+            <a-form-item label="存货（万元）">
               <a-input-number v-model:value="editForm.bs_inventory" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="固定资产及土地">
+            <a-form-item label="固定资产及土地（万元）">
               <a-input-number v-model:value="editForm.bs_fixed_assets" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="总资产">
+            <a-form-item label="总资产（万元）">
               <a-input-number v-model:value="editForm.bs_total_assets" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="借款">
+            <a-form-item label="借款（万元）">
               <a-input-number v-model:value="editForm.bs_loans" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="应付账款">
+            <a-form-item label="应付账款（万元）">
               <a-input-number v-model:value="editForm.bs_ap" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="预收账款">
+            <a-form-item label="预收账款（万元）">
               <a-input-number v-model:value="editForm.bs_advances" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="其它应付">
+            <a-form-item label="其它应付（万元）">
               <a-input-number v-model:value="editForm.bs_other_ap" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="实收资本">
+            <a-form-item label="实收资本（万元）">
               <a-input-number v-model:value="editForm.bs_capital" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="留存收益">
+            <a-form-item label="留存收益（万元）">
               <a-input-number v-model:value="editForm.bs_retained_earnings" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="负债及权益合计">
+            <a-form-item label="负债及权益合计（万元）">
               <a-input-number v-model:value="editForm.bs_total_liabilities_equity" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1255,13 +1255,13 @@
               <a-form-item label="购入时间">
                 <a-input v-model:value="asset.buy_time" />
               </a-form-item>
-              <a-form-item label="购入价格">
+              <a-form-item label="购入价格（万元）">
                 <a-input-number v-model:value="asset.buy_price" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="当前价值">
+              <a-form-item label="当前价值（万元）">
                 <a-input-number v-model:value="asset.current_value" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="折旧额">
+              <a-form-item label="折旧额（万元）">
                 <a-input-number v-model:value="asset.depreciation" :min="0" style="width: 100%" />
               </a-form-item>
               <a-form-item label="备注" style="grid-column: 1 / -1">
@@ -1272,13 +1272,13 @@
           <a-button type="primary" @click="addAssetStat" style="margin-top: 12px;">添加资产</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
-            <a-form-item label="购入价格合计">
+            <a-form-item label="购入价格合计（万元）">
               <a-input-number v-model:value="editForm.asset_totals_buy_price" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="当前价值合计">
+            <a-form-item label="当前价值合计（万元）">
               <a-input-number v-model:value="editForm.asset_totals_current_value" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="折旧合计">
+            <a-form-item label="折旧合计（万元）">
               <a-input-number v-model:value="editForm.asset_totals_depreciation" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1299,7 +1299,7 @@
               <a-form-item label="名称">
                 <a-input v-model:value="item.name" />
               </a-form-item>
-              <a-form-item label="金额">
+              <a-form-item label="金额（万元）">
                 <a-input-number v-model:value="item.value" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -1307,67 +1307,67 @@
           <a-button type="primary" @click="addSalesItem" style="margin-top: 12px;">添加销售收入</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
-            <a-form-item label="销售收入总额">
+            <a-form-item label="销售收入总额（万元）">
               <a-input-number v-model:value="editForm.is_table_s_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="物料成本">
+            <a-form-item label="物料成本（万元）">
               <a-input-number v-model:value="editForm.is_table_material_cost" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="毛利润">
+            <a-form-item label="毛利润（万元）">
               <a-input-number v-model:value="editForm.is_table_gross_profit" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="工资（销售、安装）">
+            <a-form-item label="工资（销售、安装）（万元）">
               <a-input-number v-model:value="editForm.is_table_f_wages" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="租金">
+            <a-form-item label="租金（万元）">
               <a-input-number v-model:value="editForm.is_table_f_rent" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="水电费">
+            <a-form-item label="水电费（万元）">
               <a-input-number v-model:value="editForm.is_table_f_utility" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="通讯费">
+            <a-form-item label="通讯费（万元）">
               <a-input-number v-model:value="editForm.is_table_f_comm" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="运输费">
+            <a-form-item label="运输费（万元）">
               <a-input-number v-model:value="editForm.is_table_f_trans" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="材料损失">
+            <a-form-item label="材料损失（万元）">
               <a-input-number v-model:value="editForm.is_table_f_loss" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="广告及维护费">
+            <a-form-item label="广告及维护费（万元）">
               <a-input-number v-model:value="editForm.is_table_f_adv" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="招待费">
+            <a-form-item label="招待费（万元）">
               <a-input-number v-model:value="editForm.is_table_f_entertain" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="其它税收">
+            <a-form-item label="其它税收（万元）">
               <a-input-number v-model:value="editForm.is_table_f_tax" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="其它费用">
+            <a-form-item label="其它费用（万元）">
               <a-input-number v-model:value="editForm.is_table_f_other" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="固定支出合计">
+            <a-form-item label="固定支出合计（万元）">
               <a-input-number v-model:value="editForm.is_table_f_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="净利润">
+            <a-form-item label="净利润（万元）">
               <a-input-number v-model:value="editForm.is_table_net_profit" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="家庭开支" style="grid-column: 1 / -1">
+            <a-form-item label="家庭开支（万元）" style="grid-column: 1 / -1">
               <a-textarea v-model:value="editForm.is_table_o_family_exp" :rows="2" />
             </a-form-item>
-            <a-form-item label="分期还款（经营）">
+            <a-form-item label="分期还款（经营）（万元）">
               <a-input-number v-model:value="editForm.is_table_o_biz_loan" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="分期还款（私人）">
+            <a-form-item label="分期还款（私人）（万元）">
               <a-input-number v-model:value="editForm.is_table_o_pvt_loan" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="其它支出">
+            <a-form-item label="其它支出（万元）">
               <a-input-number v-model:value="editForm.is_table_o_other_exp" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="家庭收入">
+            <a-form-item label="家庭收入（万元）">
               <a-input-number v-model:value="editForm.is_table_o_family_inc" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="年净收益">
+            <a-form-item label="年净收益（万元）">
               <a-input-number v-model:value="editForm.is_table_annual_net_income" :min="0" style="width: 100%" />
             </a-form-item>
           </div>
@@ -1382,7 +1382,7 @@
               <a-form-item label="数据名称">
                 <a-input v-model:value="item.name" />
               </a-form-item>
-              <a-form-item label="数据金额">
+              <a-form-item label="数据金额（万元）">
                 <a-input-number v-model:value="item.value" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -1390,16 +1390,16 @@
           <a-button type="primary" @click="addRevCheckItem" style="margin-top: 12px;">添加校验项</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
-            <a-form-item label="合计金额">
+            <a-form-item label="合计金额（万元）">
               <a-input-number v-model:value="editForm.rev_check_total_value" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="推算营业额">
+            <a-form-item label="推算营业额（万元）">
               <a-input-number v-model:value="editForm.rev_check_est_total" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="损益表使用额">
+            <a-form-item label="损益表使用额（万元）">
               <a-input-number v-model:value="editForm.rev_check_is_revenue" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="偏差率">
+            <a-form-item label="偏差率（%）">
               <a-input v-model:value="editForm.rev_check_diff_rate" />
             </a-form-item>
             <a-form-item label="推算方式" style="grid-column: 1 / -1">
@@ -1417,10 +1417,10 @@
               <a-form-item label="年份">
                 <a-input v-model:value="row.year" />
               </a-form-item>
-              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '金额'">
+              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '金额（万元）'">
                 <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="合计">
+              <a-form-item label="合计（万元）">
                 <a-input-number v-model:value="row.total" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -1437,10 +1437,10 @@
               <a-form-item label="年份">
                 <a-input v-model:value="row.year" />
               </a-form-item>
-              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '金额'">
+              <a-form-item v-for="month in monthFields" :key="month.key" :label="month.label + '金额（万元）'">
                 <a-input-number v-model:value="row[month.key]" :min="0" style="width: 100%" />
               </a-form-item>
-              <a-form-item label="合计">
+              <a-form-item label="合计（万元）">
                 <a-input-number v-model:value="row.total" :min="0" style="width: 100%" />
               </a-form-item>
             </div>
@@ -1489,10 +1489,10 @@
         <div class="edit-section">
           <h3>预测结果</h3>
           <div class="edit-grid">
-            <a-form-item label="预测额度">
+            <a-form-item label="预测额度（万元）">
               <a-input-number v-model:value="editForm.predicted" :min="0" style="width: 100%" />
             </a-form-item>
-            <a-form-item label="专家测算额度">
+            <a-form-item label="专家测算额度（万元）">
               <a-input-number v-model:value="editForm.expert_amount" :min="0" style="width: 100%" />
             </a-form-item>
             <a-form-item label="预测结果文本" style="grid-column: 1 / -1">
@@ -1760,8 +1760,8 @@ const removeSalesItem = (index: number) => salesList.value.splice(index, 1);
 const columns = [
   { title: '企业编号', dataIndex: 'project_number', key: 'project_number' },
   { title: '企业名称', dataIndex: 'company_name', key: 'company_name' },
-  { title: '申请金额(万元)', dataIndex: 'application_amount', key: 'application_amount' },
-  { title: '申请期限(月)', dataIndex: 'application_period', key: 'application_period' },
+  { title: '申请金额（万元）', dataIndex: 'application_amount', key: 'application_amount' },
+  { title: '申请期限（月）', dataIndex: 'application_period', key: 'application_period' },
   { title: '预测额度(万元)', dataIndex: 'predicted', key: 'predicted' },
   { title: '专家额度', dataIndex: 'expert_amount', key: 'expert_amount' },
   { title: '创建时间', dataIndex: 'created_at', key: 'created_at', customRender: ({ text }: any) => formatDateTime(text) },
@@ -1773,52 +1773,52 @@ const fieldLabels: Record<string, string> = {
   project_number: '企业编号',
   company_name: '企业名称',
   project_manager: '项目经理',
-  application_amount: '申请金额(万元)',
-  application_period: '申请期限(月)',
+  application_amount: '申请金额（万元）',
+  application_period: '申请期限（月）',
   repayment_method: '还款方式',
   controller_gender: '实控人性别',
   education_level: '实控人文化程度',
   marital_status: '婚姻状况',
   residence_type: '居住场所类型',
-  local_residence_years: '本地居住时间(年)',
+  local_residence_years: '本地居住年限（年）',
   industry_category: '所属行业(大类)',
   industry_experience: '借款人从业年限',
   is_foreign_trade: '是否外贸型',
   is_cautious_industry: '是否慎入行业',
   employee_count: '企业雇佣人数',
   business_premises_type: '经营场所类型',
-  monthly_rent: '场地月租金',
-  monthly_balance: '月均余额',
-  daily_balance: '日均余额',
-  electricity_consumption: '用电量',
-  cash_at_meeting: '上会时点货币资金',
-  receivables_at_meeting: '上会时点应收账款',
-  inventory_at_meeting: '上会时点存货',
-  payables_at_meeting: '上会时点应付账款',
-  total_assets: '总资产',
-  total_liabilities: '总负债',
-  net_assets: '净资产',
-  annual_sales: '年销售收入',
-  annual_net_profit: '年净利润',
-  monthly_net_profit: '月净利润',
-  core_assets: '核心资产',
-  hard_liabilities: '硬性负债',
-  operating_liabilities: '经营负债',
-  sales_debt_ratio: '销售/负债比',
-  asset_debt_ratio: '资产/负债比',
-  monthly_repayment: '月还款额',
-  total_monthly_repayment: '总月还款额',
-  repayment_income_ratio: '月还款/月净利润',
-  average_payment_period: '平均付款账期',
+  monthly_rent: '场地月租金（万元）',
+  monthly_balance: '月均余额（万元）',
+  daily_balance: '日均余额（万元）',
+  electricity_consumption: '用电量/电费（kWh/万元）',
+  cash_at_meeting: '上会时点货币资金（万元）',
+  receivables_at_meeting: '上会时点应收账款（万元）',
+  inventory_at_meeting: '上会时点存货（万元）',
+  payables_at_meeting: '上会时点应付账款（万元）',
+  total_assets: '总资产（万元）',
+  total_liabilities: '总负债（万元）',
+  net_assets: '净资产（万元）',
+  annual_sales: '年销售收入（万元）',
+  annual_net_profit: '年净利润（万元）',
+  monthly_net_profit: '月净利润（万元）',
+  core_assets: '核心资产（万元）',
+  hard_liabilities: '硬性负债（万元）',
+  operating_liabilities: '经营负债（万元）',
+  sales_debt_ratio: '销售/负债比（%）',
+  asset_debt_ratio: '资产/负债比（%）',
+  monthly_repayment: '月还款额（万元）',
+  total_monthly_repayment: '总月还款额（万元）',
+  repayment_income_ratio: '月还款/月净利润（%）',
+  average_payment_period: '平均付款账期（天）',
   family_harmony: '家庭和睦度',
   minor_children: '未成年子女数',
   adult_family_members: '成年家庭成员数',
   working_family_members: '在职家庭成员数',
   credit_inquiries: '征信查询次数',
-  overdue_times: '逾期次数',
-  max_overdue_amount: '最大逾期金额',
-  bank_inflow: '银行流水流入',
-  bank_outflow: '银行流水流出',
+  overdue_times: '逾期次数（次）',
+  max_overdue_amount: '最大逾期金额（万元）',
+  bank_inflow: '银行流水流入（万元）',
+  bank_outflow: '银行流水流出（万元）',
   highest_flow_month: '流水峰值月份',
   lowest_flow_month: '流水低谷月份',
   company_guarantee: '企业保证',
@@ -1837,10 +1837,10 @@ const fieldLabels: Record<string, string> = {
   profit_usage: '利润用途',
   other_soft_info: '其他软信息',
   loan_purpose: '贷款用途',
-  predicted: '预测额度',
+  predicted: '预测额度（万元）',
   prediction_text: '预测结果文本',
   expert_opinion: '专家意见',
-  expert_amount: '专家测算额度',
+  expert_amount: '专家测算额度（万元）',
   created_by: '创建人',
   created_at: '创建时间',
 };

@@ -67,11 +67,11 @@
                 <input type="text" v-model="form.loan.borrower_name" />
               </div>
               <div class="form-item">
-                <label>申请金额</label>
+                <label>申请金额（万元）</label>
                 <input type="number" v-model="form.loan.apply_amount" />
               </div>
               <div class="form-item">
-                <label>申请期限</label>
+                <label>申请期限（月）</label>
                 <input type="number" v-model="form.loan.apply_term" />
               </div>
               <div class="form-item">
@@ -89,7 +89,7 @@
                 <input type="text" v-model="form.company.name" />
               </div>
               <div class="form-item">
-                <label>注册资本</label>
+                <label>注册资本（万元）</label>
                 <input type="number" v-model="form.company.registered_capital" />
               </div>
               <div class="form-item">
@@ -183,7 +183,7 @@
                 <input type="date" v-model="form.controller.birth_date" />
               </div>
               <div class="form-item">
-                <label>服务年限</label>
+                <label>服务年限（年）</label>
                 <input type="number" v-model="form.controller.service_years" />
               </div>
               <div class="form-item">
@@ -261,7 +261,7 @@
                 <input type="text" v-model="form.residence.address" />
               </div>
               <div class="form-item">
-                <label>本地居住年限</label>
+                <label>本地居住年限（年）</label>
                 <input type="number" v-model="form.residence.years" />
               </div>
             </div>
@@ -293,11 +293,11 @@
                   <input type="text" v-model="site.address" />
                 </div>
                 <div class="form-item">
-                  <label>建筑面积</label>
+                  <label>建筑面积（㎡）</label>
                   <input type="number" v-model="site.building_area" />
                 </div>
                 <div class="form-item">
-                  <label>土地面积</label>
+                  <label>土地面积（㎡）</label>
                   <input type="number" v-model="site.land_area" />
                 </div>
                 <div class="form-item">
@@ -314,7 +314,7 @@
                   </datalist>
                 </div>
                 <div class="form-item">
-                  <label>场地月租金</label>
+                  <label>场地月租金（万元）</label>
                   <input type="number" v-model="site.month_pay" />
                 </div>
                 <div class="form-item">
@@ -427,18 +427,18 @@
                     <input type="text" v-model="row.year" />
                   </div>
                   <div class="form-item" v-for="month in months" :key="month.key">
-                    <label>{{ month.label }}余额</label>
+                    <label>{{ month.label }}余额（万元）</label>
                     <input type="number" v-model="row[month.key]" @input="updateAccountRowAvg(row)" />
                   </div>
                   <div class="form-item">
-                    <label>月均余额</label>
+                    <label>月均余额（万元）</label>
                     <input type="number" v-model="row.avg" />
                   </div>
                 </div>
               </div>
             </div>
 
-            <h4 class="subsection-title">日均余额</h4>
+            <h4 class="subsection-title">日均余额（万元）</h4>
             <div
               class="table-row"
               v-for="(row, index) in form.daily_avg_balance"
@@ -463,11 +463,11 @@
                   <input type="text" v-model="row.year" />
                 </div>
                 <div class="form-item" v-for="month in quarterMonths" :key="month.key">
-                  <label>{{ month.label }}日均</label>
+                  <label>{{ month.label }}日均（万元）</label>
                   <input type="number" v-model="row[month.key]" @input="updateDailyAvgRow(row)" />
                 </div>
                 <div class="form-item">
-                  <label>全年日均</label>
+                  <label>全年日均（万元）</label>
                   <input type="number" v-model="row.annual_avg" />
                 </div>
               </div>
@@ -506,11 +506,11 @@
                   <input type="text" v-model="g.type" />
                 </div>
                 <div class="form-item">
-                  <label>承保金额</label>
+                  <label>承保金额（万元）</label>
                   <input type="number" v-model="g.amount" />
                 </div>
                 <div class="form-item">
-                  <label>承保余额</label>
+                  <label>承保余额（万元）</label>
                   <input type="number" v-model="g.balance" />
                 </div>
                 <div class="form-item">
@@ -518,7 +518,7 @@
                   <input type="text" v-model="g.counter_guarantee" />
                 </div>
                 <div class="form-item">
-                  <label>每月还款本息</label>
+                  <label>每月还款本息（万元）</label>
                   <input type="number" v-model="g.monthly_payment" />
                 </div>
                 <div class="form-item">
@@ -549,11 +549,11 @@
             </el-button>
             <div class="form-grid">
               <div class="form-item">
-                <label>承保金额合计</label>
+                <label>承保金额合计（万元）</label>
                 <input type="number" v-model="form.guarantees_totals.amount_total" />
               </div>
               <div class="form-item">
-                <label>承保余额合计</label>
+                <label>承保余额合计（万元）</label>
                 <input type="number" v-model="form.guarantees_totals.balance_total" />
               </div>
             </div>
@@ -583,11 +583,11 @@
                   <input type="text" v-model="loanItem.type" />
                 </div>
                 <div class="form-item">
-                  <label>贷款金额</label>
+                  <label>贷款金额（万元）</label>
                   <input type="number" v-model="loanItem.amount" @input="updateExistingLoansTotals" />
                 </div>
                 <div class="form-item">
-                  <label>贷款余额</label>
+                  <label>贷款余额（万元）</label>
                   <input type="number" v-model="loanItem.balance" @input="updateExistingLoansTotals" />
                 </div>
                 <div class="form-item">
@@ -595,7 +595,7 @@
                   <input type="text" v-model="loanItem.mode" />
                 </div>
                 <div class="form-item">
-                  <label>每月还款本息</label>
+                  <label>每月还款本息（万元）</label>
                   <input type="number" v-model="loanItem.monthly_payment" @input="updateExistingLoansTotals" />
                 </div>
                 <div class="form-item">
@@ -626,15 +626,15 @@
             </el-button>
             <div class="form-grid">
               <div class="form-item">
-                <label>贷款金额合计</label>
+                <label>贷款金额合计（万元）</label>
                 <input type="number" v-model="form.existing_loans_totals.amount_total" />
               </div>
               <div class="form-item">
-                <label>贷款余额合计</label>
+                <label>贷款余额合计（万元）</label>
                 <input type="number" v-model="form.existing_loans_totals.balance_total" />
               </div>
               <div class="form-item">
-                <label>每月还款本息合计</label>
+                <label>每月还款本息合计（万元）</label>
                 <input type="number" v-model="form.existing_loans_totals.monthly_payment_total" />
               </div>
             </div>
@@ -654,11 +654,11 @@
                 <textarea v-model="form.credit.adverse_info" rows="4"></textarea>
               </div>
               <div class="form-item">
-                <label>逾期次数</label>
+                <label>逾期次数（次）</label>
                 <input type="number" v-model="form.credit.overdue_count" />
               </div>
               <div class="form-item">
-                <label>最高逾期金额</label>
+                <label>最高逾期金额（万元）</label>
                 <input type="number" v-model="form.credit.max_overdue_amount" />
               </div>
               <div class="form-item full-row large-textarea">
@@ -713,11 +713,11 @@
                   <input type="text" v-model="item.year" />
                 </div>
                 <div class="form-item" v-for="month in months" :key="month.key">
-                  <label>{{ month.label }}用电</label>
+                  <label>{{ getElectricityMonthLabel(month.label) }}</label>
                   <input type="number" v-model="item[month.key]" @input="updateElectricityTotal(item)" />
                 </div>
                 <div class="form-item">
-                  <label>合计</label>
+                  <label>{{ getElectricityTotalLabel() }}</label>
                   <input type="number" v-model="item.total" />
                 </div>
               </div>
@@ -738,11 +738,11 @@
             <h4 class="subsection-title">项目方案</h4>
             <div class="form-grid">
               <div class="form-item">
-                <label>贷款金额</label>
+                <label>贷款金额（万元）</label>
                 <input type="number" v-model="form.analysis.plan.amount" />
               </div>
               <div class="form-item">
-                <label>贷款期限</label>
+                <label>贷款期限（月）</label>
                 <input type="number" v-model="form.analysis.plan.term" />
               </div>
               <div class="form-item">
@@ -750,7 +750,7 @@
                 <input type="text" v-model="form.analysis.plan.repayment_method" />
               </div>
               <div class="form-item">
-                <label>担保费率</label>
+                <label>担保费率（%）</label>
                 <input type="number" v-model="form.analysis.plan.fee_rate" />
               </div>
               <div class="form-item">
@@ -766,15 +766,15 @@
                 <input type="text" v-model="form.analysis.plan.collateral" />
               </div>
               <div class="form-item">
-                <label>房产抵押评估值</label>
+                <label>房产抵押评估值（万元）</label>
                 <input type="number" v-model="form.analysis.plan.diyapingguzhi" />
               </div>
               <div class="form-item">
-                <label>房产二押余值</label>
+                <label>房产二押余值（万元）</label>
                 <input type="number" v-model="form.analysis.plan.eryayuzhi" />
               </div>
               <div class="form-item">
-                <label>设备抵押净值</label>
+                <label>设备抵押净值（万元）</label>
                 <input type="number" v-model="form.analysis.plan.diyajingzhi" />
               </div>
             </div>
@@ -782,23 +782,23 @@
             <h4 class="subsection-title">财务数据</h4>
             <div class="form-grid">
               <div class="form-item">
-                <label>总资产</label>
+                <label>总资产（万元）</label>
                 <input type="number" v-model="form.analysis.financials.total_assets" />
               </div>
               <div class="form-item">
-                <label>总负债</label>
+                <label>总负债（万元）</label>
                 <input type="number" v-model="form.analysis.financials.total_liabilities" />
               </div>
               <div class="form-item">
-                <label>净资产</label>
+                <label>净资产（万元）</label>
                 <input type="number" v-model="form.analysis.financials.net_assets" />
               </div>
               <div class="form-item">
-                <label>营业收入</label>
+                <label>营业收入（万元）</label>
                 <input type="number" v-model="form.analysis.financials.revenue" />
               </div>
               <div class="form-item">
-                <label>净收益</label>
+                <label>净收益（万元）</label>
                 <input type="number" v-model="form.analysis.financials.net_income" />
               </div>
               <div class="form-item">
@@ -810,11 +810,11 @@
             <h4 class="subsection-title">指标评价</h4>
             <div class="form-grid">
               <div class="form-item">
-                <label>资产负债率</label>
+                <label>资产负债率（%）</label>
                 <input type="number" v-model="form.analysis.indicators.asset_debt_ratio" />
               </div>
               <div class="form-item">
-                <label>销售负债率</label>
+                <label>销售负债率（%）</label>
                 <input type="number" v-model="form.analysis.indicators.sales_debt_ratio" />
               </div>
               <div class="form-item">
@@ -825,7 +825,7 @@
                 </select>
               </div>
               <div class="form-item">
-                <label>应收账款平均账期</label>
+                <label>应收账款平均账期（天）</label>
                 <input type="number" v-model="form.analysis.indicators.receivable_days" />
               </div>
               <div class="form-item">
@@ -833,7 +833,7 @@
                 <input type="number" v-model="form.analysis.indicators.avg_balance" />
               </div>
               <div class="form-item">
-                <label>月还款额（含本笔贷款） /月净收益对比 </label>
+                <label>月还款额（含本笔贷款）/月净收益对比（%）</label>
                 <input type="number" v-model="form.analysis.indicators.repayment_ratio" />
               </div>
               <div class="form-item">
@@ -894,7 +894,7 @@
                 />
               </div>
               <div class="form-item full-row wide-input">
-                <label>申请额度</label>
+                <label>申请额度（万元）</label>
                 <input type="number" v-model="form.analysis.limit.apply_amount" />
               </div>
               <div class="form-item full-row wide-input">
@@ -915,59 +915,59 @@
                 <input type="month" v-model="form.bs.date" />
               </div>
               <div class="form-item">
-                <label>货币资金</label>
+                <label>货币资金（万元）</label>
                 <input type="number" v-model="form.bs.cash" />
               </div>
               <div class="form-item">
-                <label>应收账款</label>
+                <label>应收账款（万元）</label>
                 <input type="number" v-model="form.bs.ar" />
               </div>
               <div class="form-item">
-                <label>预付账款</label>
+                <label>预付账款（万元）</label>
                 <input type="number" v-model="form.bs.prepayments" />
               </div>
               <div class="form-item">
-                <label>其它应收</label>
+                <label>其它应收（万元）</label>
                 <input type="number" v-model="form.bs.other_ar" />
               </div>
               <div class="form-item">
-                <label>存货</label>
+                <label>存货（万元）</label>
                 <input type="number" v-model="form.bs.inventory" />
               </div>
               <div class="form-item">
-                <label>固定资产及土地</label>
+                <label>固定资产及土地（万元）</label>
                 <input type="number" v-model="form.bs.fixed_assets" />
               </div>
               <div class="form-item">
-                <label>总资产</label>
+                <label>总资产（万元）</label>
                 <input type="number" v-model="form.bs.total_assets" />
               </div>
               <div class="form-item">
-                <label>借款</label>
+                <label>借款（万元）</label>
                 <input type="number" v-model="form.bs.loans" />
               </div>
               <div class="form-item">
-                <label>应付账款</label>
+                <label>应付账款（万元）</label>
                 <input type="number" v-model="form.bs.ap" />
               </div>
               <div class="form-item">
-                <label>预收账款</label>
+                <label>预收账款（万元）</label>
                 <input type="number" v-model="form.bs.advances" />
               </div>
               <div class="form-item">
-                <label>其它应付</label>
+                <label>其它应付（万元）</label>
                 <input type="number" v-model="form.bs.other_ap" />
               </div>
               <div class="form-item">
-                <label>实收资本</label>
+                <label>实收资本（万元）</label>
                 <input type="number" v-model="form.bs.capital" />
               </div>
               <div class="form-item">
-                <label>留存收益</label>
+                <label>留存收益（万元）</label>
                 <input type="number" v-model="form.bs.retained_earnings" />
               </div>
               <div class="form-item">
-                <label>负债及权益合计</label>
+                <label>负债及权益合计（万元）</label>
                 <input type="number" v-model="form.bs.total_liabilities_equity" />
               </div>
             </div>
@@ -1004,15 +1004,15 @@
                   <input type="date" v-model="asset.buy_time" />
                 </div>
                 <div class="form-item">
-                  <label>购入价格</label>
+                  <label>购入价格（万元）</label>
                   <input type="number" v-model="asset.buy_price" />
                 </div>
                 <div class="form-item">
-                  <label>当前价值</label>
+                  <label>当前价值（万元）</label>
                   <input type="number" v-model="asset.current_value" />
                 </div>
                 <div class="form-item">
-                  <label>折旧额</label>
+                  <label>折旧额（万元）</label>
                   <input type="number" v-model="asset.depreciation" />
                 </div>
                 <div class="form-item">
@@ -1033,15 +1033,15 @@
             <h4 class="subsection-title">合计</h4>
             <div class="form-grid">
               <div class="form-item">
-                <label>购入价格合计</label>
+                <label>购入价格合计（万元）</label>
                 <input type="number" v-model="form.asset_totals.buy_price" />
               </div>
               <div class="form-item">
-                <label>当前价值合计</label>
+                <label>当前价值合计（万元）</label>
                 <input type="number" v-model="form.asset_totals.current_value" />
               </div>
               <div class="form-item">
-                <label>折旧合计</label>
+                <label>折旧合计（万元）</label>
                 <input type="number" v-model="form.asset_totals.depreciation" />
               </div>
             </div>
@@ -1055,7 +1055,7 @@
                 <input type="text" v-model="form.is_table.year" />
               </div>
               <div class="form-item">
-                <label>销售收入总额</label>
+                <label>销售收入总额（万元）</label>
                 <input type="number" v-model="form.is_table.s_total" />
               </div>
             </div>
@@ -1085,7 +1085,7 @@
                   <input type="text" v-model="item.name" />
                 </div>
                 <div class="form-item">
-                  <label>金额</label>
+                  <label>金额（万元）</label>
                   <input type="number" v-model="item.value" />
                 </div>
               </div>
@@ -1101,83 +1101,83 @@
 
             <div class="form-grid">
               <div class="form-item">
-                <label>物料成本</label>
+                <label>物料成本（万元）</label>
                 <input type="number" v-model="form.is_table.material_cost" />
               </div>
               <div class="form-item">
-                <label>毛利润</label>
+                <label>毛利润（万元）</label>
                 <input type="number" v-model="form.is_table.gross_profit" />
               </div>
               <div class="form-item">
-                <label>工资（销售、安装）</label>
+                <label>工资（销售、安装）（万元）</label>
                 <input type="number" v-model="form.is_table.f_wages" />
               </div>
               <div class="form-item">
-                <label>租金</label>
+                <label>租金（万元）</label>
                 <input type="number" v-model="form.is_table.f_rent" />
               </div>
               <div class="form-item">
-                <label>水电费</label>
+                <label>水电费（万元）</label>
                 <input type="number" v-model="form.is_table.f_utility" />
               </div>
               <div class="form-item">
-                <label>通讯费</label>
+                <label>通讯费（万元）</label>
                 <input type="number" v-model="form.is_table.f_comm" />
               </div>
               <div class="form-item">
-                <label>运输费</label>
+                <label>运输费（万元）</label>
                 <input type="number" v-model="form.is_table.f_trans" />
               </div>
               <div class="form-item">
-                <label>材料损失</label>
+                <label>材料损失（万元）</label>
                 <input type="number" v-model="form.is_table.f_loss" />
               </div>
               <div class="form-item">
-                <label>广告及维护费</label>
+                <label>广告及维护费（万元）</label>
                 <input type="number" v-model="form.is_table.f_adv" />
               </div>
               <div class="form-item">
-                <label>招待费</label>
+                <label>招待费（万元）</label>
                 <input type="number" v-model="form.is_table.f_entertain" />
               </div>
               <div class="form-item">
-                <label>其它税收</label>
+                <label>其它税收（万元）</label>
                 <input type="number" v-model="form.is_table.f_tax" />
               </div>
               <div class="form-item">
-                <label>其它费用</label>
+                <label>其它费用（万元）</label>
                 <input type="number" v-model="form.is_table.f_other" />
               </div>
               <div class="form-item">
-                <label>固定支出合计</label>
+                <label>固定支出合计（万元）</label>
                 <input type="number" v-model="form.is_table.f_total" />
               </div>
               <div class="form-item">
-                <label>净利润</label>
+                <label>净利润（万元）</label>
                 <input type="number" v-model="form.is_table.net_profit" />
               </div>
               <div class="form-item">
-                <label>家庭开支</label>
+                <label>家庭开支（万元）</label>
                 <input type="number" v-model="form.is_table.o_family_exp" />
               </div>
               <div class="form-item">
-                <label>分期还款（经营）</label>
+                <label>分期还款（经营）（万元）</label>
                 <input type="number" v-model="form.is_table.o_biz_loan" />
               </div>
               <div class="form-item">
-                <label>分期还款（私人）</label>
+                <label>分期还款（私人）（万元）</label>
                 <input type="number" v-model="form.is_table.o_pvt_loan" />
               </div>
               <div class="form-item">
-                <label>其它支出</label>
+                <label>其它支出（万元）</label>
                 <input type="number" v-model="form.is_table.o_other_exp" />
               </div>
               <div class="form-item">
-                <label>家庭收入</label>
+                <label>家庭收入（万元）</label>
                 <input type="number" v-model="form.is_table.o_family_inc" />
               </div>
               <div class="form-item">
-                <label>年净收益</label>
+                <label>年净收益（万元）</label>
                 <input type="number" v-model="form.is_table.annual_net_income" />
               </div>
             </div>
@@ -1209,7 +1209,7 @@
                   <input type="text" v-model="item.name" />
                 </div>
                 <div class="form-item">
-                  <label>数据金额</label>
+                  <label>数据金额（万元）</label>
                   <input type="number" v-model="item.value" />
                 </div>
               </div>
@@ -1226,19 +1226,19 @@
             <h4 class="subsection-title">合计与推算</h4>
             <div class="form-grid">
               <div class="form-item">
-                <label>合计金额</label>
+                <label>合计金额（万元）</label>
                 <input type="number" v-model="form.rev_check.total_value" />
               </div>
               <div class="form-item">
-                <label>推算营业额</label>
+                <label>推算营业额（万元）</label>
                 <input type="number" v-model="form.rev_check.est_total" />
               </div>
               <div class="form-item">
-                <label>损益表使用额</label>
+                <label>损益表使用额（万元）</label>
                 <input type="number" v-model="form.rev_check.is_revenue" />
               </div>
               <div class="form-item">
-                <label>偏差率</label>
+                <label>偏差率（%）</label>
                 <input type="number" v-model="form.rev_check.diff_rate" />
               </div>
               <div class="form-item">
@@ -1275,11 +1275,11 @@
                   <input type="text" v-model="item.year" />
                 </div>
                 <div class="form-item" v-for="month in months" :key="month.key">
-                  <label>{{ month.label }}金额</label>
+                  <label>{{ month.label }}金额（万元）</label>
                   <input type="number" v-model="item[month.key]" @input="updateCashflowTotal(item)" />
                 </div>
                 <div class="form-item">
-                  <label>合计</label>
+                  <label>合计（万元）</label>
                   <input type="number" v-model="item.total" />
                 </div>
               </div>
@@ -1318,11 +1318,11 @@
                   <input type="text" v-model="item.year" />
                 </div>
                 <div class="form-item" v-for="month in months" :key="month.key">
-                  <label>{{ month.label }}金额</label>
+                  <label>{{ month.label }}金额（万元）</label>
                   <input type="number" v-model="item[month.key]" @input="updateCashflowTotal(item)" />
                 </div>
                 <div class="form-item">
-                  <label>合计</label>
+                  <label>合计（万元）</label>
                   <input type="number" v-model="item.total" />
                 </div>
               </div>
@@ -1752,6 +1752,26 @@ const electricityCollectType = computed({
     form.electricity.is_cost = "";
   },
 });
+
+const getElectricityMonthLabel = (monthLabel) => {
+  if (electricityCollectType.value === "quantity") {
+    return `${monthLabel}用电量（kWh）`;
+  }
+  if (electricityCollectType.value === "cost") {
+    return `${monthLabel}电费（万元）`;
+  }
+  return `${monthLabel}用电量/电费`;
+};
+
+const getElectricityTotalLabel = () => {
+  if (electricityCollectType.value === "quantity") {
+    return "合计（kWh）";
+  }
+  if (electricityCollectType.value === "cost") {
+    return "合计（万元）";
+  }
+  return "合计";
+};
 
 const addRow = (list, factory) => {
   list.push(factory());

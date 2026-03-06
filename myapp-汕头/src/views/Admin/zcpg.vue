@@ -72,11 +72,11 @@
           <span>{{ formatValue(tableData[0].loan_borrower_name) }}</span>
         </div>
         <div class="info-item">
-          <label>申请金额(万元)</label>
+          <label>申请金额（万元）</label>
           <span>{{ formatValue(tableData[0].loan_apply_amount) }}</span>
         </div>
         <div class="info-item">
-          <label>申请期限(月)</label>
+          <label>申请期限（月）</label>
           <span>{{ formatValue(tableData[0].loan_apply_term) }}</span>
         </div>
         <div class="info-item full-width">
@@ -94,7 +94,7 @@
       </div>
       <div class="info-grid">
         <div class="info-item">
-          <label>注册资本</label>
+          <label>注册资本（万元）</label>
           <span>{{ formatValue(tableData[0].company_registered_capital) }}</span>
         </div>
         <div class="info-item">
@@ -220,7 +220,7 @@
           <span>{{ formatValue(tableData[0].residence_type) }}</span>
         </div>
         <div class="info-item">
-          <label>本地居住年限</label>
+          <label>本地居住年限（年）</label>
           <span>{{ formatValue(tableData[0].residence_years) }}</span>
         </div>
         <div class="info-item full-width">
@@ -248,10 +248,10 @@
           <div><strong>场所{{ idx + 1 }}:</strong></div>
           <div class="sub-item-content">
             <div>地址: {{ site.address }}</div>
-            <div>建筑面积: {{ site.building_area }}㎡</div>
-            <div>土地面积: {{ site.land_area }}㎡</div>
+            <div>建筑面积（㎡）: {{ site.building_area }}</div>
+            <div>土地面积（㎡）: {{ site.land_area }}</div>
             <div>所有权: {{ site.ownership }}</div>
-            <div>月租金: {{ site.month_pay }}元</div>
+            <div>场地月租金（万元）: {{ site.month_pay }}</div>
             <div>最近支付: {{ site.is_pay || '—' }}</div>
           </div>
         </div>
@@ -270,11 +270,11 @@
           <span>{{ formatValue(tableData[0].credit_inquiry_count) }}</span>
         </div>
         <div class="info-item">
-          <label>逾期次数</label>
+          <label>逾期次数（次）</label>
           <span>{{ formatValue(tableData[0].credit_overdue_count) }}</span>
         </div>
         <div class="info-item">
-          <label>最大逾期金额</label>
+          <label>最大逾期金额（万元）</label>
           <span>{{ formatValue(tableData[0].credit_max_overdue_amount) }}</span>
         </div>
         <div class="info-item full-width">
@@ -299,9 +299,9 @@
           <div v-for="(row, idx) in group.rows" :key="`acc-row-${gIdx}-${idx}`" style="margin-left: 20px; margin-top: 4px;">
             <div><strong>{{ row.year }}年:</strong></div>
             <div style="margin-left: 12px; margin-top: 4px;">
-              1月: {{ row.m1 }}万 | 2月: {{ row.m2 }}万 | 3月: {{ row.m3 }}万 | 4月: {{ row.m4 }}万 | 5月: {{ row.m5 }}万 | 6月: {{ row.m6 }}万 |
-              7月: {{ row.m7 }}万 | 8月: {{ row.m8 }}万 | 9月: {{ row.m9 }}万 | 10月: {{ row.m10 }}万 | 11月: {{ row.m11 }}万 | 12月: {{ row.m12 }}万 |
-              <strong>月均: {{ row.avg }}万</strong>
+              1月余额（万元）: {{ row.m1 }} | 2月余额（万元）: {{ row.m2 }} | 3月余额（万元）: {{ row.m3 }} | 4月余额（万元）: {{ row.m4 }} | 5月余额（万元）: {{ row.m5 }} | 6月余额（万元）: {{ row.m6 }} |
+              7月余额（万元）: {{ row.m7 }} | 8月余额（万元）: {{ row.m8 }} | 9月余额（万元）: {{ row.m9 }} | 10月余额（万元）: {{ row.m10 }} | 11月余额（万元）: {{ row.m11 }} | 12月余额（万元）: {{ row.m12 }} |
+              <strong>月均余额（万元）: {{ row.avg }}</strong>
             </div>
           </div>
         </div>
@@ -316,43 +316,43 @@
       </div>
       <div class="info-grid">
         <div class="info-item">
-          <label>总资产</label>
+          <label>总资产（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_fin_total_assets) }}</span>
         </div>
         <div class="info-item">
-          <label>总负债</label>
+          <label>总负债（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_fin_total_liabilities) }}</span>
         </div>
         <div class="info-item">
-          <label>净资产</label>
+          <label>净资产（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_fin_net_assets) }}</span>
         </div>
         <div class="info-item">
-          <label>营业收入</label>
+          <label>营业收入（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_fin_revenue) }}</span>
         </div>
         <div class="info-item">
-          <label>净利润</label>
+          <label>净利润（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_fin_net_income) }}</span>
         </div>
         <div class="info-item">
-          <label>资产负债率</label>
+          <label>资产负债率（%）</label>
           <span>{{ formatValue(tableData[0].analysis_ind_asset_debt_ratio) }}</span>
         </div>
         <div class="info-item">
-          <label>销售负债率</label>
+          <label>销售负债率（%）</label>
           <span>{{ formatValue(tableData[0].analysis_ind_sales_debt_ratio) }}</span>
         </div>
         <div class="info-item">
-          <label>应收账款平均账期</label>
+          <label>应收账款平均账期（天）</label>
           <span>{{ formatValue(tableData[0].analysis_ind_receivable_days) }}</span>
         </div>
         <div class="info-item">
-          <label>月均/日均余额</label>
+          <label>月均/日均余额（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_ind_avg_balance) }}</span>
         </div>
         <div class="info-item">
-          <label>月还款/月净收益</label>
+          <label>月还款/月净收益（%）</label>
           <span>{{ formatValue(tableData[0].analysis_ind_repayment_ratio) }}</span>
         </div>
         <div class="info-item full-width">
@@ -370,15 +370,15 @@
       </div>
       <div class="info-grid">
         <div class="info-item">
-          <label>贷款金额</label>
+          <label>贷款金额（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_amount) }}</span>
         </div>
         <div class="info-item">
-          <label>贷款期限</label>
+          <label>贷款期限（月）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_term) }}</span>
         </div>
         <div class="info-item">
-          <label>担保费率</label>
+          <label>担保费率（%）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_fee_rate) }}</span>
         </div>
         <div class="info-item">
@@ -398,28 +398,28 @@
           <span>{{ formatValue(tableData[0].analysis_plan_collateral) }}</span>
         </div>
         <div class="info-item">
-          <label>房产抵押评估值</label>
+          <label>房产抵押评估值（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_diyapingguzhi) }}</span>
         </div>
         <div class="info-item">
-          <label>房产二押余值</label>
+          <label>房产二押余值（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_eryayuzhi) }}</span>
         </div>
         <div class="info-item">
-          <label>设备抵押净值</label>
+          <label>设备抵押净值（万元）</label>
           <span>{{ formatValue(tableData[0].analysis_plan_diyajingzhi) }}</span>
         </div>
       </div>
       <div v-if="tableData[0].guarantees_json" class="sub-table">
         <div class="sub-table-title">我司在保情况</div>
         <div v-for="(g, idx) in parseJSON(tableData[0].guarantees_json)" :key="idx" class="sub-item">
-          <div><strong>在保{{ idx + 1 }}:</strong> {{ g.type }} | 承保金额: {{ g.amount }}万 | 承保余额: {{ g.balance }}万 | 月还款: {{ g.monthly_payment }}元</div>
+          <div><strong>在保{{ idx + 1 }}:</strong> {{ g.type }} | 承保金额（万元）: {{ g.amount }} | 承保余额（万元）: {{ g.balance }} | 月还款本息（万元）: {{ g.monthly_payment }}</div>
         </div>
       </div>
       <div v-if="tableData[0].existing_loans_json" class="sub-table">
         <div class="sub-table-title">现有贷款情况</div>
         <div v-for="(loan, idx) in parseJSON(tableData[0].existing_loans_json)" :key="idx" class="sub-item">
-          <div><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额: {{ loan.amount }}万 | 贷款余额: {{ loan.balance }}万 | 月还款: {{ loan.monthly_payment }}元</div>
+          <div><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</div>
         </div>
       </div>
     </div>
@@ -467,7 +467,7 @@
       <div v-if="tableData[0].asset_stats_json" class="sub-table">
         <div class="sub-table-title">资产统计</div>
         <div v-for="(asset, idx) in parseJSON(tableData[0].asset_stats_json)" :key="idx" class="sub-item">
-          <div><strong>{{ asset.name }}:</strong> 购入价格 {{ asset.buy_price }}万 | 当前价值 {{ asset.current_value }}万 | 折旧 {{ asset.depreciation }}万</div>
+          <div><strong>{{ asset.name }}:</strong> 购入价格（万元） {{ asset.buy_price }} | 当前价值（万元） {{ asset.current_value }} | 折旧（万元） {{ asset.depreciation }}</div>
         </div>
       </div>
     </div>
@@ -660,18 +660,18 @@ const columns = [
   { title: "上传日期", dataIndex: "created_at", key: "created_at" },
   { title: "申请期限", dataIndex: "application_period", key: "application_period" },
   { title: "项目经理", dataIndex: "project_manager", key: "project_manager" },
-  { title: "销售负债率", dataIndex: "sales_debt_ratio", key: "sales_debt_ratio" },
-  { title: "资产负债率", dataIndex: "asset_debt_ratio", key: "asset_debt_ratio" },
-  { title: "银行流水年总额流入", dataIndex: "bank_inflow", key: "bank_inflow" },
-  { title: "银行流水年总额流出", dataIndex: "bank_outflow", key: "bank_outflow" },
-  { title: "销售收入", dataIndex: "annual_sales", key: "annual_sales" },
-  { title: "净利润", dataIndex: "annual_net_profit", key: "annual_net_profit" },
-  { title: "年净收益", dataIndex: "monthly_net_profit", key: "monthly_net_profit" },
-  { title: "月均余额", dataIndex: "monthly_balance", key: "monthly_balance" },
-  { title: "应收账款", dataIndex: "receivables_at_meeting", key: "receivables_at_meeting" },
-  { title: "总资产", dataIndex: "total_assets", key: "total_assets" },
-  { title: "总负债", dataIndex: "total_liabilities", key: "total_liabilities" },
-  { title: "净资产", dataIndex: "net_assets", key: "net_assets" },
+  { title: "销售负债率（%）", dataIndex: "sales_debt_ratio", key: "sales_debt_ratio" },
+  { title: "资产负债率（%）", dataIndex: "asset_debt_ratio", key: "asset_debt_ratio" },
+  { title: "银行流水年总额流入（万元）", dataIndex: "bank_inflow", key: "bank_inflow" },
+  { title: "银行流水年总额流出（万元）", dataIndex: "bank_outflow", key: "bank_outflow" },
+  { title: "销售收入（万元）", dataIndex: "annual_sales", key: "annual_sales" },
+  { title: "净利润（万元）", dataIndex: "annual_net_profit", key: "annual_net_profit" },
+  { title: "年净收益（万元）", dataIndex: "monthly_net_profit", key: "monthly_net_profit" },
+  { title: "月均余额（万元）", dataIndex: "monthly_balance", key: "monthly_balance" },
+  { title: "应收账款（万元）", dataIndex: "receivables_at_meeting", key: "receivables_at_meeting" },
+  { title: "总资产（万元）", dataIndex: "total_assets", key: "total_assets" },
+  { title: "总负债（万元）", dataIndex: "total_liabilities", key: "total_liabilities" },
+  { title: "净资产（万元）", dataIndex: "net_assets", key: "net_assets" },
   { title: "经营性贷款", dataIndex: "monthly_repayment", key: "monthly_repayment" },
   { title: "月还款额/月净收益对比", dataIndex: "repayment_income_ratio", key: "repayment_income_ratio" },
   { title: "征信查询数", dataIndex: "credit_inquiries", key: "credit_inquiries" },
