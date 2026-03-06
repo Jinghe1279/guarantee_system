@@ -70,3 +70,16 @@ annual_sales
 electricity_consumption
 total_liabilities
 repayment_method
+
+application_amount → 申请金额（一、申请贷款信息）
+net_assets → 净资产（七、风险分析 → 财务数据）
+total_assets → 总资产（七、风险分析 → 财务数据）
+core_assets → 由 固定资产及土地 + 货币资金 计算（附表1 资产负债表简表）
+inventory_at_meeting → 存货（附表1 资产负债表简表）
+industry_experience → 服务年限（实控人信息；模型里按“从业年限”使用）
+local_residence_years → 本地居住年限（居住情况）
+receivables_at_meeting → 应收账款（附表1 资产负债表简表）
+annual_sales → 营业收入（七、风险分析 → 财务数据）
+electricity_consumption → 用电明细里的合计汇总值（五、用电情况）
+total_liabilities → 总负债（七、风险分析 → 财务数据）
+repayment_method → 还款方式（七、风险分析 → 项目方案）

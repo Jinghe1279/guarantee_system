@@ -946,8 +946,12 @@
 
           <h4 class="subsection-title" style="margin-top: 24px;">征信情况</h4>
           <div class="edit-grid">
-            <a-form-item label="征信查询次数">
-              <a-input-number v-model:value="editForm.credit_inquiry_count" :min="0" style="width: 100%" />
+            <a-form-item label="征信查询次数" style="grid-column: 1 / -1">
+              <a-textarea
+                v-model:value="editForm.credit_inquiry_count"
+                :rows="3"
+                placeholder="可填写次数、时间段、查询机构等详细情况"
+              />
             </a-form-item>
             <a-form-item label="逾期次数">
               <a-input-number v-model:value="editForm.credit_overdue_count" :min="0" style="width: 100%" />

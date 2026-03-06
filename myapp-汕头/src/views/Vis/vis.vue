@@ -641,13 +641,17 @@
 
             <h4 class="subsection-title">征信与诉讼</h4>
             <div class="form-grid">
-              <div class="form-item">
+              <div class="form-item full-row large-textarea">
                 <label>征信查询次数（近一年）</label>
-                <input type="number" v-model="form.credit.inquiry_count" />
+                <textarea
+                  v-model="form.credit.inquiry_count"
+                  rows="4"
+                  placeholder="可填写次数、时间段、查询机构等详细情况"
+                ></textarea>
               </div>
-              <div class="form-item">
+              <div class="form-item full-row large-textarea">
                 <label>征信逾期、不良信息</label>
-                <textarea v-model="form.credit.adverse_info" rows="3"></textarea>
+                <textarea v-model="form.credit.adverse_info" rows="4"></textarea>
               </div>
               <div class="form-item">
                 <label>逾期次数</label>
@@ -657,9 +661,9 @@
                 <label>最高逾期金额</label>
                 <input type="number" v-model="form.credit.max_overdue_amount" />
               </div>
-              <div class="form-item">
+              <div class="form-item full-row large-textarea">
                 <label>诉讼情况</label>
-                <textarea v-model="form.litigation.status" rows="3"></textarea>
+                <textarea v-model="form.litigation.status" rows="4"></textarea>
               </div>
             </div>
           </div>
@@ -674,11 +678,11 @@
                   <option value="cost">电费</option>
                 </select>
               </div>
-              <div class="form-item wide-item">
+              <div class="form-item full-row large-textarea">
                 <label>情况说明</label>
                 <textarea
                   v-model="form.electricity.descript"
-                  rows="3"
+                  rows="4"
                   placeholder="优先采集用电量，适用于生产型企业。"
                 ></textarea>
               </div>

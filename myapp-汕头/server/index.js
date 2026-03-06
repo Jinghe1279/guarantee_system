@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS loan_application (
     business_model_description TEXT,
     business_is_waimao VARCHAR(10),
     business_is_jinshen VARCHAR(10),
-    credit_inquiry_count INT,
+    credit_inquiry_count VARCHAR(255),
     credit_adverse_info TEXT,
     credit_overdue_count INT,
     credit_max_overdue_amount DECIMAL(18,2),
@@ -328,6 +328,10 @@ const migrateEmployeeCountToVarcharSQL = `
 ALTER TABLE loan_application
 MODIFY company_employee_count VARCHAR(100)
 `;
+const migrateCreditInquiryCountToVarcharSQL = `
+ALTER TABLE loan_application
+MODIFY credit_inquiry_count VARCHAR(255)
+`;
 
 tableStatements.forEach((statement) => {
     pool.query(statement, (err) => {
@@ -344,6 +348,14 @@ pool.query(migrateEmployeeCountToVarcharSQL, (alterErr) => {
         console.error('Ensure company_employee_count VARCHAR failed:', alterErr);
     } else {
         console.log('company_employee_count is VARCHAR(100).');
+    }
+});
+
+pool.query(migrateCreditInquiryCountToVarcharSQL, (alterErr) => {
+    if (alterErr) {
+        console.error('Ensure credit_inquiry_count VARCHAR failed:', alterErr);
+    } else {
+        console.log('credit_inquiry_count is VARCHAR(255).');
     }
 });
 
@@ -484,7 +496,7 @@ const mainColumns = [
 
 const numericMainColumns = new Set([
     'loan_apply_amount', 'loan_apply_term', 'company_registered_capital', 'controller_service_years',
-    'family_annual_expense', 'residence_years', 'business_month_pay', 'credit_inquiry_count',
+    'family_annual_expense', 'residence_years', 'business_month_pay',
     'credit_overdue_count', 'credit_max_overdue_amount', 'analysis_plan_amount', 'analysis_plan_term',
     'analysis_plan_fee_rate', 'analysis_plan_diyapingguzhi', 'analysis_plan_eryayuzhi',
     'analysis_plan_diyajingzhi', 'analysis_fin_total_assets', 'analysis_fin_total_liabilities',
