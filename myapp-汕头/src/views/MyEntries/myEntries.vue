@@ -479,10 +479,13 @@
                 <span>合计 - 承保金额（万元）: {{ formatValue(record.guarantees_amount_total) }} | 承保余额（万元）: {{ formatValue(record.guarantees_balance_total) }}</span>
               </div>
             </div>
-            <div v-if="record.existing_loans_json" class="sub-table">
+            <div v-if="getExistingLoanSubjectGroups(record).length" class="sub-table">
               <div class="sub-table-title">现有贷款情况</div>
-              <div v-for="(loan, idx) in parseJSON(record.existing_loans_json)" :key="idx" class="sub-item">
-                <span><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</span>
+              <div v-for="(subject, sIdx) in getExistingLoanSubjectGroups(record)" :key="`loan-subject-${sIdx}`" class="sub-item">
+                <div><strong>贷款主体{{ sIdx + 1 }}: {{ subject.subject_name }}</strong></div>
+                <div v-for="(loan, idx) in subject.loans" :key="`loan-${sIdx}-${idx}`" style="margin-left: 12px; margin-top: 4px;">
+                  <span>贷款{{ idx + 1 }}: {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</span>
+                </div>
               </div>
               <div
                 v-if="record.existing_loans_amount_total || record.existing_loans_balance_total || record.existing_loans_monthly_payment_total"
@@ -1128,42 +1131,60 @@
           </div>
 
           <h4 class="subsection-title" style="margin-top: 24px;">现有贷款情况</h4>
-          <div v-for="(loan, index) in existingLoans" :key="'loan-' + index" class="table-row">
+          <div v-for="(subject, subjectIndex) in existingLoanSubjects" :key="'loan-subject-' + (subject.subject_id || subjectIndex)" class="table-row">
             <div class="table-row-header">
-              <span>贷款 {{ index + 1 }}</span>
-              <a-button size="small" danger @click="removeExistingLoan(index)">删除</a-button>
+              <span>贷款主体 {{ subjectIndex + 1 }}</span>
+              <div style="display: flex; gap: 8px;">
+                <a-button size="small" type="primary" @click="addLoanForSubject(subjectIndex)">添加贷款</a-button>
+                <a-button size="small" danger @click="removeExistingLoanSubject(subjectIndex)">删除主体</a-button>
+              </div>
             </div>
             <div class="edit-grid">
-              <a-form-item label="品种">
-                <a-input v-model:value="loan.type" />
-              </a-form-item>
-              <a-form-item label="贷款金额（万元）">
-                <a-input-number v-model:value="loan.amount" :min="0" style="width: 100%" />
-              </a-form-item>
-              <a-form-item label="贷款余额（万元）">
-                <a-input-number v-model:value="loan.balance" :min="0" style="width: 100%" />
-              </a-form-item>
-              <a-form-item label="用途">
-                <a-input v-model:value="loan.purpose" />
-              </a-form-item>
-              <a-form-item label="起始日期">
-                <a-input v-model:value="loan.start_date" type="date" />
-              </a-form-item>
-              <a-form-item label="到期日期">
-                <a-input v-model:value="loan.end_date" type="date" />
-              </a-form-item>
-              <a-form-item label="合作银行及利率">
-                <a-input v-model:value="loan.bank_rate" />
-              </a-form-item>
-              <a-form-item label="月还款本息（万元）">
-                <a-input-number v-model:value="loan.monthly_payment" :min="0" style="width: 100%" />
-              </a-form-item>
-              <a-form-item label="还款方式">
-                <a-input v-model:value="loan.mode" />
+              <a-form-item label="贷款主体" style="grid-column: 1 / -1">
+                <a-input v-model:value="subject.subject_name" placeholder="例如：借款人本人/关联企业A/配偶名下主体" />
               </a-form-item>
             </div>
+            <div
+              v-for="(loan, loanIndex) in subject.loans"
+              :key="'subject-loan-' + (loan.loan_id || `${subject.subject_id}-${loanIndex}`)"
+              class="table-row"
+            >
+              <div class="table-row-header">
+                <span>贷款 {{ loanIndex + 1 }}</span>
+                <a-button size="small" danger @click="removeLoanFromSubject(subjectIndex, loanIndex)">删除</a-button>
+              </div>
+              <div class="edit-grid">
+                <a-form-item label="品种">
+                  <a-input v-model:value="loan.type" />
+                </a-form-item>
+                <a-form-item label="贷款金额（万元）">
+                  <a-input-number v-model:value="loan.amount" :min="0" style="width: 100%" />
+                </a-form-item>
+                <a-form-item label="贷款余额（万元）">
+                  <a-input-number v-model:value="loan.balance" :min="0" style="width: 100%" />
+                </a-form-item>
+                <a-form-item label="用途">
+                  <a-input v-model:value="loan.purpose" />
+                </a-form-item>
+                <a-form-item label="起始日期">
+                  <a-input v-model:value="loan.start_date" type="date" />
+                </a-form-item>
+                <a-form-item label="到期日期">
+                  <a-input v-model:value="loan.end_date" type="date" />
+                </a-form-item>
+                <a-form-item label="合作银行及利率">
+                  <a-input v-model:value="loan.bank_rate" />
+                </a-form-item>
+                <a-form-item label="月还款本息（万元）">
+                  <a-input-number v-model:value="loan.monthly_payment" :min="0" style="width: 100%" />
+                </a-form-item>
+                <a-form-item label="还款方式">
+                  <a-input v-model:value="loan.mode" />
+                </a-form-item>
+              </div>
+            </div>
           </div>
-          <a-button type="primary" @click="addExistingLoan" style="margin-top: 12px;">添加现有贷款</a-button>
+          <a-button type="primary" @click="addExistingLoanSubject" style="margin-top: 12px;">添加贷款主体</a-button>
 
           <div class="edit-grid" style="margin-top: 12px;">
             <a-form-item label="贷款金额合计（万元）">
@@ -1572,7 +1593,7 @@ const businessAccounts = ref<RecordItem[]>([]);
 const accountRows = ref<RecordItem[]>([]);
 const dailyAvgBalance = ref<RecordItem[]>([]);
 const guarantees = ref<RecordItem[]>([]);
-const existingLoans = ref<RecordItem[]>([]);
+const existingLoanSubjects = ref<RecordItem[]>([]);
 const electricityItems = ref<RecordItem[]>([]);
 const assetStats = ref<RecordItem[]>([]);
 const revCheckItems = ref<RecordItem[]>([]);
@@ -1738,6 +1759,8 @@ const createGuarantee = () => ({
 });
 
 const createExistingLoan = () => ({
+  loan_id: makeLocalId('loan'),
+  loan_subject: '',
   type: '',
   amount: '',
   balance: '',
@@ -1748,6 +1771,106 @@ const createExistingLoan = () => ({
   bank_rate: '',
   purpose: '',
 });
+
+const createExistingLoanSubject = () => ({
+  subject_id: makeLocalId('loan_subject'),
+  subject_name: '',
+  loans: [createExistingLoan()],
+});
+
+const normalizeSubjectName = (value: any) => (typeof value === 'string' ? value.trim() : '');
+
+const groupExistingLoansBySubject = (loans: any[], ensureAtLeastOneSubject = true): RecordItem[] => {
+  const groups: RecordItem[] = [];
+  const groupMap = new Map<string, RecordItem>();
+  const source = Array.isArray(loans) ? loans : [];
+  const hasLoanContent = (loan: any) =>
+    [
+      'type',
+      'amount',
+      'balance',
+      'mode',
+      'monthly_payment',
+      'start_date',
+      'end_date',
+      'bank_rate',
+      'purpose',
+    ].some((key) => {
+      const value = loan?.[key];
+      return value !== '' && value !== null && value !== undefined;
+    });
+
+  source.forEach((loan) => {
+    if (!hasLoanContent(loan)) {
+      return;
+    }
+    const subjectName = normalizeSubjectName(loan?.loan_subject);
+    const groupKey = subjectName || '__default_subject__';
+    if (!groupMap.has(groupKey)) {
+      const subject = createExistingLoanSubject();
+      subject.subject_name = subjectName || '未命名贷款主体';
+      subject.loans = [];
+      groupMap.set(groupKey, subject);
+      groups.push(subject);
+    }
+    groupMap.get(groupKey)!.loans.push({
+      ...createExistingLoan(),
+      ...loan,
+      loan_subject: subjectName,
+    });
+  });
+
+  if (groups.length === 0) {
+    return ensureAtLeastOneSubject ? [createExistingLoanSubject()] : [];
+  }
+
+  groups.forEach((subject) => {
+    subject.subject_name = normalizeSubjectName(subject.subject_name) || '未命名贷款主体';
+    subject.loans = Array.isArray(subject.loans)
+      ? subject.loans.map((loan: any) => ({
+          ...createExistingLoan(),
+          ...loan,
+          loan_subject: normalizeSubjectName(subject.subject_name),
+        }))
+      : [];
+    if (subject.loans.length === 0) {
+      subject.loans = [createExistingLoan()];
+    }
+  });
+
+  return groups;
+};
+
+const flattenExistingLoanSubjects = (subjects: RecordItem[]): RecordItem[] => {
+  const flattened: RecordItem[] = [];
+  const hasLoanContent = (loan: any) =>
+    [
+      'type',
+      'amount',
+      'balance',
+      'mode',
+      'monthly_payment',
+      'start_date',
+      'end_date',
+      'bank_rate',
+      'purpose',
+    ].some((key) => {
+      const value = loan?.[key];
+      return value !== '' && value !== null && value !== undefined;
+    });
+  (Array.isArray(subjects) ? subjects : []).forEach((subject) => {
+    const subjectName = normalizeSubjectName(subject?.subject_name) || '未命名贷款主体';
+    (Array.isArray(subject?.loans) ? subject.loans : []).forEach((loan: any) => {
+      if (!hasLoanContent(loan)) return;
+      flattened.push({
+        ...createExistingLoan(),
+        ...loan,
+        loan_subject: subjectName,
+      });
+    });
+  });
+  return flattened;
+};
 
 const createElectricityItem = () =>
   monthFields.reduce(
@@ -1861,8 +1984,31 @@ const addDailyAvgRow = () => dailyAvgBalance.value.push(createDailyAvgRow());
 const removeDailyAvgRow = (index: number) => dailyAvgBalance.value.splice(index, 1);
 const addGuarantee = () => guarantees.value.push(createGuarantee());
 const removeGuarantee = (index: number) => guarantees.value.splice(index, 1);
-const addExistingLoan = () => existingLoans.value.push(createExistingLoan());
-const removeExistingLoan = (index: number) => existingLoans.value.splice(index, 1);
+const addExistingLoanSubject = () => existingLoanSubjects.value.push(createExistingLoanSubject());
+const removeExistingLoanSubject = (subjectIndex: number) => {
+  if (existingLoanSubjects.value.length <= 1) {
+    message.warning('至少保留一个贷款主体');
+    return;
+  }
+  existingLoanSubjects.value.splice(subjectIndex, 1);
+};
+const addLoanForSubject = (subjectIndex: number) => {
+  const subject = existingLoanSubjects.value[subjectIndex];
+  if (!subject) return;
+  if (!Array.isArray(subject.loans)) {
+    subject.loans = [];
+  }
+  subject.loans.push(createExistingLoan());
+};
+const removeLoanFromSubject = (subjectIndex: number, loanIndex: number) => {
+  const subject = existingLoanSubjects.value[subjectIndex];
+  if (!subject || !Array.isArray(subject.loans)) return;
+  if (subject.loans.length <= 1) {
+    message.warning('每个贷款主体至少保留一条贷款记录');
+    return;
+  }
+  subject.loans.splice(loanIndex, 1);
+};
 const addElectricityItem = () => electricityItems.value.push(createElectricityItem());
 const removeElectricityItem = (index: number) => electricityItems.value.splice(index, 1);
 const addAssetStat = () => assetStats.value.push(createAssetStat());
@@ -2183,15 +2329,13 @@ const openEdit = (record: RecordItem) => {
     }),
     createGuarantee
   );
-  existingLoans.value = ensureArray(
-    parseArrayField(record.existing_loans_json).map((row) => {
-      const normalized = { ...createExistingLoan(), ...row };
-      normalized.start_date = formatDateToInput(normalized.start_date);
-      normalized.end_date = formatDateToInput(normalized.end_date);
-      return normalized;
-    }),
-    createExistingLoan
-  );
+  const existingLoans = parseArrayField(record.existing_loans_json).map((row) => {
+    const normalized = { ...createExistingLoan(), ...row };
+    normalized.start_date = formatDateToInput(normalized.start_date);
+    normalized.end_date = formatDateToInput(normalized.end_date);
+    return normalized;
+  });
+  existingLoanSubjects.value = groupExistingLoansBySubject(existingLoans, true);
   electricityItems.value = ensureArray(
     parseArrayField(record.electricity_items_json).map((row) => ({ ...createElectricityItem(), ...row })),
     createElectricityItem
@@ -2308,7 +2452,8 @@ const buildPayload = () => {
       amount_total: data.guarantees_amount_total,
       balance_total: data.guarantees_balance_total,
     },
-    existing_loans: existingLoans.value,
+    existing_loans: flattenExistingLoanSubjects(existingLoanSubjects.value),
+    existing_loan_subjects: existingLoanSubjects.value,
     existing_loans_totals: {
       amount_total: data.existing_loans_amount_total,
       balance_total: data.existing_loans_balance_total,
@@ -2595,6 +2740,9 @@ const getAccountBalanceGroups = (record: RecordItem) => {
 
 const getAccountYearlyTotals = (record: RecordItem) =>
   calculateAccountYearlyTotals(parseJSON(record.account_rows_json));
+
+const getExistingLoanSubjectGroups = (record: RecordItem) =>
+  groupExistingLoansBySubject(parseJSON(record.existing_loans_json), false);
 </script>
 
 <style scoped>

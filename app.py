@@ -414,6 +414,29 @@ def build_doc_context(row):
             row_total["avg"] = format_total_number(sum_all / len(month_keys))
         account_yearly_totals.append(row_total)
 
+    def normalize_subject_name(value):
+        return value.strip() if isinstance(value, str) else ""
+
+    def has_loan_content(loan):
+        if not isinstance(loan, dict):
+            return False
+        fields = ["type", "amount", "balance", "mode", "monthly_payment", "start_date", "end_date", "bank_rate", "purpose"]
+        return any(str(loan.get(key) or "").strip() != "" for key in fields)
+
+    existing_loan_subject_map = {}
+    existing_loan_subjects = []
+    for loan in existing_loans:
+        if not has_loan_content(loan):
+            continue
+        subject_name = normalize_subject_name((loan or {}).get("loan_subject")) or "未命名贷款主体"
+        if subject_name not in existing_loan_subject_map:
+            group = {"subject_name": subject_name, "loans": []}
+            existing_loan_subject_map[subject_name] = group
+            existing_loan_subjects.append(group)
+        normalized_loan = {k: normalize_value(v) for k, v in (loan or {}).items()}
+        normalized_loan["loan_subject"] = subject_name
+        existing_loan_subject_map[subject_name]["loans"].append(normalized_loan)
+
     existing_amount_total = sum(parse_number(item.get("amount")) for item in existing_loans)
     existing_balance_total = sum(parse_number(item.get("balance")) for item in existing_loans)
     existing_payment_total = sum(parse_number(item.get("monthly_payment")) for item in existing_loans)
@@ -510,6 +533,7 @@ def build_doc_context(row):
             "balance_total": normalize_value(row.get("guarantees_balance_total")),
         },
         "existing_loans": existing_loans,
+        "existing_loan_subjects": existing_loan_subjects,
         "existing_loans_totals": {
             "amount_total": normalize_value(existing_amount_db) if has_existing_db else (f"{existing_amount_total:.2f}" if has_existing_values else ""),
             "balance_total": normalize_value(existing_balance_db) if has_existing_db else (f"{existing_balance_total:.2f}" if has_existing_values else ""),
@@ -1348,6 +1372,14 @@ def map_database_fields_to_model_fields(db_record: dict) -> dict:
             if isinstance(existing_loans, list):
                 total_monthly_payment = 0
                 for loan in existing_loans:
+                    if isinstance(loan, dict) and isinstance(loan.get('loans'), list):
+                        for child_loan in loan.get('loans', []):
+                            if isinstance(child_loan, dict) and 'monthly_payment' in child_loan:
+                                try:
+                                    total_monthly_payment += float(child_loan['monthly_payment'] or 0)
+                                except (ValueError, TypeError):
+                                    pass
+                        continue
                     if isinstance(loan, dict) and 'monthly_payment' in loan:
                         try:
                             total_monthly_payment += float(loan['monthly_payment'] or 0)

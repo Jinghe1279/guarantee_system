@@ -376,6 +376,33 @@ const quarterKeys = ['m3', 'm6', 'm9', 'm12'];
 
 const normalizeArray = (value) => (Array.isArray(value) ? value : []);
 const serializeArray = (value) => JSON.stringify(normalizeArray(value));
+const normalizeSubjectName = (value) => (typeof value === 'string' ? value.trim() : '');
+const hasExistingLoanContent = (loan) =>
+    ['type', 'amount', 'balance', 'mode', 'monthly_payment', 'start_date', 'end_date', 'bank_rate', 'purpose']
+        .some((key) => loan && loan[key] !== '' && loan[key] !== null && loan[key] !== undefined);
+
+const flattenExistingLoansFromSubjects = (subjects) => {
+    const result = [];
+    normalizeArray(subjects).forEach((subject) => {
+        const subjectName = normalizeSubjectName(subject?.subject_name) || '未命名贷款主体';
+        normalizeArray(subject?.loans).forEach((loan) => {
+            if (!hasExistingLoanContent(loan)) {
+                return;
+            }
+            result.push({
+                ...loan,
+                loan_subject: normalizeSubjectName(loan?.loan_subject) || subjectName
+            });
+        });
+    });
+    return result;
+};
+
+const getPayloadExistingLoans = (payload) => {
+    const directLoans = normalizeArray(payload ? payload.existing_loans : []).filter(hasExistingLoanContent);
+    const subjectLoans = flattenExistingLoansFromSubjects(payload ? payload.existing_loan_subjects : []);
+    return subjectLoans.length > 0 ? subjectLoans : directLoans;
+};
 
 const hasRowContent = (row) => {
     if (!row || typeof row !== 'object') {
@@ -437,6 +464,7 @@ const normalizeExistingLoans = (loans) => {
     if (!Array.isArray(loans)) return [];
     return loans.map(l => ({
         ...l,
+        loan_subject: normalizeSubjectName(l.loan_subject) || '未命名贷款主体',
         start_date: formatDateToSQL(l.start_date),
         end_date: formatDateToSQL(l.end_date)
     }));
@@ -539,7 +567,7 @@ const mapMainValues = (payload) => {
     const revCheck = payload.rev_check || {};
     const guaranteesTotals = payload.guarantees_totals || {};
     const existingLoansTotals = payload.existing_loans_totals || {};
-    const existingLoans = normalizeArray(payload.existing_loans);
+    const existingLoans = getPayloadExistingLoans(payload);
     const existingTotalsProvided = Object.values(existingLoansTotals).some(
         (value) => value !== null && value !== undefined && value !== ''
     );
@@ -695,7 +723,7 @@ const mapMainValues = (payload) => {
         serializeArray(normalizeGuarantees(payload.guarantees)),
         guaranteesTotals.amount_total || null,
         guaranteesTotals.balance_total || null,
-        serializeArray(normalizeExistingLoans(payload.existing_loans)),
+        serializeArray(normalizeExistingLoans(existingLoans)),
         existingTotalsProvided
             ? (existingLoansTotals.amount_total || null)
             : (existingHasValues ? existingTotalsComputed.amount_total : null),
@@ -777,7 +805,7 @@ const insertChildRows = async (applicationId, payload) => {
     insertSummary.existing_loans = (await insertBatch(
         'existing_loans',
         ['application_id', 'type', 'amount', 'balance', 'mode', 'monthly_payment', 'start_date', 'end_date', 'bank_rate', 'purpose'],
-        normalizeArray(payload.existing_loans),
+        getPayloadExistingLoans(payload),
         (row) => [
             applicationId,
             row.type || null,
@@ -949,7 +977,7 @@ app.post('/insert-prediction', async (req, res) => {
             account_rows: normalizeArray(payload.account_rows).length,
             daily_avg_balance: normalizeArray(payload.daily_avg_balance).length,
             guarantees: normalizeArray(payload.guarantees).length,
-            existing_loans: normalizeArray(payload.existing_loans).length,
+            existing_loans: getPayloadExistingLoans(payload).length,
             electricity_items: normalizeArray(payload.electricity ? payload.electricity.items : []).length,
             asset_stats: normalizeArray(payload.asset_stats).length,
             rev_check_items: normalizeArray(payload.rev_check ? payload.rev_check.items : []).length,
@@ -1081,7 +1109,7 @@ app.put('/loan-application/:id', async (req, res) => {
         payload.social || payload.residence || payload.business || payload.credit || payload.analysis ||
         payload.bs || payload.is_table || payload.rev_check || payload.asset_stats || payload.cashflow_in ||
         payload.cashflow_out || payload.business_sites || payload.business_accounts || payload.account_rows ||
-        payload.daily_avg_balance || payload.guarantees || payload.existing_loans || payload.electricity
+        payload.daily_avg_balance || payload.guarantees || payload.existing_loans || payload.existing_loan_subjects || payload.electricity
     );
 
     if (!isStructuredPayload) {

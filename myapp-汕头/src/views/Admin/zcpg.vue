@@ -427,10 +427,13 @@
           <div><strong>在保{{ idx + 1 }}:</strong> {{ g.type }} | 承保金额（万元）: {{ g.amount }} | 承保余额（万元）: {{ g.balance }} | 月还款本息（万元）: {{ g.monthly_payment }}</div>
         </div>
       </div>
-      <div v-if="tableData[0].existing_loans_json" class="sub-table">
+      <div v-if="getExistingLoanSubjectGroups().length" class="sub-table">
         <div class="sub-table-title">现有贷款情况</div>
-        <div v-for="(loan, idx) in parseJSON(tableData[0].existing_loans_json)" :key="idx" class="sub-item">
-          <div><strong>贷款{{ idx + 1 }}:</strong> {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</div>
+        <div v-for="(subject, sIdx) in getExistingLoanSubjectGroups()" :key="`loan-subject-${sIdx}`" class="sub-item">
+          <div><strong>贷款主体{{ sIdx + 1 }}: {{ subject.subject_name }}</strong></div>
+          <div v-for="(loan, idx) in subject.loans" :key="`loan-${sIdx}-${idx}`" style="margin-left: 12px; margin-top: 4px;">
+            <div>贷款{{ idx + 1 }}: {{ loan.type }} | 贷款金额（万元）: {{ loan.amount }} | 贷款余额（万元）: {{ loan.balance }} | 月还款本息（万元）: {{ loan.monthly_payment }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -732,6 +735,30 @@ const parseJSON = (jsonStr) => {
   }
 };
 
+const normalizeSubjectName = (value) => (typeof value === "string" ? value.trim() : "");
+
+const groupExistingLoansBySubject = (loans) => {
+  const groups = [];
+  const groupMap = new Map();
+  const hasLoanContent = (loan) =>
+    ['type', 'amount', 'balance', 'mode', 'monthly_payment', 'start_date', 'end_date', 'bank_rate', 'purpose']
+      .some((key) => {
+        const value = loan?.[key];
+        return value !== "" && value !== null && value !== undefined;
+      });
+  (Array.isArray(loans) ? loans : []).forEach((loan) => {
+    if (!hasLoanContent(loan)) return;
+    const subjectName = normalizeSubjectName(loan?.loan_subject) || "未命名贷款主体";
+    if (!groupMap.has(subjectName)) {
+      const subjectGroup = { subject_name: subjectName, loans: [] };
+      groupMap.set(subjectName, subjectGroup);
+      groups.push(subjectGroup);
+    }
+    groupMap.get(subjectName).loans.push(loan);
+  });
+  return groups;
+};
+
 const balanceMonthKeys = Array.from({ length: 12 }, (_, index) => `m${index + 1}`);
 
 const toFiniteNumber = (value) => {
@@ -852,6 +879,11 @@ const getAccountBalanceGroups = () => {
 const getAccountYearlyTotals = () => {
   const record = tableData.value[0] || {};
   return calculateAccountYearlyTotals(parseJSON(record.account_rows_json));
+};
+
+const getExistingLoanSubjectGroups = () => {
+  const record = tableData.value[0] || {};
+  return groupExistingLoansBySubject(parseJSON(record.existing_loans_json));
 };
 
 async function fetchTableDataWithSearch() {
