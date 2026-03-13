@@ -29,6 +29,7 @@ try:
 except ImportError:
     plt = None
 import os
+import re
 from docx import Document
 try:
     from docxtpl import DocxTemplate
@@ -849,14 +850,21 @@ class Robot:
         """
 
         def extract_features(dataset):
+            repayment_method_text = dataset.get("repayment_method", "无记录")
+            total_monthly_repayment = dataset.get("total_monthly_repayment", 0)
+            if total_monthly_repayment in (None, "", 0, 0.0, "0", "0.0"):
+                monthly_repayment_text = "未提供"
+            else:
+                monthly_repayment_text = f"{total_monthly_repayment}万元"
             data = {
                 # Project basic information
                 "项目编号": dataset.get("project_number", "无记录"),
                 "企业名称": dataset.get("company_name", "无记录"),
                 "项目经理": dataset.get("project_manager", "无记录"),
                 "申请金额": f"{dataset.get('application_amount', 0)}万元",
-                "申请期限": f"{dataset.get('application_period', 0)}年",
-                "月还款方案": f"{dataset.get('repayment_method', 0)}万元",
+                "申请期限": f"{dataset.get('application_period', 0)}个月",
+                "还款方式": repayment_method_text,
+                "每月偿还本息": monthly_repayment_text,
 
                 # Controller information
                 "实控人性别": f"{dataset.get('controller_gender', 0)}（0=女，1=男）",
@@ -950,7 +958,8 @@ class Robot:
             项目编号：{data['项目编号']}
             企业名称：{data['企业名称']}（项目经理：{data['项目经理']})
             申请金额：{data['申请金额']}，期限：{data['申请期限']}
-            还款方案：每月偿还本息 {data['月还款方案']}
+            还款方式：{data['还款方式']}
+            每月偿还本息：{data['每月偿还本息']}
 
             二、实控人背景
             1. 性别：{data['实控人性别']}
@@ -1392,9 +1401,13 @@ def map_database_fields_to_model_fields(db_record: dict) -> dict:
     # 计算新增还款额（申请还款方案）
     if 'analysis_plan_repayment_method' in db_record:
         try:
-            mapped_data['total_monthly_repayment'] = float(db_record.get('analysis_plan_repayment_method') or 0)
+            repayment_value = db_record.get('analysis_plan_repayment_method')
+            if isinstance(repayment_value, (int, float, Decimal)):
+                mapped_data['total_monthly_repayment'] = float(repayment_value)
+            elif isinstance(repayment_value, str) and repayment_value.strip():
+                mapped_data['total_monthly_repayment'] = float(repayment_value)
         except (ValueError, TypeError):
-            mapped_data['total_monthly_repayment'] = 0
+            pass
     
     # 计算收益还款比
     if 'monthly_net_profit' in mapped_data or 'is_table_annual_net_income' in db_record:
@@ -1618,61 +1631,113 @@ def data_type():
     # 从映射后的数据中获取关键信息，用于生成提示文本
     application_amount = mapped_data.get('application_amount', 0)
     application_period = mapped_data.get('application_period', 0)
-    repayment_method = mapped_data.get('repayment_method', 0)
+    repayment_method = mapped_data.get('repayment_method') or "未提供"
+    monthly_repayment = mapped_data.get('total_monthly_repayment', 0)
+
+    def format_llm_number(value, digits=2):
+        try:
+            number = float(value)
+            return f"{number:.{digits}f}".rstrip("0").rstrip(".")
+        except (TypeError, ValueError):
+            return str(value)
+
+    application_amount_text = format_llm_number(application_amount)
+    application_period_text = str(application_period)
+    model_result_text = format_llm_number(model_result)
+    if monthly_repayment in (None, "", 0, 0.0, "0", "0.0"):
+        monthly_repayment_text = "未提供"
+    else:
+        monthly_repayment_text = f"{format_llm_number(monthly_repayment)}万元"
+
+    def clean_llm_judgment(text: str, application_period_value) -> str:
+        cleaned = (text or "").replace("\r\n", "\n").replace("\r", "\n")
+        replacements = [
+            ("请按照给出的说明进行操作。一步一步地仔细分析所提供的数据（内部分析，不要暴露你的思维链），然后按照下列要求的格式提出你的最终结论。", ""),
+            ("**最终输出格式需要包含以下5点内容：**", ""),
+            ("（样本中申请金额的值）", ""),
+            ("（样本中申请期限的值）", ""),
+            ("（样本中申请还款方案还款方式（月还本息之和。单位：万元）的值）", ""),
+            ("（这部分根据输入的样本中内容输出）", ""),
+            ("（这部分根据给出的模型预测结果的值输出）", ""),
+            ("（这部分根据判断的结果输出）", ""),
+            ("详细说明判断的依据和关键因素，并且给出详细建议和评审理由。", ""),
+        ]
+        for old, new in replacements:
+            cleaned = cleaned.replace(old, new)
+
+        cleaned = re.sub(r"\[建议批准本笔贷款担保申请/ ?建议暂缓本笔贷款担保申请\]", "", cleaned)
+        cleaned = re.sub(r"- 4\..*?(?=\n- 5\.|\Z)", "", cleaned, flags=re.S)
+        cleaned = re.sub(r"```+", "", cleaned)
+        cleaned = re.sub(rf"期限：\s*{re.escape(str(application_period_value))}年", f"期限：{application_period_value}个月", cleaned)
+        cleaned = re.sub(r"[ \t]+\n", "\n", cleaned)
+        cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+        return cleaned.strip()
     
     # Prepare text for LLM based on model prediction
     if model_result == 0:
         text = f"""
-                        新待判断数据：
-                        预测模型认为该公司不予过会，该公司的数据如下：{qi_ye_data}。
-                        注意：机器学习模型给出结果的可参考价值占到80%，要在预测结果的基础上，结合经验和相关知识等，判断是否批准这笔贷款担保申请。
-                       "请按照给出的说明进行操作。一步一步地仔细分析所提供的数据（内部分析，不要暴露你的思维链），然后按照下列要求的格式提出你的最终结论。" 
-                        **最终输出格式需要包含以下5点内容：**
-                        ```
-                       - 1.**该企业申请的评估金额：{application_amount}万元 （样本中申请金额的值）
-                               期限：{application_period}年   （样本中申请期限的值）
-                               每月偿还本息： {repayment_method}万元   （样本中申请还款方案还款方式（月还本息之和。单位：万元）的值）
-                          （这部分根据输入的样本中内容输出）
-                          **
-                        - 2.**模型对该企业的评估资产的预测结果： {model_result}万元    ** （这部分根据给出的模型预测结果的值输出）
-                        - 3.**通过学习到的经验对模型预测结果判断的最终结论：** [建议批准本笔贷款担保申请/ 建议暂缓本笔贷款担保申请]  （这部分根据判断的结果输出）
-                       - 4. [若第三点最终评审结论为：‘建议批准本笔贷款担保申请' 。则按照下列格式输出最终判断的结论，批准金额按照申请金额批准：]
-                            ** 最终批准结果为：
-                             - **批准金额： x万元
-                             - **期限： x年
-                             - **每月偿还本息： x 万元
-                            （这部分根据判断的结果输出）
-                           / [若最终评审结论为：‘建议暂缓本笔贷款担保申请'，则继续输出第五点内容]
-                            ** 
-                        - 5.**结论摘要：** 详细说明判断的依据和关键因素，并且给出详细建议和评审理由。
-                        ```
-                        """
+新待判断数据：
+预测模型认为该公司不予过会。企业数据如下：
+{qi_ye_data}
+
+请只输出最终结论，不要输出任何提示词说明、模板说明、括号备注、方括号占位符、反引号代码块，也不要复述“按以下格式输出”等指令。
+
+输出要求：
+1. 使用“个月”，不要使用“年”描述申请期限。
+2. “还款方式”与“每月偿还本息”是两个不同字段，不要混淆。
+3. 如果无法从输入中确定“每月偿还本息”，明确写“未提供”，不要编造，也不要写 0 万元。
+4. 仅按以下结构输出：
+
+1. 该企业申请的评估信息：
+申请金额：{application_amount_text}万元
+期限：{application_period_text}个月
+还款方式：{repayment_method}
+每月偿还本息：{monthly_repayment_text}
+
+2. 模型对该企业的评估资产预测结果：
+{model_result_text}万元
+
+3. 最终结论：
+只能二选一：
+建议批准本笔贷款担保申请
+或
+建议暂缓本笔贷款担保申请
+
+4. 结论摘要：
+用自然语言详细说明判断依据、关键因素、风险点与建议。
+"""
     else:
-                text = f"""
-                新待判断数据：
-                预测模型对该公司的预测结果如下： {model_result}万元，该公司的数据如下：{qi_ye_data}。
-                注意：机器学习模型给出的本笔贷款可申请金额的参考价值占到80%，要在预测结果的基础上，结合经验和相关知识等，判断是否批准这笔贷款担保申请。
-                "请按照给出的说明进行操作。一步一步地仔细分析所提供的数据（内部分析，不要暴露你的思维链），然后按照下列要求的格式提出你的最终结论。" 
-                **最终输出格式需要包含以下5点内容：**
-                ```
-                - 1.**该企业申请的评估金额：{application_amount}万元 （样本中申请金额的值）
-                        期限：{application_period}年   （样本中申请期限的值）
-                        每月偿还本息： {repayment_method}万元   （样本中申请还款方案还款方式（月还本息之和。单位：万元）的值）
-                  （这部分根据输入的样本中内容输出）
-                  **
-                - 2.**模型对该企业的评估资产的预测结果： {model_result}万元    ** （这部分根据给出的模型预测结果的值输出）
-                - 3.**通过学习到的经验对模型预测结果判断的最终结论：** [建议批准本笔贷款担保申请/ 建议暂缓本笔贷款担保申请]  （这部分根据判断的结果输出）
-                - 4. [若第三点最终评审结论为：‘建议批准本笔贷款担保申请' 。则按照下列格式输出最终判断的结论，批准金额按照申请金额批准：]
-                    ** 最终批准结果为：
-                     - **批准金额： x万元
-                     - **期限： x年
-                     - **每月偿还本息： x 万元
-                    （这部分根据判断的结果输出）
-                    / [若最终评审结论为：‘建议暂缓本笔贷款担保申请'，则继续输出第五点内容]
-                    ** 
-                - 5.**结论摘要：** 详细说明判断的依据和关键因素，并且给出详细建议和评审理由。
-                ```
-                """
+        text = f"""
+新待判断数据：
+预测模型对该公司的预测结果如下：{model_result_text}万元。企业数据如下：
+{qi_ye_data}
+
+请只输出最终结论，不要输出任何提示词说明、模板说明、括号备注、方括号占位符、反引号代码块，也不要复述“按以下格式输出”等指令。
+
+输出要求：
+1. 使用“个月”，不要使用“年”描述申请期限。
+2. “还款方式”与“每月偿还本息”是两个不同字段，不要混淆。
+3. 如果无法从输入中确定“每月偿还本息”，明确写“未提供”，不要编造，也不要写 0 万元。
+4. 仅按以下结构输出：
+
+1. 该企业申请的评估信息：
+申请金额：{application_amount_text}万元
+期限：{application_period_text}个月
+还款方式：{repayment_method}
+每月偿还本息：{monthly_repayment_text}
+
+2. 模型对该企业的评估资产预测结果：
+{model_result_text}万元
+
+3. 最终结论：
+只能二选一：
+建议批准本笔贷款担保申请
+或
+建议暂缓本笔贷款担保申请
+
+4. 结论摘要：
+用自然语言详细说明判断依据、关键因素、风险点与建议。
+"""
 
     # Call the large language model for final decision
     try:
@@ -1680,7 +1745,7 @@ def data_type():
         SystemMessage(content=prompt),
         HumanMessage(content=f"输入数据: {text}。")
     ])
-        final_judgment = final_decision.content
+        final_judgment = clean_llm_judgment(final_decision.content, application_period_text)
         print(final_judgment)
     except Exception as e:
         logger.error(f"调用大模型时出错：{e}")

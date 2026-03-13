@@ -21,6 +21,49 @@ const pool = mysql.createPool({
 
 // promisify query for async/await
 const queryAsync = util.promisify(pool.query).bind(pool);
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const updateHuizongWithRetry = async (summaryRow, options = {}) => {
+    const {
+        retries = 3,
+        delayMs = 250
+    } = options;
+
+    if (!summaryRow || !summaryRow.report_number) {
+        return { skipped: true, reason: 'missing report_number' };
+    }
+
+    let lastError = null;
+    for (let attempt = 1; attempt <= retries; attempt += 1) {
+        try {
+            const result = await queryAsync(
+                `UPDATE datahuizong
+                 SET company_name = ?, application_period = ?, project_manager = ?, predicted = ?, expert_opinion = ?, expert_amount = ?, created_by = ?
+                 WHERE report_number = ?`,
+                [
+                    summaryRow.company_name || null,
+                    toNullableNumber(summaryRow.application_period),
+                    summaryRow.project_manager || null,
+                    toNullableNumber(summaryRow.predicted),
+                    summaryRow.expert_opinion || null,
+                    toNullableNumber(summaryRow.expert_amount),
+                    summaryRow.created_by || null,
+                    summaryRow.report_number
+                ]
+            );
+            return { success: true, affectedRows: result?.affectedRows || 0, attempts: attempt };
+        } catch (error) {
+            lastError = error;
+            const isRetryable = error?.code === 'ER_LOCK_WAIT_TIMEOUT' || error?.code === 'ER_LOCK_DEADLOCK';
+            if (!isRetryable || attempt === retries) {
+                break;
+            }
+            await sleep(delayMs * attempt);
+        }
+    }
+
+    throw lastError;
+};
 
 // 建表：loan_application
 const createLoanApplicationTableSQL = `
@@ -43,7 +86,7 @@ CREATE TABLE IF NOT EXISTS loan_application (
     company_established_date DATE,
     company_registered_address VARCHAR(300),
     company_main_business TEXT,
-    company_employee_count VARCHAR(100),
+    company_employee_count TEXT,
     company_is_salary VARCHAR(10),
     company_shareholder_info TEXT,
     controller_name VARCHAR(100),
@@ -57,7 +100,7 @@ CREATE TABLE IF NOT EXISTS loan_application (
     controller_career_experience TEXT,
     family_members_info TEXT,
     family_is_hemu VARCHAR(10),
-    family_annual_expense DECIMAL(18,2),
+    family_annual_expense TEXT,
     social_relationship_info TEXT,
     residence_type VARCHAR(50),
     residence_years INT,
@@ -68,7 +111,7 @@ CREATE TABLE IF NOT EXISTS loan_application (
     business_model_description TEXT,
     business_is_waimao VARCHAR(10),
     business_is_jinshen VARCHAR(10),
-    credit_inquiry_count VARCHAR(255),
+    credit_inquiry_count TEXT,
     credit_adverse_info TEXT,
     credit_overdue_count INT,
     credit_max_overdue_amount DECIMAL(18,2),
@@ -80,8 +123,8 @@ CREATE TABLE IF NOT EXISTS loan_application (
     analysis_plan_term INT,
     analysis_plan_repayment_method VARCHAR(100),
     analysis_plan_fee_rate DECIMAL(18,4),
-    analysis_plan_corp_guarantee VARCHAR(10),
-    analysis_plan_personal_guarantee VARCHAR(10),
+    analysis_plan_corp_guarantee TEXT,
+    analysis_plan_personal_guarantee TEXT,
     analysis_plan_collateral VARCHAR(200),
     analysis_plan_diyapingguzhi DECIMAL(18,2),
     analysis_plan_eryayuzhi DECIMAL(18,2),
@@ -326,11 +369,23 @@ const tableStatements = [
 ];
 const migrateEmployeeCountToVarcharSQL = `
 ALTER TABLE loan_application
-MODIFY company_employee_count VARCHAR(100)
+MODIFY company_employee_count TEXT
 `;
-const migrateCreditInquiryCountToVarcharSQL = `
+const migrateCreditInquiryCountToTextSQL = `
 ALTER TABLE loan_application
-MODIFY credit_inquiry_count VARCHAR(255)
+MODIFY credit_inquiry_count TEXT
+`;
+const migrateFamilyAnnualExpenseToTextSQL = `
+ALTER TABLE loan_application
+MODIFY family_annual_expense TEXT
+`;
+const migrateAnalysisPlanCorpGuaranteeToTextSQL = `
+ALTER TABLE loan_application
+MODIFY analysis_plan_corp_guarantee TEXT
+`;
+const migrateAnalysisPlanPersonalGuaranteeToTextSQL = `
+ALTER TABLE loan_application
+MODIFY analysis_plan_personal_guarantee TEXT
 `;
 
 tableStatements.forEach((statement) => {
@@ -345,17 +400,41 @@ tableStatements.forEach((statement) => {
 
 pool.query(migrateEmployeeCountToVarcharSQL, (alterErr) => {
     if (alterErr) {
-        console.error('Ensure company_employee_count VARCHAR failed:', alterErr);
+        console.error('Ensure company_employee_count TEXT failed:', alterErr);
     } else {
-        console.log('company_employee_count is VARCHAR(100).');
+        console.log('company_employee_count is TEXT.');
     }
 });
 
-pool.query(migrateCreditInquiryCountToVarcharSQL, (alterErr) => {
+pool.query(migrateCreditInquiryCountToTextSQL, (alterErr) => {
     if (alterErr) {
-        console.error('Ensure credit_inquiry_count VARCHAR failed:', alterErr);
+        console.error('Ensure credit_inquiry_count TEXT failed:', alterErr);
     } else {
-        console.log('credit_inquiry_count is VARCHAR(255).');
+        console.log('credit_inquiry_count is TEXT.');
+    }
+});
+
+pool.query(migrateFamilyAnnualExpenseToTextSQL, (alterErr) => {
+    if (alterErr) {
+        console.error('Ensure family_annual_expense TEXT failed:', alterErr);
+    } else {
+        console.log('family_annual_expense is TEXT.');
+    }
+});
+
+pool.query(migrateAnalysisPlanCorpGuaranteeToTextSQL, (alterErr) => {
+    if (alterErr) {
+        console.error('Ensure analysis_plan_corp_guarantee TEXT failed:', alterErr);
+    } else {
+        console.log('analysis_plan_corp_guarantee is TEXT.');
+    }
+});
+
+pool.query(migrateAnalysisPlanPersonalGuaranteeToTextSQL, (alterErr) => {
+    if (alterErr) {
+        console.error('Ensure analysis_plan_personal_guarantee TEXT failed:', alterErr);
+    } else {
+        console.log('analysis_plan_personal_guarantee is TEXT.');
     }
 });
 
@@ -524,7 +603,7 @@ const mainColumns = [
 
 const numericMainColumns = new Set([
     'loan_apply_amount', 'loan_apply_term', 'company_registered_capital', 'controller_service_years',
-    'family_annual_expense', 'residence_years', 'business_month_pay',
+    'residence_years', 'business_month_pay',
     'credit_overdue_count', 'credit_max_overdue_amount', 'analysis_plan_amount', 'analysis_plan_term',
     'analysis_plan_fee_rate', 'analysis_plan_diyapingguzhi', 'analysis_plan_eryayuzhi',
     'analysis_plan_diyajingzhi', 'analysis_fin_total_assets', 'analysis_fin_total_liabilities',
@@ -1168,21 +1247,20 @@ app.put('/loan-application/:id', async (req, res) => {
                 );
             }
             if (rows && rows.length > 0 && rows[0].project_enterpriseid) {
-                await queryAsync(
-                    `UPDATE datahuizong
-                     SET company_name = ?, application_period = ?, project_manager = ?, predicted = ?, expert_opinion = ?, expert_amount = ?, created_by = ?
-                     WHERE report_number = ?`,
-                    [
-                        rows[0].company_name || null,
-                        rows[0].loan_apply_term || null,
-                        rows[0].project_market_manager || null,
-                        rows[0].predicted || null,
-                        rows[0].expert_opinion || null,
-                        rows[0].expert_amount || null,
-                        rows[0].created_by || null,
-                        rows[0].project_enterpriseid
-                    ]
-                );
+                try {
+                    await updateHuizongWithRetry({
+                        company_name: rows[0].company_name,
+                        application_period: rows[0].loan_apply_term,
+                        project_manager: rows[0].project_market_manager,
+                        predicted: rows[0].predicted,
+                        expert_opinion: rows[0].expert_opinion,
+                        expert_amount: rows[0].expert_amount,
+                        created_by: rows[0].created_by,
+                        report_number: rows[0].project_enterpriseid
+                    });
+                } catch (summaryError) {
+                    console.warn('Sync datahuizong failed after loan_application update:', summaryError);
+                }
             }
             return res.send({ success: true, message: 'Updated successfully' });
         } catch (error) {
@@ -1204,21 +1282,16 @@ app.put('/loan-application/:id', async (req, res) => {
         const updateValues = [...mapMainValues(payload), id];
         await queryAsync(updateSql, updateValues);
 
-        await queryAsync(
-            `UPDATE datahuizong
-             SET company_name = ?, application_period = ?, project_manager = ?, predicted = ?, expert_opinion = ?, expert_amount = ?, created_by = ?
-             WHERE report_number = ?`,
-            [
-                company.name || null,
-                payload.loan ? payload.loan.apply_term || null : null,
-                project.market_manager || project.a_owner || null,
-                payload.predicted || null,
-                payload.expert_opinion || null,
-                payload.expert_amount || null,
-                payload.created_by || null,
-                project.enterpriseid
-            ]
-        );
+        await updateHuizongWithRetry({
+            company_name: company.name || null,
+            application_period: payload.loan ? payload.loan.apply_term || null : null,
+            project_manager: project.market_manager || project.a_owner || null,
+            predicted: payload.predicted || null,
+            expert_opinion: payload.expert_opinion || null,
+            expert_amount: payload.expert_amount || null,
+            created_by: payload.created_by || null,
+            report_number: project.enterpriseid
+        });
 
         await queryAsync('COMMIT');
         return res.send({ success: true, message: 'Updated successfully' });

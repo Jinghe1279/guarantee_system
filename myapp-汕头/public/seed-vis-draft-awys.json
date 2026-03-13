@@ -1,0 +1,848 @@
+{
+  "data": {
+    "project": {
+      "a_owner": "李东光",
+      "b_owner": "曾梓宜",
+      "market_manager": "曾梓宜",
+      "source": "其他",
+      "source_detail": "华兴银行澄海支行林强推荐",
+      "coop_bank": "华兴银行",
+      "apply_date": "2025-10-17",
+      "enterpriseid": ""
+    },
+    "loan": {
+      "borrower_name": "袁xx",
+      "apply_amount": "80",
+      "apply_term": "36",
+      "purpose_detail": "囤原材料，现原料铜版纸、白卡纸等处于价格低点。\n白卡纸2024年均价约4439元/吨，2025年一季度约4460元/吨，2025年二季度约4129元/吨，2025年9月约4000元/吨；\n铜版纸价格目前约5000元/吨。"
+    },
+    "company": {
+      "name": "揭阳空港区阿旺印刷厂",
+      "registered_capital": "3",
+      "established_date": "2020-06-04",
+      "registered_address": "揭阳空港经济区渔湖镇阳美社区河上十四路西畔",
+      "main_business": "祭祀类纸产品的生产",
+      "employee_count": "2025.8员工约110个人（含临时工），工资约50万元，每月月底发放上月工资，核对流水及工资表，工资准时发放。",
+      "is_salary": "是",
+      "shareholder_info": "袁xx（江xx妻子）：100%"
+    },
+    "controller": {
+      "name": "江xx",
+      "gender": "男",
+      "native_place": "梅州丰顺",
+      "marital_status": "已婚",
+      "birth_date": "1975-11-19",
+      "service_years": "31",
+      "education": "初中",
+      "spouse_name": "袁xx",
+      "career_experience": "1、江xx19岁开始接触该行业，刚开始打工，后办厂；\n2、积累一定资金后，江xx于2018年投资8层3000㎡酒店，投入较大，遇上疫情，亏损，2020、2021年左右出售；\n3、2020年购置两块土地（共220㎡）合计花费250万，原计划配合酒店做立体停车场，后酒店亏损，该土地空置；\n4、2023--2024年在2020年购买的土地上投资一KTV（7层，建筑面积1500㎡），投资约五六百万，给儿子、女儿经营，后行情不好转手出租（2024.12），每月租金约2.2万；"
+    },
+    "family": {
+      "members_info": "老婆在厂里帮忙，两个孩子（儿子26岁，女儿28岁，在外务工。）",
+      "is_hemu": "",
+      "annual_expense": "30万--40万"
+    },
+    "social": {
+      "relationship_info": "妹夫在揭阳搞建筑，其KTV就是妹夫建设。"
+    },
+    "residence": {
+      "type": "自有住宅",
+      "years": "31",
+      "address": "揭阳空港经济区渔湖镇阳美社区河上十四路西畔"
+    },
+    "business_sites": [
+      {
+        "address": "河上村祠堂前片新厝围西座二巷第一二间",
+        "building_area": "735",
+        "land_area": "",
+        "ownership": "租赁",
+        "month_pay": "0.55",
+        "is_pay": ""
+      },
+      {
+        "address": "榕城区渔湖镇河上工业区",
+        "building_area": "1100",
+        "land_area": "",
+        "ownership": "租赁",
+        "month_pay": "1.1",
+        "is_pay": ""
+      },
+      {
+        "address": "揭阳市空港经济区渔湖镇潮尾袁河上工业区十四路西畔油库路坐西向东第一间一楼仓库",
+        "building_area": "1200",
+        "land_area": "",
+        "ownership": "租赁",
+        "month_pay": "1.2",
+        "is_pay": ""
+      },
+      {
+        "address": "揭阳空港经济区渔湖镇阳美社区河上十四路西畔",
+        "building_area": "10000",
+        "land_area": "",
+        "ownership": "与村委承包",
+        "month_pay": "",
+        "is_pay": ""
+      }
+    ],
+    "business": {
+      "type": "制造业",
+      "model_description": "1、企业主要生产供应潮汕地区拜神及祭祀用的纸扎品。生产流程较简单，购买原材料（铜版纸、白卡纸等）后裁剪、印刷、模切、配套后包装出货，出厂产品有成型产品，也有平板纸(下游客户自行组织人员折叠成型)。下游客户是以线下的批发商为主，也有部分是散客；\n2、主要成本为纸板、印刷、胶水、人工和场地。场地为企业自有，能较大程度提升利润率。",
+      "is_waimao": "否",
+      "is_jinshen": "否"
+    },
+    "business_accounts": [
+      {
+        "account_id": "acct_1",
+        "account_name": "江xx 建行",
+        "account_no": "6236683260000649838"
+      },
+      {
+        "account_id": "acct_2",
+        "account_name": "江xx 建行",
+        "account_no": "6227003269010185214"
+      },
+      {
+        "account_id": "acct_3",
+        "account_name": "袁xx 建行",
+        "account_no": "6236683260002360798"
+      },
+      {
+        "account_id": "acct_4",
+        "account_name": "袁xx 建行",
+        "account_no": "6215340300432371608"
+      },
+      {
+        "account_id": "acct_5",
+        "account_name": "袁xx 零钱通",
+        "account_no": ""
+      },
+      {
+        "account_id": "acct_6",
+        "account_name": "袁xx 微信零钱",
+        "account_no": ""
+      },
+      {
+        "account_id": "acct_7",
+        "account_name": "江xx 微信零钱",
+        "account_no": ""
+      },
+      {
+        "account_id": "acct_8",
+        "account_name": "江xx 零钱通",
+        "account_no": ""
+      }
+    ],
+    "account_rows": [
+      {
+        "row_id": "bal_1_2024",
+        "account_id": "acct_1",
+        "year": "2024",
+        "m1": "9",
+        "m2": "4",
+        "m3": "13",
+        "m4": "4",
+        "m5": "2",
+        "m6": "0",
+        "m7": "3",
+        "m8": "0",
+        "m9": "8",
+        "m10": "0",
+        "m11": "22",
+        "m12": "4",
+        "avg": "6"
+      },
+      {
+        "row_id": "bal_1_2025",
+        "account_id": "acct_1",
+        "year": "2025",
+        "m1": "20",
+        "m2": "9",
+        "m3": "2",
+        "m4": "1",
+        "m5": "1",
+        "m6": "3",
+        "m7": "9",
+        "m8": "9",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "7"
+      },
+      {
+        "row_id": "bal_2_2024",
+        "account_id": "acct_2",
+        "year": "2024",
+        "m1": "0",
+        "m2": "0",
+        "m3": "0",
+        "m4": "0",
+        "m5": "0",
+        "m6": "0",
+        "m7": "0",
+        "m8": "0",
+        "m9": "2",
+        "m10": "1",
+        "m11": "1",
+        "m12": "0",
+        "avg": "0"
+      },
+      {
+        "row_id": "bal_2_2025",
+        "account_id": "acct_2",
+        "year": "2025",
+        "m1": "0",
+        "m2": "0",
+        "m3": "1",
+        "m4": "1",
+        "m5": "1",
+        "m6": "1",
+        "m7": "0",
+        "m8": "",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "1"
+      },
+      {
+        "row_id": "bal_3_2024",
+        "account_id": "acct_3",
+        "year": "2024",
+        "m1": "115",
+        "m2": "91",
+        "m3": "103",
+        "m4": "55",
+        "m5": "7",
+        "m6": "45",
+        "m7": "149",
+        "m8": "119",
+        "m9": "63",
+        "m10": "79",
+        "m11": "20",
+        "m12": "87",
+        "avg": "78"
+      },
+      {
+        "row_id": "bal_3_2025",
+        "account_id": "acct_3",
+        "year": "2025",
+        "m1": "93",
+        "m2": "100",
+        "m3": "100",
+        "m4": "63",
+        "m5": "57",
+        "m6": "47",
+        "m7": "40",
+        "m8": "19",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "65"
+      },
+      {
+        "row_id": "bal_4_2024",
+        "account_id": "acct_4",
+        "year": "2024",
+        "m1": "",
+        "m2": "",
+        "m3": "",
+        "m4": "",
+        "m5": "",
+        "m6": "",
+        "m7": "",
+        "m8": "",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": ""
+      },
+      {
+        "row_id": "bal_4_2025",
+        "account_id": "acct_4",
+        "year": "2025",
+        "m1": "",
+        "m2": "",
+        "m3": "",
+        "m4": "",
+        "m5": "",
+        "m6": "305",
+        "m7": "305",
+        "m8": "305",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "305"
+      },
+      {
+        "row_id": "bal_5_2024",
+        "account_id": "acct_5",
+        "year": "2024",
+        "m1": "5",
+        "m2": "28",
+        "m3": "13",
+        "m4": "6",
+        "m5": "12",
+        "m6": "14",
+        "m7": "27",
+        "m8": "34",
+        "m9": "12",
+        "m10": "14",
+        "m11": "23",
+        "m12": "60",
+        "avg": "21"
+      },
+      {
+        "row_id": "bal_5_2025",
+        "account_id": "acct_5",
+        "year": "2025",
+        "m1": "19",
+        "m2": "34",
+        "m3": "23",
+        "m4": "5",
+        "m5": "3",
+        "m6": "40",
+        "m7": "10",
+        "m8": "20",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "19"
+      },
+      {
+        "row_id": "bal_6_2024",
+        "account_id": "acct_6",
+        "year": "2024",
+        "m1": "164",
+        "m2": "161",
+        "m3": "184",
+        "m4": "193",
+        "m5": "200",
+        "m6": "212",
+        "m7": "222",
+        "m8": "250",
+        "m9": "263",
+        "m10": "280",
+        "m11": "291",
+        "m12": "306",
+        "avg": "227"
+      },
+      {
+        "row_id": "bal_6_2025",
+        "account_id": "acct_6",
+        "year": "2025",
+        "m1": "310",
+        "m2": "342",
+        "m3": "346",
+        "m4": "351",
+        "m5": "356",
+        "m6": "6",
+        "m7": "5",
+        "m8": "11",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "216"
+      },
+      {
+        "row_id": "bal_7_2024",
+        "account_id": "acct_7",
+        "year": "2024",
+        "m1": "0",
+        "m2": "0",
+        "m3": "0",
+        "m4": "0",
+        "m5": "0",
+        "m6": "0",
+        "m7": "1",
+        "m8": "6",
+        "m9": "0",
+        "m10": "0",
+        "m11": "4",
+        "m12": "0",
+        "avg": "1"
+      },
+      {
+        "row_id": "bal_7_2025",
+        "account_id": "acct_7",
+        "year": "2025",
+        "m1": "0",
+        "m2": "1",
+        "m3": "0",
+        "m4": "0",
+        "m5": "0",
+        "m6": "0",
+        "m7": "0",
+        "m8": "",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "0"
+      },
+      {
+        "row_id": "bal_8_2024",
+        "account_id": "acct_8",
+        "year": "2024",
+        "m1": "0",
+        "m2": "3",
+        "m3": "1",
+        "m4": "0",
+        "m5": "6",
+        "m6": "1",
+        "m7": "1",
+        "m8": "0",
+        "m9": "1",
+        "m10": "3",
+        "m11": "3",
+        "m12": "6",
+        "avg": "2"
+      },
+      {
+        "row_id": "bal_8_2025",
+        "account_id": "acct_8",
+        "year": "2025",
+        "m1": "0",
+        "m2": "3",
+        "m3": "5",
+        "m4": "11",
+        "m5": "14",
+        "m6": "4",
+        "m7": "11",
+        "m8": "",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "avg": "7"
+      }
+    ],
+    "daily_avg_balance": [
+      {
+        "year": "2024",
+        "m3": "94",
+        "m6": "51",
+        "m9": "117",
+        "m12": "67",
+        "annual_avg": "82"
+      },
+      {
+        "year": "2025",
+        "m3": "98",
+        "m6": "44",
+        "m9": "",
+        "m12": "",
+        "annual_avg": "71"
+      }
+    ],
+    "guarantees": [],
+    "guarantees_totals": {
+      "amount_total": "",
+      "balance_total": ""
+    },
+    "existing_loan_subjects": [
+      {
+        "subject_id": "loan_subject_1",
+        "subject_name": "袁xx",
+        "loans": [
+          {
+            "loan_id": "loan_1",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "150",
+            "balance": "66",
+            "mode": "信用",
+            "monthly_payment": "5",
+            "start_date": "2023-12-07",
+            "end_date": "2026-12-06",
+            "bank_rate": "揭东农商行",
+            "purpose": "袁xx"
+          },
+          {
+            "loan_id": "loan_2",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "150",
+            "balance": "115",
+            "mode": "信用",
+            "monthly_payment": "5",
+            "start_date": "2024-12-20",
+            "end_date": "2027-12-19",
+            "bank_rate": "揭东农商行",
+            "purpose": "袁xx"
+          },
+          {
+            "loan_id": "loan_3",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "200",
+            "balance": "184",
+            "mode": "信用",
+            "monthly_payment": "6",
+            "start_date": "2025-06-30",
+            "end_date": "2028-06-30",
+            "bank_rate": "建设银行",
+            "purpose": "袁xx续贷"
+          },
+          {
+            "loan_id": "loan_4",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "36",
+            "balance": "36",
+            "mode": "信用",
+            "monthly_payment": "0.1",
+            "start_date": "2025-03-07",
+            "end_date": "2026-03-07",
+            "bank_rate": "建设银行",
+            "purpose": "袁xx"
+          },
+          {
+            "loan_id": "loan_5",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "27",
+            "balance": "27",
+            "mode": "信用",
+            "monthly_payment": "0.1",
+            "start_date": "2025-07-28",
+            "end_date": "2028-07-28",
+            "bank_rate": "建设银行",
+            "purpose": "袁xx"
+          },
+          {
+            "loan_id": "loan_6",
+            "loan_subject": "袁xx",
+            "type": "个人经营贷",
+            "amount": "100",
+            "balance": "100",
+            "mode": "信用",
+            "monthly_payment": "4",
+            "start_date": "2025-09-02",
+            "end_date": "2028-09-02",
+            "bank_rate": "华兴银行",
+            "purpose": "IPC，囤原料"
+          }
+        ]
+      }
+    ],
+    "existing_loans_totals": {
+      "amount_total": "663",
+      "balance_total": "528",
+      "monthly_payment_total": "20.2"
+    },
+    "credit": {
+      "inquiry_count": "①江xx近一年贷款审批查询1次；\n②袁xx近一年贷款审批查询5次。",
+      "adverse_info": "无逾期、不良。",
+      "overdue_count": "0",
+      "max_overdue_amount": "0"
+    },
+    "litigation": {
+      "status": ""
+    },
+    "electricity": {
+      "is_quantity": "是",
+      "is_cost": "否",
+      "descript": "1、2022年--2024年用电量较为稳定；\n2、2025年1-8月同比上涨50%。",
+      "items": [
+        {
+          "year": "2022",
+          "m1": "25324",
+          "m2": "16393",
+          "m3": "31712",
+          "m4": "28726",
+          "m5": "24623",
+          "m6": "24595",
+          "m7": "25516",
+          "m8": "25891",
+          "m9": "30163",
+          "m10": "31030",
+          "m11": "32851",
+          "m12": "29384",
+          "total": "326208"
+        },
+        {
+          "year": "2023",
+          "m1": "13613",
+          "m2": "20187",
+          "m3": "31035",
+          "m4": "30374",
+          "m5": "31881",
+          "m6": "26876",
+          "m7": "27107",
+          "m8": "26506",
+          "m9": "24650",
+          "m10": "27588",
+          "m11": "28588",
+          "m12": "32290",
+          "total": "320695"
+        },
+        {
+          "year": "2024",
+          "m1": "29864",
+          "m2": "9709",
+          "m3": "27199",
+          "m4": "26745",
+          "m5": "25428",
+          "m6": "24421",
+          "m7": "29456",
+          "m8": "26968",
+          "m9": "26625",
+          "m10": "27452",
+          "m11": "30767",
+          "m12": "25938",
+          "total": "310572"
+        },
+        {
+          "year": "2025",
+          "m1": "20209",
+          "m2": "27593",
+          "m3": "43824",
+          "m4": "33727",
+          "m5": "37908",
+          "m6": "42342",
+          "m7": "48255",
+          "m8": "45069",
+          "m9": "",
+          "m10": "",
+          "m11": "",
+          "m12": "",
+          "total": "298927"
+        }
+      ]
+    },
+    "analysis": {
+      "plan": {
+        "amount": "80",
+        "term": "36",
+        "repayment_method": "等额本金还款",
+        "fee_rate": "1.5",
+        "corp_guarantee": "揭阳空港区阿旺印刷厂",
+        "personal_guarantee": "江xx（实控人）、袁xx（江xx儿子，后补征信）",
+        "collateral": "",
+        "diyapingguzhi": "",
+        "eryayuzhi": "",
+        "diyajingzhi": ""
+      },
+      "financials": {
+        "total_assets": "2817",
+        "total_liabilities": "1058",
+        "net_assets": "1759",
+        "revenue": "2700",
+        "net_income": "301"
+      },
+      "profit_destination": "①2023--2024投资KTV（1500㎡）；根据微信聊天对账记录，至2025.1.21，共转出488万元给建设方（妹夫），音响等设备支出约50万元；\n②2024年购置一台五色印刷机花费148万；近两年其他零散购买设备支出约30万；\n③2025年7月承包一块土地2.15亩，花费价格95万元；\n④囤存货；",
+      "indicators": {
+        "asset_debt_ratio": "38",
+        "sales_debt_ratio": "38",
+        "meets_3x_income": "否",
+        "receivable_days": "0",
+        "avg_balance": "428",
+        "repayment_ratio": "60",
+        "is_superior_loan": "否",
+        "is_growth_phase": "否",
+        "is_added_guarantor": "否"
+      },
+      "soft_info": "1、老板本人文化程度不高，但勤劳肯干；\n2、老板过去爱乱投资，现主要存款在其老婆账户中；\n3、存在小额借入，亦有借出资金，有一定的资金调集能力。",
+      "summary": "1、客户深耕行业多年，有一定的经营规模及客群基础，近年经营情况稳定；\n2、企业此前经历两次投资失败，现回归本行业，大力发展业务；\n3、其孩子做保证，约束力较强；\n4、有一定的资产积累，原料存货较多，有较强的变现能力。",
+      "limit": {
+        "calculation": "301*3*0.7-528=104万",
+        "apply_amount": "100",
+        "increase_factors": "无"
+      }
+    },
+    "bs": {
+      "date": "2025-08",
+      "cash": "364",
+      "ar": "177",
+      "prepayments": "",
+      "other_ar": "",
+      "inventory": "800",
+      "fixed_assets": "1476",
+      "total_assets": "2817",
+      "loans": "528",
+      "ap": "240",
+      "advances": "",
+      "other_ap": "290",
+      "capital": "",
+      "retained_earnings": "1759",
+      "total_liabilities_equity": "2817"
+    },
+    "asset_stats": [
+      {
+        "name": "十四号路西畔",
+        "buy_time": "2004-01-01",
+        "buy_price": "",
+        "current_value": "800",
+        "depreciation": "",
+        "remark": "土地2.1亩承包期限2004.7--2029.7，按年缴纳租金，长租，上盖物+铁皮钢结构约10000㎡，上盖物约2014年建成，按800/㎡估算价值"
+      },
+      {
+        "name": "十四号路西畔（2.15亩）",
+        "buy_time": "2025-01-01",
+        "buy_price": "",
+        "current_value": "95",
+        "depreciation": "",
+        "remark": "2.15亩，按购买价值"
+      },
+      {
+        "name": "杨美村河上外新厝祠堂前片西座六幢6号",
+        "buy_time": "2023-01-01",
+        "buy_price": "",
+        "current_value": "69",
+        "depreciation": "",
+        "remark": "94.4㎡，68.8万"
+      },
+      {
+        "name": "渔湖镇河上村厝地",
+        "buy_time": "2012-01-01",
+        "buy_price": "",
+        "current_value": "12",
+        "depreciation": "",
+        "remark": "按购买价值12万"
+      },
+      {
+        "name": "渔湖街道阳美村望江北路河上段及地上建筑物",
+        "buy_time": "2020-01-01",
+        "buy_price": "",
+        "current_value": "450",
+        "depreciation": "",
+        "remark": "KTV，土地以儿子、女儿名义购买，按购买价值250万，上盖物按1200元/㎡计算（装修较好）"
+      },
+      {
+        "name": "渔湖镇阳美村河上",
+        "buy_time": "",
+        "buy_price": "",
+        "current_value": "50",
+        "depreciation": "",
+        "remark": "父亲（袁宏周）名下，合计164㎡"
+      }
+    ],
+    "asset_totals": {
+      "buy_price": "",
+      "current_value": "1476",
+      "depreciation": ""
+    },
+    "is_table": {
+      "year": "2024",
+      "sales_list": [
+        {
+          "name": "流水剔除强关联后流入",
+          "value": "2700"
+        }
+      ],
+      "s_total": "2700",
+      "material_cost": "",
+      "gross_profit": "",
+      "f_wages": "",
+      "f_rent": "",
+      "f_utility": "",
+      "f_comm": "",
+      "f_trans": "",
+      "f_loss": "",
+      "f_adv": "",
+      "f_entertain": "",
+      "f_tax": "",
+      "f_other": "",
+      "f_total": "",
+      "net_profit": "405",
+      "o_family_exp": "40",
+      "o_biz_loan": "28",
+      "o_pvt_loan": "36",
+      "o_other_exp": "",
+      "o_family_inc": "",
+      "annual_net_income": "301"
+    },
+    "rev_check": {
+      "items": [
+        {
+          "name": "银行流水剔除强关联后的收入（2024年）",
+          "value": "2700"
+        },
+        {
+          "name": "银行流水剔除强关联后的收入（2025年1-8月）",
+          "value": "1775"
+        }
+      ],
+      "total_value": "",
+      "est_total": "2700",
+      "is_revenue": "2700",
+      "diff_rate": "0",
+      "method": "银行流水剔除强关联后的收入"
+    },
+    "cashflow_in": [
+      {
+        "year": "2024",
+        "m1": "396",
+        "m2": "300",
+        "m3": "235",
+        "m4": "181",
+        "m5": "244",
+        "m6": "325",
+        "m7": "518",
+        "m8": "256",
+        "m9": "351",
+        "m10": "287",
+        "m11": "650",
+        "m12": "641",
+        "total": "4384"
+      },
+      {
+        "year": "2025",
+        "m1": "497",
+        "m2": "214",
+        "m3": "239",
+        "m4": "359",
+        "m5": "322",
+        "m6": "669",
+        "m7": "473",
+        "m8": "271",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "total": "3044"
+      }
+    ],
+    "cashflow_out": [
+      {
+        "year": "2024",
+        "m1": "351",
+        "m2": "282",
+        "m3": "213",
+        "m4": "243",
+        "m5": "264",
+        "m6": "272",
+        "m7": "432",
+        "m8": "257",
+        "m9": "429",
+        "m10": "265",
+        "m11": "579",
+        "m12": "488",
+        "total": "4075"
+      },
+      {
+        "year": "2025",
+        "m1": "473",
+        "m2": "157",
+        "m3": "250",
+        "m4": "335",
+        "m5": "295",
+        "m6": "680",
+        "m7": "500",
+        "m8": "331",
+        "m9": "",
+        "m10": "",
+        "m11": "",
+        "m12": "",
+        "total": "3021"
+      }
+    ]
+  },
+  "savedAt": "2026-03-13T00:00:00.000Z"
+}
