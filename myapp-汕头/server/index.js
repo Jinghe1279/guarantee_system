@@ -65,6 +65,34 @@ const updateHuizongWithRetry = async (summaryRow, options = {}) => {
     throw lastError;
 };
 
+const deleteHuizongWithRetry = async (reportNumber, options = {}) => {
+    const {
+        retries = 3,
+        delayMs = 250
+    } = options;
+
+    if (!reportNumber) {
+        return { skipped: true, reason: 'missing report_number' };
+    }
+
+    let lastError = null;
+    for (let attempt = 1; attempt <= retries; attempt += 1) {
+        try {
+            const result = await queryAsync('DELETE FROM datahuizong WHERE report_number = ?', [reportNumber]);
+            return { success: true, affectedRows: result?.affectedRows || 0, attempts: attempt };
+        } catch (error) {
+            lastError = error;
+            const isRetryable = error?.code === 'ER_LOCK_WAIT_TIMEOUT' || error?.code === 'ER_LOCK_DEADLOCK';
+            if (!isRetryable || attempt === retries) {
+                break;
+            }
+            await sleep(delayMs * attempt);
+        }
+    }
+
+    throw lastError;
+};
+
 // 建表：loan_application
 const createLoanApplicationTableSQL = `
 CREATE TABLE IF NOT EXISTS loan_application (
@@ -1320,7 +1348,11 @@ app.delete('/loan-application-with-summary/:id', async (req, res) => {
         const reportNumber = rows[0].project_enterpriseid;
         await queryAsync('DELETE FROM loan_application WHERE id = ?', [id]);
         if (reportNumber) {
-            await queryAsync('DELETE FROM datahuizong WHERE report_number = ?', [reportNumber]);
+            try {
+                await deleteHuizongWithRetry(reportNumber);
+            } catch (summaryError) {
+                console.warn('Delete datahuizong failed after loan_application delete:', summaryError);
+            }
         }
         res.send({ success: true, message: 'Deleted successfully' });
     } catch (error) {

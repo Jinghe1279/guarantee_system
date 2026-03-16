@@ -1164,12 +1164,12 @@ const handlePredict = async (record: RecordItem) => {
     // 弹窗展示预测结果
     Modal.success({
       title: '预测完成',
-      width: 720,
+      width: '80vw',
       content: h('div', [
         h('p', { style: 'font-size:16px;font-weight:600;color:#2b7a78;margin-bottom:8px;' },
           `模型预测额度: ${predictedAmount ?? '—'} 万元`),
         h('div', {
-          style: 'max-height:400px;overflow-y:auto;white-space:pre-wrap;background:#f7f9fa;padding:12px;border-radius:8px;font-size:13px;line-height:1.8;',
+          style: 'height:70vh;overflow-y:auto;white-space:pre-wrap;background:#f7f9fa;padding:16px;border-radius:8px;font-size:14px;line-height:1.9;',
           innerHTML: (llmJudgment || '—').replace(/\n/g, '<br/>'),
         }),
       ]),
