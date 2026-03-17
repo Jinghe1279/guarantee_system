@@ -23,7 +23,7 @@ const pool = mysql.createPool({
 const queryAsync = util.promisify(pool.query).bind(pool);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const updateHuizongWithRetry = async (summaryRow, options = {}) => {
+const replaceHuizongWithRetry = async (summaryRow, options = {}) => {
     const {
         retries = 3,
         delayMs = 250
@@ -36,22 +36,23 @@ const updateHuizongWithRetry = async (summaryRow, options = {}) => {
     let lastError = null;
     for (let attempt = 1; attempt <= retries; attempt += 1) {
         try {
+            await queryAsync('DELETE FROM datahuizong WHERE report_number = ?', [summaryRow.report_number]);
             const result = await queryAsync(
-                `UPDATE datahuizong
-                 SET company_name = ?, application_period = ?, project_manager = ?, predicted = ?, expert_opinion = ?, expert_amount = ?, created_by = ?
-                 WHERE report_number = ?`,
+                `INSERT INTO datahuizong (
+                    company_name, date, application_period, project_manager, report_number, predicted, expert_opinion, expert_amount, created_by
+                ) VALUES (?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     summaryRow.company_name || null,
                     toNullableNumber(summaryRow.application_period),
                     summaryRow.project_manager || null,
+                    summaryRow.report_number,
                     toNullableNumber(summaryRow.predicted),
                     summaryRow.expert_opinion || null,
                     toNullableNumber(summaryRow.expert_amount),
-                    summaryRow.created_by || null,
-                    summaryRow.report_number
+                    summaryRow.created_by || null
                 ]
             );
-            return { success: true, affectedRows: result?.affectedRows || 0, attempts: attempt };
+            return { success: true, affectedRows: result?.affectedRows || 1, attempts: attempt };
         } catch (error) {
             lastError = error;
             const isRetryable = error?.code === 'ER_LOCK_WAIT_TIMEOUT' || error?.code === 'ER_LOCK_DEADLOCK';
@@ -91,6 +92,43 @@ const deleteHuizongWithRetry = async (reportNumber, options = {}) => {
     }
 
     throw lastError;
+};
+
+const rebuildDatahuizongFromLoanApplication = async () => {
+    const rows = await queryAsync(`
+        SELECT
+            company_name,
+            project_enterpriseid AS report_number,
+            loan_apply_term AS application_period,
+            project_market_manager,
+            predicted,
+            expert_opinion,
+            expert_amount,
+            created_by
+        FROM loan_application
+        WHERE project_enterpriseid IS NOT NULL AND project_enterpriseid <> ''
+        ORDER BY id ASC
+    `);
+
+    await queryAsync('DELETE FROM datahuizong');
+    for (const row of rows) {
+        await queryAsync(
+            `INSERT INTO datahuizong (
+                company_name, date, application_period, project_manager, report_number, predicted, expert_opinion, expert_amount, created_by
+            ) VALUES (?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                row.company_name || null,
+                toNullableNumber(row.application_period),
+                row.project_market_manager || null,
+                row.report_number,
+                toNullableNumber(row.predicted),
+                row.expert_opinion || null,
+                toNullableNumber(row.expert_amount),
+                row.created_by || null
+            ]
+        );
+    }
+    return rows.length;
 };
 
 // 建表：loan_application
@@ -465,6 +503,15 @@ pool.query(migrateAnalysisPlanPersonalGuaranteeToTextSQL, (alterErr) => {
         console.log('analysis_plan_personal_guarantee is TEXT.');
     }
 });
+
+(async () => {
+    try {
+        const rebuiltCount = await rebuildDatahuizongFromLoanApplication();
+        console.log(`datahuizong rebuilt from loan_application, rows: ${rebuiltCount}`);
+    } catch (error) {
+        console.error('Rebuild datahuizong failed:', error);
+    }
+})();
 
 pool.query(createHuizongTableSQL, (err) => {
     if (err) {
@@ -979,28 +1026,17 @@ const insertChildRows = async (applicationId, payload) => {
 app.post('/insert-huizong', async (req, res) => {
     try {
         const data = req.body;
-        const sql = `INSERT INTO datahuizong(
-            company_name, date, application_period, project_manager, report_number, predicted, expert_opinion, expert_amount, created_by
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const values = [
-            data.company_name,
-            data.date,
-            toNullableNumber(data.application_period),
-            data.project_manager,
-            data.report_number,
-            toNullableNumber(data.predicted),
-            data.expert_opinion || null,
-            toNullableNumber(data.expert_amount),
-            data.created_by || null
-        ];
-        pool.query(sql, values, (err, results) => {
-            if (err) {
-                console.error("插入错误", err);
-                res.status(500).send("插入错误");
-                return;
-            }
-            res.status(200).send("插入成功");
+        await replaceHuizongWithRetry({
+            company_name: data.company_name,
+            application_period: data.application_period,
+            project_manager: data.project_manager,
+            report_number: data.report_number,
+            predicted: data.predicted,
+            expert_opinion: data.expert_opinion,
+            expert_amount: data.expert_amount,
+            created_by: data.created_by
         });
+        res.status(200).send("插入成功");
     } catch (error) {
         console.error("插入出错", error);
         res.status(500).send("插入错误");
@@ -1065,6 +1101,7 @@ app.post('/insert-prediction', async (req, res) => {
     const payload = req.body || {};
     const project = payload.project || {};
     const company = payload.company || {};
+    const loan = payload.loan || {};
 
     if (!project.enterpriseid || !company.name) {
         return res.status(400).json({ error: 'Missing required fields: project.enterpriseid, company.name' });
@@ -1091,6 +1128,17 @@ app.post('/insert-prediction', async (req, res) => {
             cashflow_in: normalizeArray(payload.cashflow_in).length,
             cashflow_out: normalizeArray(payload.cashflow_out).length
         };
+
+        await replaceHuizongWithRetry({
+            company_name: company.name || null,
+            application_period: loan.apply_term || null,
+            project_manager: project.market_manager || project.a_owner || null,
+            report_number: project.enterpriseid,
+            predicted: payload.predicted || null,
+            expert_opinion: payload.expert_opinion || null,
+            expert_amount: payload.expert_amount || null,
+            created_by: payload.created_by || null
+        });
 
         await queryAsync('COMMIT');
         console.log('Inserted loan_application', {
@@ -1134,17 +1182,22 @@ app.get('/datahuizong', (req, res) => {
 // 汇总列表带筛选
 app.get('/xmlb', (req, res) => {
     const { searchName, searchReportNumber, searchUserName, startDate, endDate, searchTime } = req.query;
-    let sql = `SELECT * FROM datahuizong`;
+    let sql = `
+        SELECT d.*, COALESCE(u.username, d.created_by) AS upload_username
+        FROM datahuizong d
+        LEFT JOIN users u ON u.username = d.created_by
+    `;
     const params = [];
     const conds = [];
-    if (searchName) { conds.push(`company_name LIKE ?`); params.push(`%${searchName}%`); }
-    if (searchReportNumber) { conds.push(`report_number LIKE ?`); params.push(`%${searchReportNumber}%`); }
-    if (searchUserName) { conds.push(`project_manager LIKE ?`); params.push(`%${searchUserName}%`); }
-    if (startDate && endDate) { conds.push(`date BETWEEN ? AND ?`); params.push(startDate, endDate); }
-    else if (startDate) { conds.push(`date >= ?`); params.push(startDate); }
-    else if (endDate) { conds.push(`date <= ?`); params.push(endDate); }
-    if (searchTime) { conds.push(`application_period = ?`); params.push(searchTime); }
+    if (searchName) { conds.push(`d.company_name LIKE ?`); params.push(`%${searchName}%`); }
+    if (searchReportNumber) { conds.push(`d.report_number LIKE ?`); params.push(`%${searchReportNumber}%`); }
+    if (searchUserName) { conds.push(`COALESCE(u.username, d.created_by) LIKE ?`); params.push(`%${searchUserName}%`); }
+    if (startDate && endDate) { conds.push(`d.date BETWEEN ? AND ?`); params.push(startDate, endDate); }
+    else if (startDate) { conds.push(`d.date >= ?`); params.push(startDate); }
+    else if (endDate) { conds.push(`d.date <= ?`); params.push(endDate); }
+    if (searchTime) { conds.push(`d.application_period = ?`); params.push(searchTime); }
     if (conds.length) sql += ' WHERE ' + conds.join(' AND ');
+    sql += ' ORDER BY d.id DESC';
     pool.query(sql, params, (err, results) => {
         if (err) return res.status(500).send({ error: err.message });
         res.send(results);
@@ -1276,7 +1329,7 @@ app.put('/loan-application/:id', async (req, res) => {
             }
             if (rows && rows.length > 0 && rows[0].project_enterpriseid) {
                 try {
-                    await updateHuizongWithRetry({
+                    await replaceHuizongWithRetry({
                         company_name: rows[0].company_name,
                         application_period: rows[0].loan_apply_term,
                         project_manager: rows[0].project_market_manager,
@@ -1310,7 +1363,7 @@ app.put('/loan-application/:id', async (req, res) => {
         const updateValues = [...mapMainValues(payload), id];
         await queryAsync(updateSql, updateValues);
 
-        await updateHuizongWithRetry({
+        await replaceHuizongWithRetry({
             company_name: company.name || null,
             application_period: payload.loan ? payload.loan.apply_term || null : null,
             project_manager: project.market_manager || project.a_owner || null,
@@ -1365,30 +1418,17 @@ app.delete('/loan-application-with-summary/:id', async (req, res) => {
 app.post('/datahuizong', async (req, res) => {
     try {
         const data = req.body;
-        const sql = `INSERT INTO datahuizong(
-            company_name, date, application_period, project_manager, report_number, predicted, expert_opinion, expert_amount, created_by
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        const values = [
-            data.company_name,
-            data.date,
-            toNullableNumber(data.application_period),
-            data.project_manager,
-            data.report_number,
-            toNullableNumber(data.predicted),
-            data.expert_opinion || null,
-            toNullableNumber(data.expert_amount),
-            data.created_by || null
-        ];
-
-        pool.query(sql, values, (err) => {
-            if (err) {
-                console.error('插入错误', err);
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.json({ success: true, message: 'Data inserted successfully' });
+        await replaceHuizongWithRetry({
+            company_name: data.company_name,
+            application_period: data.application_period,
+            project_manager: data.project_manager,
+            report_number: data.report_number,
+            predicted: data.predicted,
+            expert_opinion: data.expert_opinion,
+            expert_amount: data.expert_amount,
+            created_by: data.created_by
         });
+        res.json({ success: true, message: 'Data inserted successfully' });
     } catch (error) {
         console.error('处理请求时出错', error);
         res.status(500).json({ error: error.message });

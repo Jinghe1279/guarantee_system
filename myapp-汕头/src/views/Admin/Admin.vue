@@ -258,8 +258,8 @@ const columns = [
   { title: "企业名称", dataIndex: "company_name", key: "company_name" },
   { title: "上传日期", dataIndex: "created_at", key: "created_at" },
   { title: "借贷周期", dataIndex: "application_period", key: "application_period" },
-  { title: "上传负责人", dataIndex: "project_manager", key: "project_manager" },
-  { title: "预测结果(万元)", dataIndex: "predicted", key: "predicted" },
+  { title: "上传负责人", dataIndex: "upload_username", key: "upload_username" },
+  { title: "最终评审额度", dataIndex: "expert_amount", key: "expert_amount" },
 ];
 
 async function fetchTableDataWithSearch() {
@@ -280,13 +280,13 @@ async function fetchTableDataWithSearch() {
     tableData.value = response.data;
 
     countZero.value = tableData.value.filter(
-      (item) => Number(item.predicted) === 0
+      (item) => Number(item.expert_amount) === 0
     ).length;
     countLessThanOrEqual300.value = tableData.value.filter(
-      (item) => Number(item.predicted) <= 30
+      (item) => Number(item.expert_amount) <= 30
     ).length;
     countGreater300.value = tableData.value.filter(
-      (item) => Number(item.predicted) > 30
+      (item) => Number(item.expert_amount) > 30
     ).length;
   } catch (error) {
     console.error("Error fetching table data:", error);

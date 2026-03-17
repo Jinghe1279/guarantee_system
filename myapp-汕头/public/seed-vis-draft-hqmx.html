@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>导入 VIS 暂存草稿 - 恒祺模型</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Microsoft YaHei", sans-serif;
+        background: #f5f7fa;
+        color: #1f2d3d;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 60px auto;
+        padding: 32px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 28px;
+      }
+      p {
+        line-height: 1.7;
+        margin: 10px 0;
+      }
+      .ok {
+        color: #1f8f55;
+      }
+      .err {
+        color: #c0392b;
+      }
+      .actions {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      button,
+      a {
+        display: inline-block;
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: none;
+        background: #2b7a78;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .secondary {
+        background: #6b7280;
+      }
+      code {
+        background: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>VIS 暂存草稿导入</h1>
+      <p>本页会把“汕头市恒祺模型有限公司”评审报告写入浏览器本地 <code>vis_form_draft_v2</code>。</p>
+      <p id="status">正在导入草稿...</p>
+      <div class="actions">
+        <a href="/vis">前往 VIS 页面</a>
+        <button class="secondary" id="clear-btn" type="button">清除当前暂存</button>
+      </div>
+    </div>
+    <script>
+      (async function () {
+        const statusEl = document.getElementById("status");
+        const clearBtn = document.getElementById("clear-btn");
+
+        clearBtn.addEventListener("click", function () {
+          localStorage.removeItem("vis_form_draft_v2");
+          statusEl.className = "";
+          statusEl.textContent = "已清除当前暂存。";
+        });
+
+        try {
+          const response = await fetch("/seed-vis-draft-hqmx.json", { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error("草稿文件读取失败");
+          }
+          const draftText = await response.text();
+          JSON.parse(draftText);
+          localStorage.setItem("vis_form_draft_v2", draftText);
+          statusEl.className = "ok";
+          statusEl.textContent =
+            "草稿已写入成功。现在打开 /vis 后点击“恢复暂存”即可看到已填写内容。";
+        } catch (error) {
+          statusEl.className = "err";
+          statusEl.textContent = "导入失败：" + (error && error.message ? error.message : error);
+        }
+      })();
+    </script>
+  </body>
+</html>

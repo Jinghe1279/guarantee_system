@@ -2259,16 +2259,6 @@ const saveWithoutPredict = async () => {
     payload.existing_loans = flattenExistingLoans();
     payload.existing_loan_subjects = JSON.parse(JSON.stringify(form.existing_loan_subjects));
     const projectManager = form.project.market_manager || form.project.a_owner || "";
-    const basicData = {
-      company_name: form.company.name,
-      date: new Date().toISOString().split("T")[0],
-      application_period: form.loan.apply_term,
-      project_manager: projectManager,
-      report_number: form.project.enterpriseid,
-      predicted: null,
-      created_by: createdBy,
-    };
-
     const detailData = {
       ...payload,
       project_number: form.project.enterpriseid,
@@ -2279,7 +2269,6 @@ const saveWithoutPredict = async () => {
       created_by: createdBy,
     };
 
-    await axios.post(`${API_NODE}/insert-huizong`, basicData);
     await axios.post(`${API_NODE}/insert-prediction`, detailData);
     ElMessage.success("已保存");
     window.location.reload();

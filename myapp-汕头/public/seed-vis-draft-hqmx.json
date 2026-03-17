@@ -1,0 +1,283 @@
+{
+  "data": {
+    "project": {
+      "a_owner": "李东光",
+      "b_owner": "张佳佳",
+      "market_manager": "张涌",
+      "source": "其他",
+      "source_detail": "张涌自主开发，实控人李xx儿子李xx是张涌朋友",
+      "coop_bank": "民生银行",
+      "apply_date": "2025-10-31",
+      "enterpriseid": ""
+    },
+    "loan": {
+      "borrower_name": "李xx、汕头市恒祺模型有限公司",
+      "apply_amount": "100",
+      "apply_term": "36",
+      "purpose_detail": "建造约3000㎡厂房"
+    },
+    "company": {
+      "name": "汕头市恒祺模型有限公司",
+      "registered_capital": "200",
+      "established_date": "2016-07-28",
+      "registered_address": "汕头市澄海区莲上镇上巷村工业小区",
+      "main_business": "遥控车玩具的生产",
+      "employee_count": "约100人，工资总额约60万，核对流水，工资按时发放，约在当月20号左右发放上月工资",
+      "is_salary": "是",
+      "shareholder_info": "成立时工商要求须有五位股东\n1、唐xx：60万元，货币，30%，李xx配偶\n2、李xx：40万元，货币，20%，李xx二儿子\n3、李xx：40万元，货币，20%，李xx大儿子\n4、李xx：40万元，货币，20%\n5、李xx：20万元，货币，10%，李xx弟媳，无实际股份\n合计：200万元，100%"
+    },
+    "controller": {
+      "name": "李xx",
+      "gender": "男",
+      "native_place": "汕头澄海",
+      "marital_status": "已婚",
+      "birth_date": "1962-05-30",
+      "service_years": "20",
+      "education": "高中",
+      "spouse_name": "唐xx",
+      "career_experience": "1、1981年，李xx在政府部门任财务人员；\n2、1992年，李xx兄弟四人以“澄海县莲上五金厂”与莲上上巷经联社签署土地有偿使用合同，花费15.1万元有偿使用6亩土地50年，李xx开始从事二料生意，其他兄弟从事机械、毛纺等生意；目前6亩土地属李xx的约1.6亩，但李xx兄弟间未签署合同；该1.6亩土地上建成两层厂房在出租，租金一年约15万；\n3、2007年，李xx与莲上上巷经联社长租2亩土地50年；该土地目前建成一层钢结构在出租，租金一年约24万元；\n4、1992年--2010年间，李xx从事过二料、毛织品、工艺品等方面的生意；\n5、2010年，李xx开始做飞行器玩具生意；\n6、2014年，与汕头市白沙蔬菜原种研究所长租10亩土地20年；\n7、2016年成立汕头市恒祺模型有限公司，做玩具汽车等方面的生意；现企业玩具定位偏中高端，热销单品价格在100元左右；约同年工厂火灾，厂房未买保险造成较大损失；\n8、2016年在白沙蔬菜原种研究所10亩土地上开始建设12400㎡厂房，总投约1300万，于2017年建成；\n9、2024年投新厂，花费约100万元。"
+    },
+    "family": {
+      "members_info": "唐xx（配偶）、李xx（二儿子）夫妇、李xx（大儿子）夫妇",
+      "is_hemu": "",
+      "annual_expense": "30万元"
+    },
+    "social": {
+      "relationship_info": "社会关系：1、客户与广东伽懋智能织造有限公司有亲戚关系；2、李xx的哥哥近期在澄海文冠路卖出一块地约5000多万。\n\n关联企业：\n1、广州麦论正顺商贸有限公司，2025-10-03，法定代表人唐xx，汕头市恒祺模型有限公司100%，电商公司\n2、广州凝曦商贸有限公司，2020-04-05，法定代表人李xx，李xx70%，林x30%，电商公司\n3、鹿人智能科技（汕头市）有限公司，2018-11-16，法定代表人杜x，陈晓敏80%，杜x20%，李xx为财务负责人\n4、义乌市瑾锑电子商务商行，2020-10-14，法定代表人李xx，李xx100%，电商公司\n5、汕头市澄海区莲上恒生机器厂，1991-05-21，法定代表人李xx，李xx100%，无经营\n6、汕头市澄海区恒塑塑料厂，2015-01-16，法定代表人李xx，李xx100%，无经营\n7、汕头市恒祺模型有限公司第二车间，2016-11-10，法定代表人李xx，汕头市恒祺模型有限公司100%，车间\n8、广州牟弥岚贸易有限公司，2025-10-22，法定代表人李xx，李xx51%，杜x49%，电商公司"
+    },
+    "residence": {
+      "type": "自有住宅",
+      "years": "63",
+      "address": "汕头市澄海区澄江路宜居华庭7幢504号"
+    },
+    "business_sites": [
+      {
+        "address": "澄海区凤翔洲畔海婧路源涵楼二楼",
+        "building_area": "",
+        "land_area": "",
+        "ownership": "租赁，年租金19万元",
+        "month_pay": "1.58",
+        "is_pay": "是"
+      }
+    ],
+    "business": {
+      "type": "制造业",
+      "model_description": "客户主营遥控玩具车的生产、销售。\n1、李xx目前负责财务板块，生意逐步交由李xx、李xx管理；李xx管理业务方向，李xx负责研发方向；\n2、产品定位偏中高端，较为畅销的单品出厂价在100元左右，产品以外销为主；下游多为做亚马逊的客户；客户亦有自己做少量电商；\n3、企业有自己合作的设计工作室，自有8台注塑机，产品设计出来后企业核心塑胶件自己生产，普通件外发加工，产品在自己工厂组装后出货。",
+      "is_waimao": "是",
+      "is_jinshen": "否"
+    },
+    "business_accounts": [
+      { "account_id": "acct_1", "account_name": "李xx 工行", "account_no": "6222****2907" },
+      { "account_id": "acct_2", "account_name": "李xx 建行", "account_no": "623668*********6182" },
+      { "account_id": "acct_3", "account_name": "李xx 建行", "account_no": "622707******5580" },
+      { "account_id": "acct_4", "account_name": "恒祺模型 建行", "account_no": "44050165010400000512" },
+      { "account_id": "acct_5", "account_name": "李xx 农行", "account_no": "622848****6014" },
+      { "account_id": "acct_6", "account_name": "李xx 浙江稠州商业银行", "account_no": "6210286015695040" }
+    ],
+    "account_rows": [
+      { "row_id": "bal_1_2024", "account_id": "acct_1", "year": "2024", "m1": "0", "m2": "1", "m3": "11", "m4": "3", "m5": "10", "m6": "1", "m7": "2", "m8": "40", "m9": "3", "m10": "1", "m11": "4", "m12": "5", "avg": "7" },
+      { "row_id": "bal_1_2025", "account_id": "acct_1", "year": "2025", "m1": "1", "m2": "5", "m3": "0", "m4": "1", "m5": "0", "m6": "0", "m7": "44", "m8": "7", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "7" },
+      { "row_id": "bal_2_2024", "account_id": "acct_2", "year": "2024", "m1": "99", "m2": "3", "m3": "26", "m4": "0", "m5": "13", "m6": "26", "m7": "48", "m8": "7", "m9": "153", "m10": "1", "m11": "6", "m12": "198", "avg": "48" },
+      { "row_id": "bal_2_2025", "account_id": "acct_2", "year": "2025", "m1": "2", "m2": "8", "m3": "22", "m4": "6", "m5": "16", "m6": "45", "m7": "41", "m8": "86", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "28" },
+      { "row_id": "bal_3_2024", "account_id": "acct_3", "year": "2024", "m1": "3", "m2": "8", "m3": "5", "m4": "3", "m5": "2", "m6": "3", "m7": "2", "m8": "18", "m9": "2", "m10": "3", "m11": "3", "m12": "3", "avg": "5" },
+      { "row_id": "bal_3_2025", "account_id": "acct_3", "year": "2025", "m1": "2", "m2": "2", "m3": "2", "m4": "2", "m5": "0", "m6": "1", "m7": "1", "m8": "0", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "1" },
+      { "row_id": "bal_4_2024", "account_id": "acct_4", "year": "2024", "m1": "132", "m2": "13", "m3": "25", "m4": "1", "m5": "33", "m6": "9", "m7": "58", "m8": "0", "m9": "1", "m10": "16", "m11": "5", "m12": "112", "avg": "34" },
+      { "row_id": "bal_4_2025", "account_id": "acct_4", "year": "2025", "m1": "2", "m2": "29", "m3": "42", "m4": "60", "m5": "1", "m6": "82", "m7": "105", "m8": "14", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "42" },
+      { "row_id": "bal_5_2024", "account_id": "acct_5", "year": "2024", "m1": "1", "m2": "8", "m3": "5", "m4": "1", "m5": "14", "m6": "14", "m7": "0", "m8": "10", "m9": "0", "m10": "0", "m11": "10", "m12": "34", "avg": "8" },
+      { "row_id": "bal_5_2025", "account_id": "acct_5", "year": "2025", "m1": "3", "m2": "15", "m3": "0", "m4": "5", "m5": "2", "m6": "13", "m7": "34", "m8": "3", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "9" },
+      { "row_id": "bal_6_2024", "account_id": "acct_6", "year": "2024", "m1": "5", "m2": "0", "m3": "0", "m4": "0", "m5": "11", "m6": "0", "m7": "0", "m8": "0", "m9": "21", "m10": "13", "m11": "55", "m12": "5", "avg": "9" },
+      { "row_id": "bal_6_2025", "account_id": "acct_6", "year": "2025", "m1": "0", "m2": "0", "m3": "0", "m4": "0", "m5": "0", "m6": "22", "m7": "0", "m8": "2", "m9": "", "m10": "", "m11": "", "m12": "", "avg": "3" }
+    ],
+    "daily_avg_balance": [
+      { "year": "2024", "m3": "135", "m6": "26", "m9": "51", "m12": "119", "annual_avg": "83" },
+      { "year": "2025", "m3": "150", "m6": "54", "m9": "231", "m12": "", "annual_avg": "145" }
+    ],
+    "guarantees": [],
+    "guarantees_totals": { "amount_total": "", "balance_total": "" },
+    "existing_loan_subjects": [
+      {
+        "subject_id": "loan_subject_1",
+        "subject_name": "恒祺模型",
+        "loans": [
+          { "loan_id": "loan_1", "loan_subject": "恒祺模型", "type": "流贷", "amount": "32", "balance": "32", "mode": "信用", "monthly_payment": "0.1", "start_date": "2025-01-22", "end_date": "2026-01-22", "bank_rate": "建设银行", "purpose": "" },
+          { "loan_id": "loan_2", "loan_subject": "恒祺模型", "type": "流贷", "amount": "15", "balance": "15", "mode": "信用", "monthly_payment": "0.1", "start_date": "2025-02-08", "end_date": "2026-02-08", "bank_rate": "建设银行", "purpose": "" },
+          { "loan_id": "loan_3", "loan_subject": "恒祺模型", "type": "流贷", "amount": "12", "balance": "12", "mode": "信用", "monthly_payment": "", "start_date": "2025-02-08", "end_date": "2026-02-08", "bank_rate": "建设银行", "purpose": "" }
+        ]
+      },
+      {
+        "subject_id": "loan_subject_2",
+        "subject_name": "李xx",
+        "loans": [
+          { "loan_id": "loan_4", "loan_subject": "李xx", "type": "消费贷", "amount": "28", "balance": "2", "mode": "抵押", "monthly_payment": "1", "start_date": "2021-11-22", "end_date": "2025-11-22", "bank_rate": "平安银行", "purpose": "" },
+          { "loan_id": "loan_5", "loan_subject": "李xx", "type": "经营贷", "amount": "120", "balance": "120", "mode": "抵押", "monthly_payment": "0.3", "start_date": "2024-06-28", "end_date": "2027-06-28", "bank_rate": "光大银行", "purpose": "" },
+          { "loan_id": "loan_6", "loan_subject": "李xx", "type": "经营贷", "amount": "125", "balance": "125", "mode": "抵押", "monthly_payment": "0.3", "start_date": "2025-03-05", "end_date": "2026-03-05", "bank_rate": "建设银行，转贷", "purpose": "" },
+          { "loan_id": "loan_7", "loan_subject": "李xx", "type": "经营贷", "amount": "100", "balance": "100", "mode": "抵押", "monthly_payment": "0.3", "start_date": "2025-09-02", "end_date": "2028-09-02", "bank_rate": "建设银行，转贷", "purpose": "" },
+          { "loan_id": "loan_8", "loan_subject": "李xx", "type": "经营贷", "amount": "6", "balance": "6", "mode": "信用", "monthly_payment": "", "start_date": "2024-12-16", "end_date": "2025-12-16", "bank_rate": "建设银行", "purpose": "" },
+          { "loan_id": "loan_9", "loan_subject": "李xx", "type": "经营贷", "amount": "44", "balance": "44", "mode": "信用", "monthly_payment": "0.1", "start_date": "2025-06-27", "end_date": "2026-06-27", "bank_rate": "建设银行，续贷", "purpose": "" },
+          { "loan_id": "loan_10", "loan_subject": "李xx", "type": "经营贷", "amount": "26", "balance": "25", "mode": "信用", "monthly_payment": "0.1", "start_date": "2025-06-27", "end_date": "2026-06-27", "bank_rate": "建设银行，续贷", "purpose": "" },
+          { "loan_id": "loan_11", "loan_subject": "李xx", "type": "消费贷", "amount": "1.5", "balance": "0.3", "mode": "信用", "monthly_payment": "", "start_date": "2021-07-16", "end_date": "2027-07-10", "bank_rate": "北京银行", "purpose": "" },
+          { "loan_id": "loan_12", "loan_subject": "李xx", "type": "消费贷", "amount": "0.1", "balance": "0.1", "mode": "信用", "monthly_payment": "", "start_date": "2021-12-29", "end_date": "2027-11-25", "bank_rate": "蚂蚁消金", "purpose": "" },
+          { "loan_id": "loan_13", "loan_subject": "李xx", "type": "消费贷", "amount": "6.5", "balance": "3.5", "mode": "信用", "monthly_payment": "", "start_date": "2022-08-22", "end_date": "2026-08-27", "bank_rate": "携程小贷", "purpose": "" },
+          { "loan_id": "loan_14", "loan_subject": "李xx", "type": "经营贷", "amount": "50", "balance": "6", "mode": "信用", "monthly_payment": "", "start_date": "2023-01-01", "end_date": "2025-12-08", "bank_rate": "平安银行", "purpose": "" },
+          { "loan_id": "loan_21", "loan_subject": "李xx", "type": "信用卡", "amount": "16", "balance": "6", "mode": "信用", "monthly_payment": "", "start_date": "", "end_date": "", "bank_rate": "", "purpose": "" },
+          { "loan_id": "loan_22", "loan_subject": "李xx", "type": "信用卡", "amount": "20", "balance": "14", "mode": "信用", "monthly_payment": "", "start_date": "", "end_date": "", "bank_rate": "", "purpose": "" }
+        ]
+      },
+      {
+        "subject_id": "loan_subject_3",
+        "subject_name": "林x",
+        "loans": [
+          { "loan_id": "loan_15", "loan_subject": "林x", "type": "消费贷", "amount": "3.7", "balance": "0.6", "mode": "信用", "monthly_payment": "", "start_date": "2021-09-21", "end_date": "2025-11-28", "bank_rate": "商业银行UU", "purpose": "" },
+          { "loan_id": "loan_16", "loan_subject": "林x", "type": "消费贷", "amount": "0.07", "balance": "0.03", "mode": "信用", "monthly_payment": "", "start_date": "2023-01-14", "end_date": "2026-06-23", "bank_rate": "消金公司LO", "purpose": "" },
+          { "loan_id": "loan_17", "loan_subject": "林x", "type": "消费贷", "amount": "3.2", "balance": "2.1", "mode": "信用", "monthly_payment": "", "start_date": "2024-10-25", "end_date": "2026-05-17", "bank_rate": "商业银行CS", "purpose": "" },
+          { "loan_id": "loan_23", "loan_subject": "林x", "type": "信用卡", "amount": "4", "balance": "1", "mode": "信用", "monthly_payment": "", "start_date": "", "end_date": "", "bank_rate": "", "purpose": "" }
+        ]
+      },
+      {
+        "subject_id": "loan_subject_4",
+        "subject_name": "恒塑塑料厂",
+        "loans": [
+          { "loan_id": "loan_18", "loan_subject": "恒塑塑料厂", "type": "流贷", "amount": "240", "balance": "240", "mode": "抵押", "monthly_payment": "0.7", "start_date": "2023-09-11", "end_date": "2026-09-11", "bank_rate": "建设银行", "purpose": "" },
+          { "loan_id": "loan_19", "loan_subject": "恒塑塑料厂", "type": "流贷", "amount": "150", "balance": "130", "mode": "信用", "monthly_payment": "2", "start_date": "2024-01-16", "end_date": "2026-01-16", "bank_rate": "建设银行", "purpose": "" },
+          { "loan_id": "loan_20", "loan_subject": "恒塑塑料厂", "type": "流贷", "amount": "130", "balance": "130", "mode": "抵押", "monthly_payment": "0.4", "start_date": "2023-11-15", "end_date": "2026-11-15", "bank_rate": "建设银行", "purpose": "" }
+        ]
+      }
+    ],
+    "existing_loans_totals": { "amount_total": "1133", "balance_total": "1015", "monthly_payment_total": "5.4" },
+    "credit": {
+      "inquiry_count": "①李xx近一年贷款审批9次；\n②李xx近一年贷款审批1次；\n③唐xx近一年贷款审批0次；\n④林x近一年贷款审批1次。\n\n补充李xx夫妇征信：\n李xx无对外担保，近一年贷款审批五次。\n詹xx近五年信用卡逾期六次，单次最高金额1187元，消费贷逾期2次，金额最高1977元，近一年贷款审批四次。",
+      "adverse_info": "①李xx：光大银行2023年6月发放的120万经营贷款近5年内有2个月逾期，金额分别为2760元、1112元，为疏忽导致，该贷款2024年6月结清后续作；\n②李xx：中国银行信用卡近5年内有2个月逾期，金额分别为433元、237元，为疏忽导致，该卡目前信用额度8000元，余额108元；\n③唐xx：经营贷账户2021.10逾期一次，金额4460元。\n\n补充李xx夫妇征信明细：\n1、李xx：消费贷23.6/16.8，2024-03-06至2029-03-06，商业银行MK；消费贷0.11/0.04，2021-07-14至2027-07-03，商业银行HD；消费贷20/6.6，2024-06-29至2026-06-29，商业银行HD；经营贷36.5/3.7，2024-08-24至2026-08-12，商业银行MK；经营贷30/0.9，2024-10-25至2025-12-12，商业银行ZM；经营贷41.4/2.9，2025-09-09至2026-09-12，商业银行MK；经营贷18.1/3.8，2025-09-28至2026-07-11，小额贷款公司IU；信用卡14.6/4.5。\n2、詹xx：消费贷6.7/5.9，2023-01-07至2026-10-18，小贷公司SD；消费贷0.02/0.02，2023-06-17至2026-06-24，消金公司WQ；经营贷4.3/1.3，2025-07-24至2026-09-30，商业银行WS；消费贷0.14/0.1，2025-08-09至2099-12-31，小贷公司OO；信用卡2.4/2.5。",
+      "overdue_count": "",
+      "max_overdue_amount": ""
+    },
+    "litigation": {
+      "status": "①李xx关联案号为（2018）粤0515执834号、（2019）粤0515执150号两笔诉讼，为申请执行人，被告欠其货款；\n②汕头市澄海区莲上恒生机器厂关联案号（2019）粤0515民初2001号买卖合同纠纷诉讼，为原告，被告被执行5.6万元；"
+    },
+    "electricity": {
+      "is_quantity": "是",
+      "is_cost": "否",
+      "descript": "1、近六年用电量总体成上升趋势；\n2、2024年用电量较2023年上涨21%；2025年1-9月用电量同比上涨16%；\n3、企业于2024年7月新租一场地，每月电费4000--5000元。",
+      "items": [
+        { "year": "2020", "m1": "9698", "m2": "2687", "m3": "11454", "m4": "16395", "m5": "28103", "m6": "35477", "m7": "40353", "m8": "44031", "m9": "46698", "m10": "36399", "m11": "26885", "m12": "33786", "total": "331966" },
+        { "year": "2021", "m1": "31412", "m2": "5650", "m3": "35979", "m4": "35239", "m5": "47838", "m6": "47571", "m7": "43176", "m8": "31892", "m9": "33096", "m10": "30681", "m11": "24324", "m12": "25038", "total": "391896" },
+        { "year": "2022", "m1": "18256", "m2": "6922", "m3": "19668", "m4": "20439", "m5": "30908", "m6": "32672", "m7": "52040", "m8": "52871", "m9": "55072", "m10": "30355", "m11": "25724", "m12": "35425", "total": "380352" },
+        { "year": "2023", "m1": "16086", "m2": "18664", "m3": "29376", "m4": "26607", "m5": "33102", "m6": "40318", "m7": "46453", "m8": "55100", "m9": "53039", "m10": "56229", "m11": "45604", "m12": "49594", "total": "470172" },
+        { "year": "2024", "m1": "46153", "m2": "5452", "m3": "36928", "m4": "50289", "m5": "45064", "m6": "49075", "m7": "57127", "m8": "60573", "m9": "60315", "m10": "60372", "m11": "43692", "m12": "54072", "total": "569113" },
+        { "year": "2025", "m1": "27981", "m2": "17848", "m3": "55243", "m4": "55315", "m5": "59410", "m6": "62859", "m7": "65102", "m8": "68770", "m9": "64959", "m10": "", "m11": "", "m12": "", "total": "477488" }
+      ]
+    },
+    "analysis": {
+      "plan": {
+        "amount": "100",
+        "term": "36",
+        "repayment_method": "月还1万元",
+        "fee_rate": "1.5",
+        "corp_guarantee": "",
+        "personal_guarantee": "李xx夫妇、李xx夫妇（征信后补）、林x",
+        "collateral": "",
+        "diyapingguzhi": "",
+        "eryayuzhi": "",
+        "diyajingzhi": ""
+      },
+      "financials": {
+        "total_assets": "5539",
+        "total_liabilities": "1575",
+        "net_assets": "3964",
+        "revenue": "4044",
+        "net_income": "309"
+      },
+      "profit_destination": "①2024年投资新厂花费约100万元；\n②近两年归还此前建设欠款150万元；\n③应收账款一定程度增加（主要是2025年8月、9月销售额接近2000万元）。",
+      "indicators": {
+        "asset_debt_ratio": "28",
+        "sales_debt_ratio": "39",
+        "meets_3x_income": "否",
+        "receivable_days": "60",
+        "avg_balance": "145",
+        "repayment_ratio": "23.08",
+        "is_superior_loan": "否",
+        "is_growth_phase": "否",
+        "is_added_guarantor": "是"
+      },
+      "soft_info": "1、李xx本人从业经验丰富，在此类玩具细分赛道属澄海较大型企业；\n2、李xx家族都在做生意，有一定的实力，其哥哥近期刚卖出一块约5000万元的地。",
+      "summary": "1、企业近年销售稳步增长，盈利能力增强；\n2、发展期间企业资产逐步积累，目前有多套商品房资产及高价值集体资产；\n3、实控人夫妇及其两个儿子夫妇签署保证，违约成本高；\n4、现企业贷款多为先息后本，信用类负债约300万，企业月还压力较小。",
+      "limit": {
+        "calculation": "309*3*0.7-775=-126",
+        "apply_amount": "100",
+        "increase_factors": "①企业资产积累较多，有较好的变现能力；\n②实控人夫妇、两对儿子夫妇作担保，违约成本高。"
+      }
+    },
+    "bs": {
+      "date": "2025-09",
+      "cash": "112",
+      "ar": "2060",
+      "prepayments": "",
+      "other_ar": "",
+      "inventory": "780",
+      "fixed_assets": "2587",
+      "total_assets": "5539",
+      "loans": "775",
+      "ap": "800",
+      "advances": "",
+      "other_ap": "",
+      "capital": "",
+      "retained_earnings": "3964",
+      "total_liabilities_equity": "5539"
+    },
+    "asset_stats": [
+      { "name": "上巷村工业大道西（狮尾片）", "buy_time": "2007-01-01", "buy_price": "", "current_value": "600", "depreciation": "", "remark": "2亩工业用地，长租50年，租赁期限至2057年1月，租金一次性付清，现建一层钢结构对外出租，租金一年约24万，该地块在上巷工业区，附近成交价约450万/亩，按300万/亩保守估算价值" },
+      { "name": "汕分公路西侧上巷工业区", "buy_time": "1992-01-01", "buy_price": "", "current_value": "480", "depreciation": "", "remark": "6亩地，合同以澄海县莲上五金厂名义签订，兄弟四人使用，其中1.6亩地属李xx，使用期限至2043年7月，兄弟间未签合同，此处李xx目前在对外出租，出租合同未找到，但可在流水看到每年收租约15万元，按300万/亩保守估算价值" },
+      { "name": "凤翔街道白沙片中心路北侧白沙片区4号科教建设用地", "buy_time": "2014-01-01", "buy_price": "", "current_value": "1240", "depreciation": "", "remark": "10亩地，长租至2034年6月，目前该地面建了约12400㎡建筑，包括工厂及宿舍楼，按1000元/㎡保守估算价值" },
+      { "name": "汕头市澄海区澄江路宜居华庭7幢504号", "buy_time": "", "buy_price": "179", "current_value": "", "depreciation": "", "remark": "188.8㎡，唐xx，已抵押" },
+      { "name": "汕头市澄海区文冠路93号馨悦园3幢201号", "buy_time": "", "buy_price": "194", "current_value": "", "depreciation": "", "remark": "161.98㎡，林x，已抵押" },
+      { "name": "汕头市澄海区宁川西路西侧与广益路北侧中信金城花园4幢802号", "buy_time": "", "buy_price": "116", "current_value": "", "depreciation": "", "remark": "115.57㎡，李xx，已抵押" },
+      { "name": "汕头市澄海区澄江路宜居华庭7幢1404号", "buy_time": "", "buy_price": "174", "current_value": "", "depreciation": "", "remark": "183.35㎡，林x，已抵押" },
+      { "name": "潮州市湘桥区金碧路189号潮州恒大城十七幢2702号房", "buy_time": "", "buy_price": "64", "current_value": "", "depreciation": "", "remark": "91.43㎡，李xx，未抵押" }
+    ],
+    "asset_totals": { "buy_price": "", "current_value": "2507", "depreciation": "" },
+    "is_table": {
+      "year": "2024",
+      "sales_list": [ { "name": "销售收入", "value": "4044" } ],
+      "s_total": "4044",
+      "material_cost": "",
+      "gross_profit": "",
+      "f_wages": "",
+      "f_rent": "",
+      "f_utility": "",
+      "f_comm": "",
+      "f_trans": "",
+      "f_loss": "",
+      "f_adv": "",
+      "f_entertain": "",
+      "f_tax": "",
+      "f_other": "",
+      "f_total": "",
+      "net_profit": "324",
+      "o_family_exp": "30",
+      "o_biz_loan": "24",
+      "o_pvt_loan": "",
+      "o_other_exp": "",
+      "o_family_inc": "39",
+      "annual_net_income": "309"
+    },
+    "rev_check": {
+      "items": [
+        { "name": "销售板块客户有三个跟单员在记账（2024年）", "value": "4044" },
+        { "name": "销售板块客户有三个跟单员在记账（2025年1-9月）", "value": "3892" }
+      ],
+      "total_value": "",
+      "est_total": "4044",
+      "is_revenue": "4044",
+      "diff_rate": "0",
+      "method": "销售板块客户有三个跟单员在记账，较为清晰"
+    },
+    "cashflow_in": [
+      { "year": "2024", "m1": "735", "m2": "597", "m3": "329", "m4": "188", "m5": "555", "m6": "555", "m7": "739", "m8": "543", "m9": "820", "m10": "759", "m11": "625", "m12": "1065", "total": "7510" },
+      { "year": "2025", "m1": "1332", "m2": "106", "m3": "316", "m4": "414", "m5": "438", "m6": "606", "m7": "549", "m8": "890", "m9": "", "m10": "", "m11": "", "m12": "", "total": "4651" }
+    ],
+    "cashflow_out": [
+      { "year": "2024", "m1": "770", "m2": "805", "m3": "289", "m4": "252", "m5": "481", "m6": "583", "m7": "681", "m8": "578", "m9": "715", "m10": "907", "m11": "576", "m12": "792", "total": "7429" },
+      { "year": "2025", "m1": "1681", "m2": "54", "m3": "310", "m4": "406", "m5": "493", "m6": "462", "m7": "486", "m8": "1005", "m9": "", "m10": "", "m11": "", "m12": "", "total": "4897" }
+    ]
+  },
+  "savedAt": "2026-03-14T00:00:00.000Z"
+}
